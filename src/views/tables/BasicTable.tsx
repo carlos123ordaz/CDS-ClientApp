@@ -69,19 +69,19 @@ const peticionGet = async () => {
 };
 
 const peticionPost = async () => {
-  delete gestorSeleccion.idVendedor; // Asegurarse de que no se envíe el ID_Vendedor al crear un nuevo registro
-  //gestorSeleccion.numDocVendedor = String(gestorSeleccion.numDocVendedor); // Asegurarse de que sea un número
+  delete gestorSeleccion.idVendedor; // Asegura que no envíe ID_Vendedor al crear nuevo registro
+  //gestorSeleccion.numDocVendedor = String(gestorSeleccion.numDocVendedor); // Asegura que sea número
   await axios.post(baseUrl, gestorSeleccion)
     .then(response => {
-      setData(data.concat(response.data as Vendedor)); // Agregar el nuevo registro a la lista
-      abrirCerrarModalInsertar(); // Cerrar el modal después de insertar
+      setData(data.concat(response.data as Vendedor)); // Agrega nuevo registro a lista
+      abrirCerrarModalInsertar(); // cierra modal tras insertar
     }).catch(error => {
       console.error("Error al insertar el registro:", error);
     })
 };
 
 const peticionPut = async () => {
-  gestorSeleccion.idVendedor = gestorSeleccion.idVendedor !== undefined ? parseInt(String(gestorSeleccion.idVendedor)) : undefined; // Asegurarse de que sea un número
+  gestorSeleccion.idVendedor = gestorSeleccion.idVendedor !== undefined ? parseInt(String(gestorSeleccion.idVendedor)) : undefined; // Asegura que sea número
   await axios.put(baseUrl+"/"+gestorSeleccion.idVendedor, gestorSeleccion)
   .then(response => {
     var respuesta = response.data as Vendedor;
@@ -149,7 +149,7 @@ const seleccionarGestor = (vendedor: Vendedor, caso: string): void => {
         </tbody>
       </table>
 
-      {/* Modal para insertar un nuevo gestor de base de datos */}
+      {/* Modal para insertar nuevo gestor de base de datos */}
       <Modal isOpen={modalInsertar}>
         <ModalHeader>Insertar Gestor de Base de Datos</ModalHeader>
         <ModalBody>
@@ -174,7 +174,7 @@ const seleccionarGestor = (vendedor: Vendedor, caso: string): void => {
         </ModalFooter>
       </Modal>
 
-      {/* Modal para editar un gestor de base de datos */}
+      {/* Modal para editar gestor de base de datos */}
       <Modal isOpen={modalEditar}>
           <ModalHeader>Editar Gestor de Base de Datos</ModalHeader>
           <ModalBody>

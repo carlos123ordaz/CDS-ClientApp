@@ -25,21 +25,21 @@ import axios from 'axios';
 // Define FormData interface here if not imported
 export interface FormData {
   cliente: string;
-  clienteFinal: string;
-  clienteProveedor: string;
-  fechaRecepcion: string;
-  fechaInicio: string;
-  fechaProcesamiento: string;
-  formaPago: string;
-  moneda: string;
-  totalSinIgv: string;
+  IbCltFin: string;
+  IbCltPrv: string;
+  FecRecep: string;
+  FecInicio: string;
+  FecProcVi: string;
+  FormaPago: string;
+  Moneda: string;
+  TotalSinIgv: string;
   vendedor: string;
-  vendedor1: string;
-  vendedor2: string;
+  IbVdr1: string;
+  IbVdr2: string;
   lider: string;
-  numOperacion: string;
-  numReferenciaCliente: string;
-  ubrutaCotizacion: string;
+  numOp: string;
+  numRefCliente: string;
+  ubrutaCoti: string;
   comisionCompartida: boolean;
 }
 
@@ -111,7 +111,7 @@ const FbDefaultForm = () => {
     comisionCompartida: false,
   });
 
-// Filtra los clientes únicos por idCliente
+// Filtra los clientes unicos por idCliente
 const clientesUnicos = React.useMemo(() => {
   const seen = new Set();
   return clientes
@@ -137,26 +137,26 @@ const handleChange = (
 
 const lideres = vendedores.filter(v => v.ibLider === true || v.ibLider === 1);
 
-// Guardar la orden de pedido
+// Guarda orden pedido
 const guardarPedido = async () => {
   const datosParaEnviar = {
     // ...pedido, // Copia todos los campos del estado
     // Sobrescribe con los nombres y valores que espera el back:
     IdFp: pedido.formaPago ? Number(pedido.formaPago) : null,
-    IdCliente: pedido.cliente ? Number(pedido.cliente) : null,
-    IdVendedor: pedido.vendedor ? Number(pedido.vendedor) : null,
-    FecRecepcion: pedido.fechaRecepcion ? pedido.fechaRecepcion.format('YYYY-MM-DD') : null,
+    IdClt: pedido.cliente ? Number(pedido.cliente) : null,
+    IdVdr: pedido.vendedor ? Number(pedido.vendedor) : null,
+    FecRecep: pedido.fechaRecepcion ? pedido.fechaRecepcion.format('YYYY-MM-DD') : null,
     FecInicio: pedido.fechaInicio ? pedido.fechaInicio.format('YYYY-MM-DD') : null,
     FecProcVi: pedido.fechaProcesamientoVI ? pedido.fechaProcesamientoVI.format('YYYY-MM-DD') : null,
-    RazonSocialCliente: clientes.find(c => c.idCliente === pedido.cliente)?.razonSocial || null,
+    RSocialClt: clientes.find(c => c.idCliente === pedido.cliente)?.razonSocial || null,
     NumOp: pedido.nroOperacion || null,
     IdMda: pedido.moneda ? Number(pedido.moneda) : null,
     TotalSinIgv: pedido.totalSinIGV ? Number(pedido.totalSinIGV) : null,
     NumRefCliente: pedido.nroReferenciaCliente || null,
-    ClienteFinal: clientes.find(c => c.idCliente === pedido.clienteFinal)?.razonSocial || null,
-    ClienteProveedor: clientes.find(c => c.idCliente === pedido.clienteProveedor)?.razonSocial || null,
-    Vendedor1: vendedores.find(v => v.idVendedor === pedido.vendedor1)?.nombreVendedor || null,
-    Vendedor2: vendedores.find(v => v.idVendedor === pedido.vendedor2)?.nombreVendedor || null,
+    IbCltFin: clientes.find(c => c.idCliente === pedido.clienteFinal)?.razonSocial || null,
+    IbCltPrv: clientes.find(c => c.idCliente === pedido.clienteProveedor)?.razonSocial || null,
+    IbVdr1: vendedores.find(v => v.idVendedor === pedido.vendedor1)?.nombreVendedor || null,
+    IbVdr2: vendedores.find(v => v.idVendedor === pedido.vendedor2)?.nombreVendedor || null,
     Lider: vendedores.find(v => v.idVendedor === pedido.lider)?.nombreVendedor || null,
     UbrutaCoti: pedido.ubrutaCotizacion || null,
     ComisionCompartida: pedido.comisionCompartida,
@@ -164,14 +164,13 @@ const guardarPedido = async () => {
   try {
     await axios.post('https://localhost:7002/OrdenPedido', datosParaEnviar);
     alert('Pedido guardado correctamente');
-    // Opcional: limpiar el formulario o actualizar la lista
   } catch (error) {
     alert('Error al guardar el pedido');
     console.error(error);
   }
 };
 
-  // Obtener vendedores al cargar el componente
+  // Obtener vendedores al cargar componente
 React.useEffect(() => {
   getVendedores()
       .then((res) => {setVendedores(res.data as Vendedor[]);
@@ -184,7 +183,7 @@ React.useEffect(() => {
       });
   }, []);
 
-  // Obtener clientes al cargar el componente
+  // Obtener clientes al cargar componente
   React.useEffect(() => {
     getClientes()
       .then((res) => setClientes(res.data as Clientes[]))
@@ -195,7 +194,7 @@ React.useEffect(() => {
       });
   }, []);
 
-  // Obtener forma de pago al cargar el componente
+  // Obtener forma de pago al cargar componente
   React.useEffect(() => {
     getFormaPago()
       .then((res) => setFormaPago(res.data as FormaPago[]))
@@ -206,7 +205,7 @@ React.useEffect(() => {
       });
   }, []);
 
-  // Obtener monedas al cargar el componente
+  // Obtener monedas al cargar componente
     React.useEffect(() => {
     getMonedas()
       .then((res) => setMonedas(res.data as Monedas[]))
@@ -230,7 +229,6 @@ React.useEffect(() => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log('Datos del formulario:', pedido);
-    // Aquí puedes agregar la lógica para enviar los datos a tu API
     alert('Formulario enviado correctamente. Revisa la consola para ver los datos.');
   };
 
@@ -492,7 +490,7 @@ React.useEffect(() => {
              }}
             sx={{
               mb: 2, fontSize: '13px', minWidth: 250,
-              // Estilos para eliminar flechas en los campos numéricos
+              // Estilos para eliminar flechas en campos numéricos
               '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
                 WebkitAppearance: 'none',
                 margin: 0,
@@ -642,7 +640,7 @@ React.useEffect(() => {
                 style={{ fontSize: '25px' }}
                 name="comisionCompartida"
                 inputProps={{ 'aria-label': 'primary checkbox' }}
-                sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }} // Cambia el tamaño del ícono
+                sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }} // Cambia tamaño del ícono
               />
               }
               label="Comisión compartida"

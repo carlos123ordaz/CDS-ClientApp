@@ -73,14 +73,14 @@ const App = () => {
     // Filtro de búsqueda general (en cliente o vendedor)
     const searchLower = search.toLowerCase();
     const matchSearch =
-      op.RazonSocialCliente?.toLowerCase().includes(searchLower) ||
-      op.Vendedor1?.toLowerCase().includes(searchLower);
+      op.RSocialClt?.toLowerCase().includes(searchLower) ||
+      op.IbVdr1?.toLowerCase().includes(searchLower);
     // Filtros avanzados
-    const matchCliente = filtros.cliente === '' || (op.RazonSocialCliente?.toLowerCase().includes(filtros.cliente.toLowerCase()));
-    const matchVendedor = filtros.vendedor === '' || (op.Vendedor1?.toLowerCase().includes(filtros.vendedor.toLowerCase()));
+    const matchCliente = filtros.cliente === '' || (op.RSocialClt?.toLowerCase().includes(filtros.cliente.toLowerCase()));
+    const matchVendedor = filtros.vendedor === '' || (op.IbVdr1?.toLowerCase().includes(filtros.vendedor.toLowerCase()));
     const matchEstado = filtros.estado === '' || ((filtros.estado === 'activo' && op.Estado) || (filtros.estado === 'inactivo' && !op.Estado));
-    const matchFechaDesde = filtros.fechaDesde === '' || (op.FecRecepcion && op.FecRecepcion >= filtros.fechaDesde);
-    const matchFechaHasta = filtros.fechaHasta === '' || (op.FecRecepcion && op.FecRecepcion <= filtros.fechaHasta);
+    const matchFechaDesde = filtros.fechaDesde === '' || (op.FecRecep && op.FecRecep >= filtros.fechaDesde);
+    const matchFechaHasta = filtros.fechaHasta === '' || (op.FecRecep && op.FecRecep <= filtros.fechaHasta);
     return matchSearch && matchCliente && matchVendedor && matchEstado && matchFechaDesde && matchFechaHasta;
   });
 
@@ -278,17 +278,17 @@ const App = () => {
               dataFiltrada.slice(0, limite).map((op,idx) => (
                 <tr key={`${op.IdOpci}-${idx}`}>
                   <td>{op.IdOpci}</td>
-                  <td>{op.RazonSocialCliente}</td>
-                  <td>{op.ClienteFinal}</td>
-                  <td>{op.ClienteProveedor}</td>
-                  <td>{op.FecRecepcion?.substring(0, 10)}</td>
+                  <td>{op.RSocialClt}</td>
+                  <td>{op.IbCltFin}</td>
+                  <td>{op.IbCltPrv}</td>
+                  <td>{op.FecRecep?.substring(0, 10)}</td>
                   <td>{op.FecInicio?.substring(0, 10)}</td>
                   <td>{op.FecProcVi?.substring(0, 10)}</td>
                   <td>{op.FormaPago?.NombreFormaPago ?? ''}</td>
                   <td>{op.Moneda?.NombreMoneda ?? ''}</td>
                   <td>{op.TotalSinIgv}</td>
                   {/* <td>{op.NumDocVendedor}</td> */}
-                  <td>{op.Vendedor1}</td>
+                  <td>{op.IbVdr1}</td>
                   <td>{op.Estado ? 'Activo' : 'Inactivo'}</td>
                   <td className='sticky-col'>
                     <button className="btn btn-primary">Editar</button>{' '}
