@@ -9,14 +9,8 @@ import { Profile } from "./SidebarProfile/Profile";
 const Sidebar = () => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.down("lg"));
   const theme = useTheme();
-
-
   const {isMobileSidebar , setIsMobileSidebar} = useContext(DashboardContext);
-
-
   const toggleWidth ='256px';
-
-
 
   return (
     <>
@@ -28,9 +22,6 @@ const Sidebar = () => {
             flexShrink: 0,
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* Sidebar for desktop */}
-          {/* ------------------------------------------- */}
           <Drawer
             anchor="left"
             open
@@ -50,9 +41,6 @@ const Sidebar = () => {
               }
             }}
           >
-            {/* ------------------------------------------- */}
-            {/* Sidebar Box */}
-            {/* ------------------------------------------- */}
             <Box
               borderRadius="0 !important"
               sx={{
@@ -60,12 +48,7 @@ const Sidebar = () => {
               }}
             >
               <Profile />
-               
               <Scrollbar sx={{ height: "calc(100% - 270px)" }}>
-
-                {/* ------------------------------------------- */}
-                {/* Sidebar Items */}
-                {/* ------------------------------------------- */}
                 <SidebarItems />
               </Scrollbar>
             </Box>
@@ -88,16 +71,10 @@ const Sidebar = () => {
             }
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* Logo */}
-          {/* ------------------------------------------- */}
           <Box px={2}>
             <AuthLogo />
           </Box>
           <Profile />
-          {/* ------------------------------------------- */}
-          {/* Sidebar For Mobile */}
-          {/* ------------------------------------------- */}
           <SidebarItems />
         </Drawer>
       )}
