@@ -1686,7 +1686,6 @@ const Create = () => {
                             </CardContent>
                         </Card>
                     )}
-
                     {/* Navegación entre pasos */}
                     {activeStep < 5 && (
                         <Card sx={{ mt: 3 }}>
