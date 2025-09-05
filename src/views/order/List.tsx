@@ -395,7 +395,7 @@ const List = () => {
             <Box sx={{ p: 3 }}>
                 {/* Header con estadísticas */}
                 <Grid container spacing={3} sx={{ mb: 3 }}>
-                    <Grid item xs={12} md={3}>
+                    <Grid size={{ xs: 12, md: 3 }}>
                         <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                             <CardContent sx={{ color: 'white' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -408,7 +408,7 @@ const List = () => {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid size={{ xs: 12, md: 3 }}>
                         <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
                             <CardContent sx={{ color: 'white' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -421,7 +421,7 @@ const List = () => {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid  size={{ xs: 12, md: 3 }}>
                         <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
                             <CardContent sx={{ color: 'white' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -434,7 +434,7 @@ const List = () => {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid size={{ xs: 12, md: 3 }}>
                         <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
                             <CardContent sx={{ color: 'white' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -467,7 +467,7 @@ const List = () => {
                         </Box>
 
                         <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
                                     fullWidth
                                     size="small"
@@ -483,7 +483,7 @@ const List = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={2}>
+                            <Grid size={{ xs: 12, md: 2 }}>
                                 <FormControl fullWidth size="small">
                                     <InputLabel>Status</InputLabel>
                                     <Select
@@ -499,7 +499,7 @@ const List = () => {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} md={2}>
+                            <Grid size={{ xs: 12, md: 2 }}>
                                 <FormControl fullWidth size="small">
                                     <InputLabel>Moneda</InputLabel>
                                     <Select
@@ -514,7 +514,7 @@ const List = () => {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} md={2}>
+                            <Grid size={{ xs: 12, md: 2 }}>
                                 <Button
                                     fullWidth
                                     variant="contained"
@@ -525,7 +525,7 @@ const List = () => {
                                     Buscar
                                 </Button>
                             </Grid>
-                            <Grid item xs={12} md={2}>
+                            <Grid size={{ xs: 12, md: 2 }}>
                                 <Button
                                     fullWidth
                                     variant="outlined"
@@ -545,7 +545,7 @@ const List = () => {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={12} md={3}>
+                                        <Grid size={{ xs: 12, md: 3 }}>
                                             <DatePicker
                                                 label="Fecha Desde"
                                                 value={filtros.fechaDesde}
@@ -555,7 +555,7 @@ const List = () => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={12} md={3}>
+                                        <Grid size={{ xs: 12, md: 3 }}>
                                             <DatePicker
                                                 label="Fecha Hasta"
                                                 value={filtros.fechaHasta}
@@ -565,7 +565,7 @@ const List = () => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={12} md={3}>
+                                        <Grid size={{ xs: 12, md: 3 }}>
                                             <TextField
                                                 fullWidth
                                                 size="small"
@@ -575,7 +575,7 @@ const List = () => {
                                                 onChange={(e) => setFiltros(prev => ({ ...prev, montoMinimo: e.target.value }))}
                                             />
                                         </Grid>
-                                        <Grid item xs={12} md={3}>
+                                        <Grid size={{ xs: 12, md: 3 }}>
                                             <TextField
                                                 fullWidth
                                                 size="small"
@@ -816,14 +816,14 @@ const List = () => {
                         {selectedOrder && (
                             <Grid container spacing={3}>
                                 {/* Información principal */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                                                 ℹ️ Información Principal
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={6}>
+                                                <Grid size={{ xs: 6 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Correlativo OPCI
                                                     </Typography>
@@ -831,7 +831,7 @@ const List = () => {
                                                         {selectedOrder.correlativoOPCI}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={6}>
+                                                <Grid size={{ xs: 6 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         N° Operación
                                                     </Typography>
@@ -839,7 +839,7 @@ const List = () => {
                                                         {selectedOrder.numOp}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={6}>
+                                                <Grid size={{ xs: 6 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Fecha Recepción
                                                     </Typography>
@@ -847,7 +847,7 @@ const List = () => {
                                                         {formatearFecha(selectedOrder.fecRecep)}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={6}>
+                                                <Grid size={{ xs: 6 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Fecha Inicio
                                                     </Typography>
@@ -855,7 +855,7 @@ const List = () => {
                                                         {formatearFecha(selectedOrder.fecInicio)}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Status
                                                     </Typography>
@@ -873,14 +873,14 @@ const List = () => {
                                 </Grid>
 
                                 {/* Información del cliente */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                                                 🏢 Información del Cliente
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Razón Social
                                                     </Typography>
@@ -888,7 +888,7 @@ const List = () => {
                                                         {selectedOrder.razonSocialCliente}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Cliente Final
                                                     </Typography>
@@ -896,7 +896,7 @@ const List = () => {
                                                         {selectedOrder.clienteFinal || 'No especificado'}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Cliente Proveedor
                                                     </Typography>
@@ -904,7 +904,7 @@ const List = () => {
                                                         {selectedOrder.clienteProveedor || 'No especificado'}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         N° Referencia Cliente
                                                     </Typography>
@@ -918,14 +918,14 @@ const List = () => {
                                 </Grid>
 
                                 {/* Información financiera */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                                                 💰 Información Financiera
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={6}>
+                                                <Grid size={{ xs: 6 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Total sin IGV
                                                     </Typography>
@@ -933,7 +933,7 @@ const List = () => {
                                                         {formatearMoneda(selectedOrder.totalSinIgv, selectedOrder.moneda)}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={6}>
+                                                <Grid size={{ xs: 6 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Forma de Pago
                                                     </Typography>
@@ -941,7 +941,7 @@ const List = () => {
                                                         {selectedOrder.formaPago}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Ubruta Cotización
                                                     </Typography>
@@ -949,7 +949,7 @@ const List = () => {
                                                         {selectedOrder.ubrutaCoti}
                                                     </Typography>
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
@@ -966,14 +966,14 @@ const List = () => {
                                 </Grid>
 
                                 {/* Información de vendedores */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                                                 👥 Equipo de Ventas
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Vendedor Principal
                                                     </Typography>
@@ -987,7 +987,7 @@ const List = () => {
                                                     </Box>
                                                 </Grid>
                                                 {selectedOrder.vendedor2 && (
-                                                    <Grid item xs={12}>
+                                                    <Grid size={{ xs: 12 }}>
                                                         <Typography variant="caption" color="text.secondary">
                                                             Vendedor Secundario
                                                         </Typography>
@@ -1001,7 +1001,7 @@ const List = () => {
                                                         </Box>
                                                     </Grid>
                                                 )}
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Líder
                                                     </Typography>
@@ -1020,7 +1020,7 @@ const List = () => {
                                 </Grid>
 
                                 {/* Detalle de items */}
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>

@@ -352,7 +352,7 @@ const ProductList = () => {
                 <CardContent>
                     <Grid container spacing={3} alignItems="center">
                         {/* Búsqueda */}
-                        <Grid item xs={12} md={4}>
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <TextField
                                 fullWidth
                                 size="small"
@@ -370,7 +370,7 @@ const ProductList = () => {
                         </Grid>
 
                         {/* Filtros */}
-                        <Grid item xs={12} md={2}>
+                        <Grid size={{ xs: 12, md: 2 }}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Estado</InputLabel>
                                 <Select
@@ -386,7 +386,7 @@ const ProductList = () => {
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={12} md={2}>
+                        <Grid size={{ xs: 12, md: 2 }}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Clase</InputLabel>
                                 <Select
@@ -402,7 +402,7 @@ const ProductList = () => {
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={12} md={2}>
+                        <Grid size={{ xs: 12, md: 2 }}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Marca</InputLabel>
                                 <Select
@@ -419,7 +419,7 @@ const ProductList = () => {
                         </Grid>
 
                         {/* Botones de acción */}
-                        <Grid item xs={12} md={2}>
+                        <Grid size={{ xs: 12, md: 2 }}>
                             <Stack direction="row" spacing={1}>
                                 <Tooltip title="Limpiar filtros">
                                     <IconButton onClick={clearFilters} size="small">
@@ -651,7 +651,7 @@ const ProductList = () => {
                 <DialogContent>
                     {selectedProduct && (
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                     <Avatar sx={{ width: 60, height: 60, mr: 2, bgcolor: 'primary.main' }}>
                                         <InventoryIcon fontSize="large" />
@@ -669,28 +669,28 @@ const ProductList = () => {
                                     </Box>
                                 </Box>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Marca:</strong> {selectedProduct.marca}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Unidad:</strong> {selectedProduct.unidadMedida}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Clase:</strong> {selectedProduct.clase}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Sub-Clase:</strong> {selectedProduct.subClase}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Sub-Sub-Clase:</strong> {selectedProduct.subSubClase}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>BBSS SUNAT:</strong> {selectedProduct.bbssSunat}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Fecha Creación:</strong> {new Date(selectedProduct.fechaCreacion).toLocaleDateString()}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Última Modificación:</strong> {new Date(selectedProduct.fechaModificacion).toLocaleDateString()}</Typography>
                             </Grid>
                         </Grid>

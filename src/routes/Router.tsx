@@ -20,8 +20,9 @@ const VendorList = lazy(() => import('../views/vendor/List'));
 const ProductCreate = lazy(() => import('../views/product/Create'));
 const ProductList = lazy(() => import('../views/product/List'));
 
-const ServiceCreate = lazy(() => import('../views/service/Create'));
-const ServiceList = lazy(() => import('../views/service/List'));
+
+const ServiceCreate = lazy(() => import('../views/servicios/Create'));
+const ServiceList= lazy(() => import('../views/servicios/ListServices'));
 
 const Error = lazy(() => import('../views/authentication/NotFound'));
 const Register = lazy(() => import('../views/authentication/Register'));
@@ -48,8 +49,8 @@ const Router = [
       { path: '/product-create', exact: true, element: <ProductCreate /> },
       { path: '/product-list', exact: true, element: <ProductList /> },
 
-      { path: '/service-create', exact: true, element: <sERRVICE /> },
-      { path: '/service-list', exact: true, element: <ProductList /> },
+      { path: '/service-create', exact: true, element: <ServiceCreate /> },
+      { path: '/service-list', exact: true, element: <ServiceList /> },
 
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],

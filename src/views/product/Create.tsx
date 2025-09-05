@@ -445,13 +445,13 @@ const ProductCreate = () => {
 
                             <Grid container spacing={3}>
                                 {/* Códigos de identificación */}
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Paper sx={{ p: 2, bgcolor: 'primary.50', border: '1px solid', borderColor: 'primary.200' }}>
                                         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                             🏷️ Códigos de Identificación
                                         </Typography>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <TextField
                                                     label="Código ERP (Generado automáticamente)"
                                                     {...register('codERP', { 
@@ -478,7 +478,7 @@ const ProductCreate = () => {
                                                     }}
                                                 />
                                             </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <FormControl fullWidth size="small" required>
                                                     <InputLabel>Marca</InputLabel>
                                                     <Controller
@@ -506,7 +506,7 @@ const ProductCreate = () => {
                                                     )}
                                                 </FormControl>
                                             </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <TextField
                                                     label="Código Comercial"
                                                     {...register('codComercial', { required: 'Campo requerido' })}
@@ -530,13 +530,13 @@ const ProductCreate = () => {
                                 </Grid>
 
                                 {/* Descripción y unidad */}
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
                                         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                             📝 Descripción y Medidas
                                         </Typography>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid size={{ xs: 12 }} md={8}>
                                                 <TextField
                                                     label="Descripción del Producto"
                                                     {...register('descripcion', { required: 'Campo requerido' })}
@@ -557,7 +557,7 @@ const ProductCreate = () => {
                                                     }}
                                                 />
                                             </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <FormControl fullWidth size="small" required>
                                                     <InputLabel>Unidad de Medida</InputLabel>
                                                     <Controller
@@ -623,13 +623,13 @@ const ProductCreate = () => {
                             </Typography>
 
                             <Grid container spacing={3}>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Paper sx={{ p: 2, bgcolor: 'info.50', border: '1px solid', borderColor: 'info.200' }}>
                                         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                             🗂️ Categorización
                                         </Typography>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <FormControl fullWidth size="small" required>
                                                     <InputLabel>Clase</InputLabel>
                                                     <Controller
@@ -657,7 +657,7 @@ const ProductCreate = () => {
                                                     )}
                                                 </FormControl>
                                             </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <FormControl fullWidth size="small" required>
                                                     <InputLabel>Sub-Clase</InputLabel>
                                                     <Controller
@@ -685,7 +685,7 @@ const ProductCreate = () => {
                                                     )}
                                                 </FormControl>
                                             </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <FormControl fullWidth size="small">
                                                     <InputLabel>Sub-Sub-Clase</InputLabel>
                                                     <Controller
@@ -708,7 +708,7 @@ const ProductCreate = () => {
                                 </Grid>
 
                                 {/* Servicios complementarios */}
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                             <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -721,7 +721,7 @@ const ProductCreate = () => {
                                             </Alert>
                                             <Grid container spacing={1}>
                                                 {serviciosComplementarios.map((servicio, index) => (
-                                                    <Grid item xs={12} sm={6} md={4} key={index}>
+                                                    <Grid size={{ xs: 12 }} sm={6} md={4} key={index}>
                                                         <Chip
                                                             label={servicio}
                                                             variant="outlined"
@@ -753,13 +753,13 @@ const ProductCreate = () => {
                             </Alert>
 
                             <Grid container spacing={3}>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Paper sx={{ p: 2, bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.200' }}>
                                         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                             🌍 Traducciones
                                         </Typography>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={6}>
+                                            <Grid size={{ xs: 12, md: 6 }}>
                                                 <TextField
                                                     label="Material (Traducción)"
                                                     {...register('materialTraduccion')}
@@ -768,7 +768,7 @@ const ProductCreate = () => {
                                                     placeholder="Material in English"
                                                 />
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid size={{ xs: 12 }}>
                                                 <TextField
                                                     label="Descripción (Traducción)"
                                                     {...register('descripcionTraduccion')}
@@ -779,7 +779,7 @@ const ProductCreate = () => {
                                                     placeholder="Product description in English..."
                                                 />
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid size={{ xs: 12 }}>
                                                 <TextField
                                                     label="Uso (Traducción)"
                                                     {...register('usoTraduccion')}
@@ -808,13 +808,13 @@ const ProductCreate = () => {
                             </Typography>
 
                             <Grid container spacing={3}>
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Paper sx={{ p: 2, bgcolor: 'error.50', border: '1px solid', borderColor: 'error.200' }}>
                                         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                             📋 Clasificación SUNAT
                                         </Typography>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={6}>
+                                            <Grid size={{ xs: 12, md: 6 }}>
                                                 <FormControl fullWidth size="small" required>
                                                     <InputLabel>BBSS SUNAT</InputLabel>
                                                     <Controller
@@ -847,7 +847,7 @@ const ProductCreate = () => {
                                 </Grid>
 
                                 {/* Condiciones de pago */}
-                                <Grid item xs={12}>
+                                <Grid size={{ xs: 12 }}>
                                     <Accordion>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                             <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -860,7 +860,7 @@ const ProductCreate = () => {
                                             </Alert>
                                             <Grid container spacing={1}>
                                                 {condicionesPago.map((condicion, index) => (
-                                                    <Grid item xs={12} sm={6} md={4} key={index}>
+                                                    <Grid size={{ xs: 12 }} sm={6} md={4} key={index}>
                                                         <Chip
                                                             label={condicion}
                                                             variant="outlined"
@@ -894,7 +894,7 @@ const ProductCreate = () => {
 
                             <Grid container spacing={3}>
                                 {/* Resumen de información básica */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
@@ -949,7 +949,7 @@ const ProductCreate = () => {
                                 </Grid>
 
                                 {/* Resumen de clasificación */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'secondary.main' }}>
@@ -986,7 +986,7 @@ const ProductCreate = () => {
                                 </Grid>
 
                                 {/* Resumen de traducciones */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'info.main' }}>
@@ -1023,7 +1023,7 @@ const ProductCreate = () => {
                                 </Grid>
 
                                 {/* Observaciones finales */}
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Card variant="outlined">
                                         <CardContent>
                                             <Typography variant="h6" sx={{ mb: 2, color: 'success.main' }}>
@@ -1086,7 +1086,7 @@ const ProductCreate = () => {
                 {activeStep === 4 && (
                     <Paper sx={{ p: 3, mt: 3, backgroundColor: '#f5f5f5' }}>
                         <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={12} md={6}>
+                            <Grid size={{ xs: 12, md: 6 }}>
                                 <Typography variant="h6" color="primary">
                                     ¿Todo está correcto?
                                 </Typography>
@@ -1094,7 +1094,7 @@ const ProductCreate = () => {
                                     Revisa la información antes de guardar el producto
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid size={{ xs: 12, md: 6 }}>
                                 <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                                     <Button
                                         variant="outlined"
@@ -1155,7 +1155,7 @@ const ProductCreate = () => {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid size={{ xs: 12 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                 <Avatar sx={{ width: 60, height: 60, mr: 2, bgcolor: 'primary.main' }}>
                                     <InventoryIcon fontSize="large" />
@@ -1173,19 +1173,19 @@ const ProductCreate = () => {
                                 </Box>
                             </Box>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={{ xs: 6 }}>
                             <Typography variant="body2"><strong>Marca:</strong> {marcas.find(m => m.value === watch('marca'))?.label}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={{ xs: 6 }}>
                             <Typography variant="body2"><strong>Unidad:</strong> {unidadesMedida.find(u => u.value === watch('unidadMedida'))?.label}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={{ xs: 6 }}>
                             <Typography variant="body2"><strong>Clase:</strong> {clases.find(c => c.value === watch('clase'))?.label}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={{ xs: 6 }}>
                             <Typography variant="body2"><strong>Sub-Clase:</strong> {subClases.find(s => s.value === watch('subClase'))?.label}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={{ xs: 6 }}>
                             <Typography variant="body2"><strong>BBSS SUNAT:</strong> {bbssSunat.find(b => b.value === watch('bbssSunat'))?.label}</Typography>
                         </Grid>
                     </Grid>

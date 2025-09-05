@@ -307,7 +307,7 @@ const OrderCreate = () => {
                             <AccordionDetails>
                                 <Grid container spacing={2}>
                                     {/* Fila 1 */}
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <TextField
                                             label="Correlativo OPCI"
                                             {...register('correlativoOPCI')}
@@ -316,7 +316,7 @@ const OrderCreate = () => {
                                             disabled={loading}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <Controller
                                             name="fecRecep"
                                             control={control}
@@ -331,7 +331,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <Controller
                                             name="fecInicio"
                                             control={control}
@@ -346,7 +346,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <Controller
                                             name="fecProcVi"
                                             control={control}
@@ -363,7 +363,7 @@ const OrderCreate = () => {
                                     </Grid>
 
                                     {/* Fila 2 - Clientes */}
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <Controller
                                             name="idClt"
                                             control={control}
@@ -386,7 +386,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <Controller
                                             name="ibCltFin"
                                             control={control}
@@ -409,7 +409,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <Controller
                                             name="ibCltPrv"
                                             control={control}
@@ -434,7 +434,7 @@ const OrderCreate = () => {
                                     </Grid>
 
                                     {/* Fila 3 - Vendedores */}
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <Controller
                                             name="idVdr"
                                             control={control}
@@ -457,7 +457,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <Controller
                                             name="ibVdr2"
                                             control={control}
@@ -480,7 +480,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <Controller
                                             name="ibLider"
                                             control={control}
@@ -505,7 +505,7 @@ const OrderCreate = () => {
                                     </Grid>
 
                                     {/* Fila 4 - Datos financieros */}
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <TextField
                                             label="N° Operación"
                                             {...register('numOp')}
@@ -514,7 +514,7 @@ const OrderCreate = () => {
                                             disabled={loading}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <Controller
                                             name="idMda"
                                             control={control}
@@ -545,7 +545,7 @@ const OrderCreate = () => {
                                             )}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <TextField
                                             label="Total sin IGV"
                                             type="number"
@@ -556,7 +556,7 @@ const OrderCreate = () => {
                                             inputProps={{ step: '0.01' }}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <Controller
                                             name="idFp"
                                             control={control}
@@ -581,7 +581,7 @@ const OrderCreate = () => {
                                     </Grid>
 
                                     {/* Fila 5 - Campos adicionales */}
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <TextField
                                             label="N° Ref. Cliente"
                                             {...register('numRefCliente')}
@@ -590,7 +590,7 @@ const OrderCreate = () => {
                                             disabled={loading}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <TextField
                                             label="Ubruta Cotización"
                                             {...register('ubrutaCoti')}
@@ -599,7 +599,7 @@ const OrderCreate = () => {
                                             disabled={loading}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
@@ -744,7 +744,7 @@ const OrderCreate = () => {
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={3}>
+                                                <Grid size={{ xs: 12, md: 3 }}>
                                                     <TextField
                                                         label="Código Cliente"
                                                         {...register(`detalles.${index}.codigoCliente`)}
@@ -753,7 +753,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                <Grid size={{ xs: 12, md: 3 }}>
                                                     <TextField
                                                         label="Número Deal"
                                                         {...register(`detalles.${index}.numeroDeal`)}
@@ -762,7 +762,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                <Grid size={{ xs: 12, md: 3 }}>
                                                     <TextField
                                                         label="Número Servicio"
                                                         {...register(`detalles.${index}.numeroServicio`)}
@@ -771,7 +771,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                <Grid size={{ xs: 12, md: 3 }}>
                                                     <TextField
                                                         label="Número Proyecto"
                                                         {...register(`detalles.${index}.numeroProyecto`)}
@@ -780,7 +780,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="CCS"
                                                         {...register(`detalles.${index}.ccs`)}
@@ -789,7 +789,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="CCSS"
                                                         {...register(`detalles.${index}.ccss`)}
@@ -798,7 +798,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="CCN"
                                                         {...register(`detalles.${index}.ccn`)}
@@ -807,7 +807,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Nota 1"
                                                         {...register(`detalles.${index}.nota1`)}
@@ -818,7 +818,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Nota 2"
                                                         {...register(`detalles.${index}.nota2`)}
@@ -829,7 +829,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Nota 3"
                                                         {...register(`detalles.${index}.nota3`)}
@@ -840,7 +840,7 @@ const OrderCreate = () => {
                                                         disabled={loading}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Nota 4"
                                                         {...register(`detalles.${index}.nota4`)}
@@ -861,7 +861,7 @@ const OrderCreate = () => {
                         {/* RESUMEN Y ACCIONES */}
                         <Paper sx={{ p: 2, mt: 2, backgroundColor: '#f5f5f5' }}>
                             <Grid container spacing={2} alignItems="center">
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Typography variant="h6" color="primary">
                                         💰 Total sin IGV: {calcularTotal().toFixed(2)}
                                     </Typography>
@@ -869,7 +869,7 @@ const OrderCreate = () => {
                                         Cantidad de items: {fields.length}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                                         <Button
                                             variant="outlined"

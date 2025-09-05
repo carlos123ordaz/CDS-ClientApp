@@ -447,7 +447,7 @@ const Details = () => {
                     </Box>
 
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={3}>
+                        <Grid size={{ xs: 12, md: 3 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <CalendarIcon sx={{ mr: 1, fontSize: 20 }} />
                                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -458,7 +458,7 @@ const Details = () => {
                                 {formatearFecha(orden.fecRecep)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={3}>
+                        <Grid size={{ xs: 12, md: 3 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <AssignmentIcon sx={{ mr: 1, fontSize: 20 }} />
                                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -469,7 +469,7 @@ const Details = () => {
                                 {orden.numOp}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={3}>
+                        <Grid size={{ xs: 12, md: 3 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <TrendingUpIcon sx={{ mr: 1, fontSize: 20 }} />
                                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -496,7 +496,7 @@ const Details = () => {
                                 </Typography>
                             </Box>
                         </Grid>
-                        <Grid item xs={12} md={3}>
+                        <Grid size={{ xs: 12, md: 3 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                 <WarningIcon sx={{ mr: 1, fontSize: 20 }} />
                                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -550,7 +550,7 @@ const Details = () => {
                 <TabPanel value={tabValue} index={0}>
                     <Grid container spacing={3}>
                         {/* Información Principal */}
-                        <Grid item xs={12} lg={6}>
+                        <Grid size={{ xs: 12 }} lg={6}>
                             <Card variant="outlined" sx={{ height: 'fit-content' }}>
                                 <CardContent>
                                     <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', display: 'flex', alignItems: 'center' }}>
@@ -558,7 +558,7 @@ const Details = () => {
                                         Información Principal
                                     </Typography>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={6}>
+                                        <Grid size={{ xs: 6 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Correlativo OPCI
                                             </Typography>
@@ -566,7 +566,7 @@ const Details = () => {
                                                 {orden.correlativoOPCI}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid size={{ xs: 6 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 N° Operación
                                             </Typography>
@@ -574,7 +574,7 @@ const Details = () => {
                                                 {orden.numOp}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid size={{ xs: 6 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Fecha Recepción
                                             </Typography>
@@ -582,7 +582,7 @@ const Details = () => {
                                                 {formatearFecha(orden.fecRecep)}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid size={{ xs: 6 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Fecha Inicio
                                             </Typography>
@@ -590,7 +590,7 @@ const Details = () => {
                                                 {formatearFecha(orden.fecInicio)}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid size={{ xs: 6 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Fecha Proc. VI
                                             </Typography>
@@ -598,7 +598,7 @@ const Details = () => {
                                                 {formatearFecha(orden.fecProcVi)}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid size={{ xs: 6 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 N° Ref. Cliente
                                             </Typography>
@@ -606,7 +606,7 @@ const Details = () => {
                                                 {orden.numRefCliente}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Observaciones
                                             </Typography>
@@ -622,7 +622,7 @@ const Details = () => {
                         </Grid>
 
                         {/* Información del Cliente */}
-                        <Grid item xs={12} lg={6}>
+                        <Grid size={{ xs: 12 }} lg={6}>
                             <Card variant="outlined" sx={{ height: 'fit-content' }}>
                                 <CardContent>
                                     <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', display: 'flex', alignItems: 'center' }}>
@@ -630,7 +630,7 @@ const Details = () => {
                                         Información del Cliente
                                     </Typography>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Razón Social
                                             </Typography>
@@ -638,7 +638,7 @@ const Details = () => {
                                                 {orden.razonSocialCliente}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Cliente Final
                                             </Typography>
@@ -646,7 +646,7 @@ const Details = () => {
                                                 {orden.clienteFinal}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Typography variant="caption" color="text.secondary">
                                                 Cliente Proveedor
                                             </Typography>
@@ -654,7 +654,7 @@ const Details = () => {
                                                 {orden.clienteProveedor}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Divider sx={{ my: 1 }} />
                                             <Typography variant="subtitle2" sx={{ mb: 1 }}>
                                                 Contacto Principal
@@ -728,11 +728,11 @@ const Details = () => {
 
                     <Grid container spacing={2}>
                         {items.map((item, index) => (
-                            <Grid item xs={12} key={item.id}>
+                            <Grid size={{ xs: 12 }} key={item.id}>
                                 <Card variant="outlined">
                                     <CardContent>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid size={{ xs: 12 }} md={8}>
                                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
                                                     <Avatar sx={{ bgcolor: 'primary.main', mr: 2, mt: 0.5 }}>
                                                         {index + 1}
@@ -765,7 +765,7 @@ const Details = () => {
                                                             />
                                                         </Box>
                                                         <Grid container spacing={2} sx={{ mt: 1 }}>
-                                                            <Grid item xs={6} sm={3}>
+                                                            <Grid size={{ xs: 6 }} sm={3}>
                                                                 <Typography variant="caption" color="text.secondary">
                                                                     Cantidad
                                                                 </Typography>
@@ -773,7 +773,7 @@ const Details = () => {
                                                                     {item.cantidad} {item.unidadMedida}
                                                                 </Typography>
                                                             </Grid>
-                                                            <Grid item xs={6} sm={3}>
+                                                            <Grid size={{ xs: 6 }} sm={3}>
                                                                 <Typography variant="caption" color="text.secondary">
                                                                     PVU
                                                                 </Typography>
@@ -781,7 +781,7 @@ const Details = () => {
                                                                     {formatearMoneda(item.pvu, orden.moneda)}
                                                                 </Typography>
                                                             </Grid>
-                                                            <Grid item xs={6} sm={3}>
+                                                            <Grid size={{ xs: 6 }} sm={3}>
                                                                 <Typography variant="caption" color="text.secondary">
                                                                     Total
                                                                 </Typography>
@@ -789,7 +789,7 @@ const Details = () => {
                                                                     {formatearMoneda(item.total, orden.moneda)}
                                                                 </Typography>
                                                             </Grid>
-                                                            <Grid item xs={6} sm={3}>
+                                                            <Grid size={{ xs: 6 }} sm={3}>
                                                                 <Typography variant="caption" color="text.secondary">
                                                                     Fecha Requerida
                                                                 </Typography>
@@ -801,7 +801,7 @@ const Details = () => {
                                                     </Box>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid size={{ xs: 12, md: 4 }}>
                                                 <Box sx={{ textAlign: 'center', mb: 2 }}>
                                                     <Typography variant="caption" color="text.secondary">
                                                         Progreso del Item
@@ -1044,7 +1044,7 @@ const Details = () => {
                     </Typography>
                     
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Card variant="outlined">
                                 <CardContent>
                                     <Typography variant="h6" sx={{ mb: 2 }}>
@@ -1097,7 +1097,7 @@ const Details = () => {
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Card variant="outlined">
                                 <CardContent>
                                     <Typography variant="h6" sx={{ mb: 2 }}>
@@ -1179,7 +1179,7 @@ const Details = () => {
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12 }} sm={6}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Status</InputLabel>
                                 <Select
@@ -1194,7 +1194,7 @@ const Details = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12 }} sm={6}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Prioridad</InputLabel>
                                 <Select
@@ -1208,7 +1208,7 @@ const Details = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={{ xs: 12 }}>
                             <TextField
                                 fullWidth
                                 multiline

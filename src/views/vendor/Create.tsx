@@ -10,9 +10,7 @@ import {
     Select,
     MenuItem,
     Button,
-    Grid,
     Paper,
-    Divider,
     IconButton,
     Avatar,
     Chip,
@@ -31,27 +29,15 @@ import {
     DialogActions,
     List,
     ListItem,
-    ListItemIcon,
     ListItemText,
     Stepper,
     Step,
     StepLabel,
-    StepContent,
-    Tooltip,
     Fab,
     Snackbar,
+    Grid,
     LinearProgress,
     FormHelperText,
-    RadioGroup,
-    Radio,
-    FormLabel,
-    Checkbox,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
 } from '@mui/material';
 import {
     Person as PersonIcon,
@@ -87,7 +73,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 // Interfaces
 interface FormData {
@@ -96,7 +82,7 @@ interface FormData {
     numeroDocumento: string;
     vendedor: string;
     estado: string;
-    
+
     // Información personal
     nombres: string;
     apellidoPaterno: string;
@@ -104,7 +90,7 @@ interface FormData {
     fechaNacimiento: string;
     genero: string;
     estadoCivil: string;
-    
+
     // Información de contacto
     telefono: string;
     telefonoAdicional: string;
@@ -115,7 +101,7 @@ interface FormData {
     provincia: string;
     departamento: string;
     codigoPostal: string;
-    
+
     // Información laboral
     fechaIngreso: string;
     cargo: string;
@@ -128,20 +114,20 @@ interface FormData {
     metaVentas: number;
     esLider: boolean;
     equipoTrabajo: string[];
-    
+
     // Información bancaria
     banco: string;
     tipoCuenta: string;
     numeroCuenta: string;
     numeroInterbancario: string;
-    
+
     // Configuración del sistema
     usuario: string;
     password: string;
     confirmarPassword: string;
     rol: string;
     permisos: string[];
-    
+
     // Otros
     observaciones: string;
     documentosAdjuntos: File[];
@@ -221,29 +207,29 @@ const roles = [
 
 const Create = () => {
     const navigate = useNavigate();
-    
+
     // Estados principales
     const [loading, setLoading] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
     const [previewMode, setPreviewMode] = React.useState(false);
-    const [snackbar, setSnackbar] = React.useState({ 
-        open: false, 
-        message: '', 
-        severity: 'success' as 'success' | 'error' | 'warning' | 'info' 
+    const [snackbar, setSnackbar] = React.useState({
+        open: false,
+        message: '',
+        severity: 'success' as 'success' | 'error' | 'warning' | 'info'
     });
 
     // Form control
-    const { 
-        register, 
-        handleSubmit, 
-        control, 
-        watch, 
-        setValue, 
-        formState: { errors }, 
+    const {
+        register,
+        handleSubmit,
+        control,
+        watch,
+        setValue,
+        formState: { errors },
         trigger,
-        reset 
+        reset
     } = useForm<FormData>({
         defaultValues: {
             estado: 'ACTIVO',
@@ -333,7 +319,7 @@ const Create = () => {
         const nombres = watch('nombres');
         const apellidoPaterno = watch('apellidoPaterno');
         const apellidoMaterno = watch('apellidoMaterno');
-        
+
         if (nombres || apellidoPaterno || apellidoMaterno) {
             const nombreCompleto = `${nombres || ''} ${apellidoPaterno || ''} ${apellidoMaterno || ''}`.trim();
             setValue('vendedor', nombreCompleto);
@@ -344,7 +330,7 @@ const Create = () => {
     const generarUsuario = () => {
         const nombres = watch('nombres');
         const apellidoPaterno = watch('apellidoPaterno');
-        
+
         if (nombres && apellidoPaterno) {
             const usuario = `${nombres.split(' ')[0]}.${apellidoPaterno}`.toLowerCase()
                 .normalize('NFD')
@@ -386,7 +372,7 @@ const Create = () => {
     // Guardar vendedor
     const guardarVendedor = (data: FormData) => {
         setLoading(true);
-        
+
         // Simular guardado
         setTimeout(() => {
             console.log('Vendedor guardado:', data);
@@ -396,7 +382,7 @@ const Create = () => {
                 message: 'Vendedor registrado correctamente',
                 severity: 'success'
             });
-            
+
             // Opcional: redireccionar después de guardar
             setTimeout(() => {
                 navigate('/vendedores');
@@ -476,9 +462,9 @@ const Create = () => {
                             </Box>
                             <Box sx={{ textAlign: 'right' }}>
                                 <Avatar
-                                    sx={{ 
-                                        width: 80, 
-                                        height: 80, 
+                                    sx={{
+                                        width: 80,
+                                        height: 80,
                                         bgcolor: 'rgba(255,255,255,0.2)',
                                         border: '3px solid rgba(255,255,255,0.3)'
                                     }}
@@ -487,11 +473,11 @@ const Create = () => {
                                 </Avatar>
                             </Box>
                         </Box>
-                        
+
                         {/* Barra de progreso */}
                         <Box sx={{ mt: 2 }}>
-                            <LinearProgress 
-                                variant="determinate" 
+                            <LinearProgress
+                                variant="determinate"
                                 value={(activeStep / (steps.length - 1)) * 100}
                                 sx={{
                                     height: 8,
@@ -523,7 +509,7 @@ const Create = () => {
                                                 setActiveStep(index);
                                             }
                                         }}
-                                        sx={{ 
+                                        sx={{
                                             cursor: index <= activeStep ? 'pointer' : 'default',
                                             '& .MuiStepLabel-label': {
                                                 fontSize: '0.875rem',
@@ -554,13 +540,13 @@ const Create = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Documento de identidad */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'primary.50', border: '1px solid', borderColor: 'primary.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 📄 Documento de Identidad
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid  size={{ xs: 12, md: 4 }}>
                                                     <FormControl fullWidth size="small" required>
                                                         <InputLabel>Tipo de Documento</InputLabel>
                                                         <Controller
@@ -588,10 +574,10 @@ const Create = () => {
                                                         )}
                                                     </FormControl>
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Número de Documento"
-                                                        {...register('numeroDocumento', { 
+                                                        {...register('numeroDocumento', {
                                                             required: 'Campo requerido',
                                                             validate: validateDocumento
                                                         })}
@@ -606,7 +592,7 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <FormControl fullWidth size="small" required>
                                                         <InputLabel>Estado</InputLabel>
                                                         <Controller
@@ -622,10 +608,10 @@ const Create = () => {
                                                                     {estados.map(estado => (
                                                                         <MenuItem key={estado.value} value={estado.value}>
                                                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                                                <Chip 
-                                                                                    label={estado.label} 
-                                                                                    color={estado.color as any} 
-                                                                                    size="small" 
+                                                                                <Chip
+                                                                                    label={estado.label}
+                                                                                    color={estado.color as any}
+                                                                                    size="small"
                                                                                 />
                                                                             </Box>
                                                                         </MenuItem>
@@ -640,13 +626,13 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Nombres */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 👤 Nombres y Apellidos
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Nombres"
                                                         {...register('nombres', { required: 'Campo requerido' })}
@@ -658,7 +644,7 @@ const Create = () => {
                                                         placeholder="Juan Carlos"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Apellido Paterno"
                                                         {...register('apellidoPaterno', { required: 'Campo requerido' })}
@@ -670,7 +656,7 @@ const Create = () => {
                                                         placeholder="García"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Apellido Materno"
                                                         {...register('apellidoMaterno', { required: 'Campo requerido' })}
@@ -682,14 +668,14 @@ const Create = () => {
                                                         placeholder="López"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <TextField
                                                         label="Nombre Completo (Generado automáticamente)"
                                                         {...register('vendedor')}
                                                         size="small"
                                                         fullWidth
                                                         disabled
-                                                        sx={{ 
+                                                        sx={{
                                                             '& .MuiInputBase-input.Mui-disabled': {
                                                                 WebkitTextFillColor: 'rgba(0, 0, 0, 0.8)',
                                                                 fontWeight: 'bold',
@@ -702,7 +688,7 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Información adicional */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -711,7 +697,7 @@ const Create = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="fechaNacimiento"
                                                             control={control}
@@ -721,9 +707,9 @@ const Create = () => {
                                                                     value={field.value ? dayjs(field.value) : null}
                                                                     onChange={(value) => field.onChange(value?.toISOString())}
                                                                     slotProps={{
-                                                                        textField: { 
-                                                                            size: 'small', 
-                                                                            fullWidth: true 
+                                                                        textField: {
+                                                                            size: 'small',
+                                                                            fullWidth: true
                                                                         }
                                                                     }}
                                                                     maxDate={dayjs().subtract(18, 'year')}
@@ -731,7 +717,7 @@ const Create = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <FormControl fullWidth size="small">
                                                             <InputLabel>Género</InputLabel>
                                                             <Controller
@@ -749,7 +735,7 @@ const Create = () => {
                                                             />
                                                         </FormControl>
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <FormControl fullWidth size="small">
                                                             <InputLabel>Estado Civil</InputLabel>
                                                             <Controller
@@ -787,16 +773,16 @@ const Create = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Información de contacto */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'info.50', border: '1px solid', borderColor: 'info.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 📞 Contacto
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Teléfono Principal"
-                                                        {...register('telefono', { 
+                                                        {...register('telefono', {
                                                             required: 'Campo requerido',
                                                             validate: validatePhone
                                                         })}
@@ -815,7 +801,7 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Teléfono Adicional"
                                                         {...register('telefonoAdicional', { validate: validatePhone })}
@@ -833,10 +819,10 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Email Principal"
-                                                        {...register('email', { 
+                                                        {...register('email', {
                                                             required: 'Campo requerido',
                                                             validate: validateEmail
                                                         })}
@@ -856,7 +842,7 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Email Adicional"
                                                         {...register('emailAdicional', { validate: validateEmail })}
@@ -880,13 +866,13 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Dirección */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 🏠 Dirección
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12}>
+                                                <Grid size={{ xs: 12 }}>
                                                     <TextField
                                                         label="Dirección Completa"
                                                         {...register('direccion', { required: 'Campo requerido' })}
@@ -907,7 +893,7 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Distrito"
                                                         {...register('distrito')}
@@ -916,7 +902,7 @@ const Create = () => {
                                                         placeholder="San Isidro"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Provincia"
                                                         {...register('provincia')}
@@ -925,7 +911,7 @@ const Create = () => {
                                                         placeholder="Lima"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Departamento"
                                                         {...register('departamento')}
@@ -934,7 +920,7 @@ const Create = () => {
                                                         placeholder="Lima"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Código Postal"
                                                         {...register('codigoPostal')}
@@ -962,13 +948,13 @@ const Create = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Datos básicos laborales */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'secondary.50', border: '1px solid', borderColor: 'secondary.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 💼 Datos Laborales
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <Controller
                                                         name="fechaIngreso"
                                                         control={control}
@@ -979,8 +965,8 @@ const Create = () => {
                                                                 value={field.value ? dayjs(field.value) : null}
                                                                 onChange={(value) => field.onChange(value?.toISOString())}
                                                                 slotProps={{
-                                                                    textField: { 
-                                                                        size: 'small', 
+                                                                    textField: {
+                                                                        size: 'small',
                                                                         fullWidth: true,
                                                                         required: true,
                                                                         error: !!errors.fechaIngreso,
@@ -992,7 +978,7 @@ const Create = () => {
                                                         )}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <FormControl fullWidth size="small" required>
                                                         <InputLabel>Cargo</InputLabel>
                                                         <Controller
@@ -1020,7 +1006,7 @@ const Create = () => {
                                                         )}
                                                     </FormControl>
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <FormControl fullWidth size="small" required>
                                                         <InputLabel>Departamento</InputLabel>
                                                         <Controller
@@ -1043,7 +1029,7 @@ const Create = () => {
                                                         />
                                                     </FormControl>
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Supervisor Directo"
                                                         {...register('supervisor')}
@@ -1052,7 +1038,7 @@ const Create = () => {
                                                         placeholder="Nombre del supervisor"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Sucursal"
                                                         {...register('sucursal')}
@@ -1061,7 +1047,7 @@ const Create = () => {
                                                         placeholder="Oficina principal"
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <FormControl fullWidth size="small">
                                                         <InputLabel>Tipo de Contrato</InputLabel>
                                                         <Controller
@@ -1079,7 +1065,7 @@ const Create = () => {
                                                         />
                                                     </FormControl>
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <FormControlLabel
                                                         control={
                                                             <Switch
@@ -1095,16 +1081,16 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Información salarial */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 💰 Información Salarial y Metas
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Salario Base (S/)"
-                                                        {...register('salarioBase', { 
+                                                        {...register('salarioBase', {
                                                             required: 'Campo requerido',
                                                             min: { value: 1, message: 'Debe ser mayor a 0' }
                                                         })}
@@ -1124,10 +1110,10 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Comisión (%)"
-                                                        {...register('comision', { 
+                                                        {...register('comision', {
                                                             min: { value: 0, message: 'No puede ser negativo' },
                                                             max: { value: 100, message: 'No puede ser mayor a 100%' }
                                                         })}
@@ -1146,10 +1132,10 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={4}>
+                                                <Grid size={{ xs: 12, md: 4 }}>
                                                     <TextField
                                                         label="Meta de Ventas Mensual (S/)"
-                                                        {...register('metaVentas', { 
+                                                        {...register('metaVentas', {
                                                             min: { value: 0, message: 'No puede ser negativo' }
                                                         })}
                                                         type="number"
@@ -1173,7 +1159,7 @@ const Create = () => {
 
                                     {/* Equipo de trabajo (si es líder) */}
                                     {watchEsLider && (
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Accordion>
                                                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -1215,7 +1201,7 @@ const Create = () => {
                                         🏦 Datos Bancarios para Pagos
                                     </Typography>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid size={{ xs: 12, md: 6 }}>
                                             <FormControl fullWidth size="small" required>
                                                 <InputLabel>Banco</InputLabel>
                                                 <Controller
@@ -1243,7 +1229,7 @@ const Create = () => {
                                                 )}
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid size={{ xs: 12, md: 6 }}>
                                             <FormControl fullWidth size="small" required>
                                                 <InputLabel>Tipo de Cuenta</InputLabel>
                                                 <Controller
@@ -1266,10 +1252,10 @@ const Create = () => {
                                                 />
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid size={{ xs: 12, md: 6 }}>
                                             <TextField
                                                 label="Número de Cuenta"
-                                                {...register('numeroCuenta', { 
+                                                {...register('numeroCuenta', {
                                                     required: 'Campo requerido',
                                                     pattern: {
                                                         value: /^\d{10,20}$/,
@@ -1284,10 +1270,10 @@ const Create = () => {
                                                 placeholder="1234567890"
                                             />
                                         </Grid>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid size={{ xs: 12, md: 6 }}>
                                             <TextField
                                                 label="Número Interbancario (CCI)"
-                                                {...register('numeroInterbancario', { 
+                                                {...register('numeroInterbancario', {
                                                     pattern: {
                                                         value: /^\d{20}$/,
                                                         message: 'CCI debe tener 20 dígitos'
@@ -1317,16 +1303,16 @@ const Create = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Credenciales de acceso */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Paper sx={{ p: 2, bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.200' }}>
                                             <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
                                                 🔐 Credenciales de Acceso
                                             </Typography>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Usuario (Generado automáticamente)"
-                                                        {...register('usuario', { 
+                                                        {...register('usuario', {
                                                             required: 'Campo requerido',
                                                             minLength: { value: 3, message: 'Mínimo 3 caracteres' }
                                                         })}
@@ -1344,7 +1330,7 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <FormControl fullWidth size="small" required>
                                                         <InputLabel>Rol del Sistema</InputLabel>
                                                         <Controller
@@ -1370,10 +1356,10 @@ const Create = () => {
                                                         />
                                                     </FormControl>
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Contraseña"
-                                                        {...register('password', { 
+                                                        {...register('password', {
                                                             required: 'Campo requerido',
                                                             minLength: { value: 6, message: 'Mínimo 6 caracteres' },
                                                             pattern: {
@@ -1402,12 +1388,12 @@ const Create = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                <Grid size={{ xs: 12, md: 6 }}>
                                                     <TextField
                                                         label="Confirmar Contraseña"
-                                                        {...register('confirmarPassword', { 
+                                                        {...register('confirmarPassword', {
                                                             required: 'Campo requerido',
-                                                            validate: (value) => 
+                                                            validate: (value) =>
                                                                 value === watchPassword || 'Las contraseñas no coinciden'
                                                         })}
                                                         type={showConfirmPassword ? 'text' : 'password'}
@@ -1436,7 +1422,7 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Permisos del sistema */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -1482,7 +1468,7 @@ const Create = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Resumen de información personal */}
-                                    <Grid item xs={12} md={6}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
@@ -1531,7 +1517,7 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Resumen de información laboral */}
-                                    <Grid item xs={12} md={6}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'secondary.main' }}>
@@ -1586,7 +1572,7 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Resumen de información bancaria */}
-                                    <Grid item xs={12} md={6}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'info.main' }}>
@@ -1623,7 +1609,7 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Resumen de configuración del sistema */}
-                                    <Grid item xs={12} md={6}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'warning.main' }}>
@@ -1661,13 +1647,13 @@ const Create = () => {
                                                                             sx={{ mr: 0.5, mb: 0.5 }}
                                                                         />
                                                                     ))}
-                                                                    {roles.find(r => r.value === watch('rol'))?.permisos.length > 3 && (
+                                                                    {/* {roles.find(r => r.value === watch('rol'))?.permisos.length > 3 && (
                                                                         <Chip
                                                                             label={`+${roles.find(r => r.value === watch('rol'))?.permisos.length - 3} más`}
                                                                             size="small"
                                                                             variant="outlined"
                                                                         />
-                                                                    )}
+                                                                    )} */}
                                                                 </Box>
                                                             }
                                                         />
@@ -1678,7 +1664,7 @@ const Create = () => {
                                     </Grid>
 
                                     {/* Observaciones finales */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'success.main' }}>
@@ -1741,7 +1727,7 @@ const Create = () => {
                     {activeStep === 5 && (
                         <Paper sx={{ p: 3, mt: 3, backgroundColor: '#f5f5f5' }}>
                             <Grid container spacing={2} alignItems="center">
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Typography variant="h6" color="primary">
                                         🎯 ¿Todo está correcto?
                                     </Typography>
@@ -1749,7 +1735,7 @@ const Create = () => {
                                         Revisa la información antes de guardar el vendedor
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                                         <Button
                                             variant="outlined"
@@ -1784,7 +1770,7 @@ const Create = () => {
                                     </Box>
                                 </Grid>
                             </Grid>
-                            
+
                             {/* Barra de progreso durante guardado */}
                             {loading && (
                                 <Box sx={{ mt: 2 }}>
@@ -1810,7 +1796,7 @@ const Create = () => {
                     </DialogTitle>
                     <DialogContent dividers>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                     <Avatar sx={{ width: 60, height: 60, mr: 2, bgcolor: 'primary.main' }}>
                                         <PersonIcon fontSize="large" />
@@ -1828,22 +1814,22 @@ const Create = () => {
                                     </Box>
                                 </Box>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Cargo:</strong> {cargos.find(c => c.value === watch('cargo'))?.label}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Departamento:</strong> {departamentos.find(d => d.value === watch('departamentoTrabajo'))?.label}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Email:</strong> {watch('email')}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Teléfono:</strong> {watch('telefono')}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Usuario:</strong> {watch('usuario')}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2"><strong>Rol:</strong> {roles.find(r => r.value === watch('rol'))?.label}</Typography>
                             </Grid>
                         </Grid>
@@ -1874,7 +1860,7 @@ const Create = () => {
                     autoHideDuration={6000}
                     onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
                 >
-                    <Alert 
+                    <Alert
                         onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
                         severity={snackbar.severity}
                         sx={{ width: '100%' }}

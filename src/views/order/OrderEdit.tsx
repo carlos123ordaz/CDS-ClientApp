@@ -579,7 +579,7 @@ const OrderEdit = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Información básica */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion defaultExpanded>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -588,7 +588,7 @@ const OrderEdit = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={3}>
+                                                    <Grid size={{ xs: 12, md: 3 }}>
                                                         <TextField
                                                             label="Correlativo OPCI"
                                                             {...register('correlativoOPCI', { required: 'Campo requerido' })}
@@ -599,7 +599,7 @@ const OrderEdit = () => {
                                                             disabled={loading}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={3}>
+                                                    <Grid size={{ xs: 12, md: 3 }}>
                                                         <Controller
                                                             name="fecRecep"
                                                             control={control}
@@ -621,7 +621,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={3}>
+                                                    <Grid size={{ xs: 12, md: 3 }}>
                                                         <Controller
                                                             name="fecInicio"
                                                             control={control}
@@ -637,7 +637,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={3}>
+                                                    <Grid size={{ xs: 12, md: 3 }}>
                                                         <Controller
                                                             name="fecProcVi"
                                                             control={control}
@@ -653,7 +653,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <TextField
                                                             label="N° Operación"
                                                             {...register('numOp', { required: 'Campo requerido' })}
@@ -664,7 +664,7 @@ const OrderEdit = () => {
                                                             disabled={loading}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <TextField
                                                             label="N° Ref. Cliente"
                                                             {...register('numRefCliente')}
@@ -673,7 +673,7 @@ const OrderEdit = () => {
                                                             disabled={loading}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <TextField
                                                             label="Ubruta Cotización"
                                                             {...register('ubrutaCoti')}
@@ -688,7 +688,7 @@ const OrderEdit = () => {
                                     </Grid>
 
                                     {/* Estados y prioridad */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion defaultExpanded>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -697,7 +697,7 @@ const OrderEdit = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <FormControl fullWidth size="small" required>
                                                             <InputLabel>Status</InputLabel>
                                                             <Controller
@@ -720,7 +720,7 @@ const OrderEdit = () => {
                                                             />
                                                         </FormControl>
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <FormControl fullWidth size="small" required>
                                                             <InputLabel>Prioridad</InputLabel>
                                                             <Controller
@@ -743,7 +743,7 @@ const OrderEdit = () => {
                                                             />
                                                         </FormControl>
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <FormControlLabel
                                                             control={
                                                                 <Switch
@@ -754,7 +754,7 @@ const OrderEdit = () => {
                                                             label="Comisión Compartida"
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12}>
+                                                    <Grid size={{ xs: 12 }}>
                                                         <TextField
                                                             label="Observaciones"
                                                             {...register('observaciones')}
@@ -771,7 +771,7 @@ const OrderEdit = () => {
                                     </Grid>
 
                                     {/* Clientes */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion defaultExpanded>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -780,7 +780,7 @@ const OrderEdit = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="idClt"
                                                             control={control}
@@ -807,7 +807,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="ibCltFin"
                                                             control={control}
@@ -830,7 +830,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="ibCltPrv"
                                                             control={control}
@@ -859,7 +859,7 @@ const OrderEdit = () => {
                                     </Grid>
 
                                     {/* Vendedores */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion defaultExpanded>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -868,7 +868,7 @@ const OrderEdit = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="idVdr"
                                                             control={control}
@@ -895,7 +895,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="ibVdr2"
                                                             control={control}
@@ -918,7 +918,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={4}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
                                                             name="ibLider"
                                                             control={control}
@@ -947,7 +947,7 @@ const OrderEdit = () => {
                                     </Grid>
 
                                     {/* Información Financiera */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Accordion defaultExpanded>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
@@ -956,7 +956,7 @@ const OrderEdit = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={12} md={6}>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
                                                         <Controller
                                                             name="idMda"
                                                             control={control}
@@ -991,7 +991,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12} md={6}>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
                                                         <Controller
                                                             name="idFp"
                                                             control={control}
@@ -1018,7 +1018,7 @@ const OrderEdit = () => {
                                                             )}
                                                         />
                                                     </Grid>
-                                                    <Grid item xs={12}>
+                                                    <Grid size={{ xs: 12 }}>
                                                         <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
                                                             <Typography variant="h6" sx={{ color: 'success.main', mb: 1 }}>
                                                                 💰 Total Calculado: {formatearMoneda(calcularTotal(), 'S/')}
@@ -1169,14 +1169,14 @@ const OrderEdit = () => {
 
                                 <Grid container spacing={3}>
                                     {/* Resumen de cambios */}
-                                    <Grid item xs={12} lg={8}>
+                                    <Grid size={{ xs: 12 }} lg={8}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                                                     📋 Resumen de la Orden
                                                 </Typography>
                                                 <Grid container spacing={2}>
-                                                    <Grid item xs={6}>
+                                                    <Grid size={{ xs: 6 }}>
                                                         <Typography variant="caption" color="text.secondary">
                                                             Correlativo OPCI
                                                         </Typography>
@@ -1184,7 +1184,7 @@ const OrderEdit = () => {
                                                             {watchedValues.correlativoOPCI}
                                                         </Typography>
                                                     </Grid>
-                                                    <Grid item xs={6}>
+                                                    <Grid size={{ xs: 6 }}>
                                                         <Typography variant="caption" color="text.secondary">
                                                             Status
                                                         </Typography>
@@ -1196,7 +1196,7 @@ const OrderEdit = () => {
                                                             />
                                                         </Box>
                                                     </Grid>
-                                                    <Grid item xs={6}>
+                                                    <Grid size={{ xs: 6 }}>
                                                         <Typography variant="caption" color="text.secondary">
                                                             Cliente Principal
                                                         </Typography>
@@ -1204,7 +1204,7 @@ const OrderEdit = () => {
                                                             {clientes.find(c => c.idClt === watchedValues.idClt)?.razonSocial || 'No seleccionado'}
                                                         </Typography>
                                                     </Grid>
-                                                    <Grid item xs={6}>
+                                                    <Grid size={{ xs: 6 }}>
                                                         <Typography variant="caption" color="text.secondary">
                                                             Vendedor Principal
                                                         </Typography>
@@ -1212,7 +1212,7 @@ const OrderEdit = () => {
                                                             {vendedores.find(v => v.idVdr === watchedValues.idVdr)?.nomVdr || 'No seleccionado'}
                                                         </Typography>
                                                     </Grid>
-                                                    <Grid item xs={12}>
+                                                    <Grid size={{ xs: 12 }}>
                                                         <Typography variant="caption" color="text.secondary">
                                                             Observaciones
                                                         </Typography>
@@ -1228,7 +1228,7 @@ const OrderEdit = () => {
                                     </Grid>
 
                                     {/* Totales y estadísticas */}
-                                    <Grid item xs={12} lg={4}>
+                                    <Grid size={{ xs: 12 }} lg={4}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'success.main' }}>
@@ -1263,7 +1263,7 @@ const OrderEdit = () => {
                                     </Grid>
 
                                     {/* Lista de items con estado */}
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12 }}>
                                         <Card variant="outlined">
                                             <CardContent>
                                                 <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
@@ -1311,7 +1311,7 @@ const OrderEdit = () => {
 
                                     {/* Historial de cambios */}
                                     {historialCambios.length > 0 && (
-                                        <Grid item xs={12}>
+                                        <Grid size={{ xs: 12 }}>
                                             <Card variant="outlined">
                                                 <CardContent>
                                                     <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
@@ -1368,7 +1368,7 @@ const OrderEdit = () => {
                     {/* Botones de acción principales */}
                     <Paper sx={{ p: 3, mt: 3, backgroundColor: '#f5f5f5' }}>
                         <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={12} md={6}>
+                            <Grid size={{ xs: 12, md: 6 }}>
                                 <Typography variant="h6" color="primary">
                                     💾 Estado: {hasChanges ? 'Cambios Pendientes' : 'Sin Cambios'}
                                 </Typography>
@@ -1376,7 +1376,7 @@ const OrderEdit = () => {
                                     {hasChanges ? 'Hay cambios sin guardar en la orden' : 'Todos los cambios están guardados'}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid size={{ xs: 12, md: 6 }}>
                                 <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                                     <Button
                                         variant="outlined"
@@ -1428,17 +1428,17 @@ const OrderEdit = () => {
                             {watchedValues.correlativoOPCI}
                         </Typography>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2">
                                     <strong>Cliente:</strong> {clientes.find(c => c.idClt === watchedValues.idClt)?.razonSocial}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="body2">
                                     <strong>Total:</strong> {formatearMoneda(calcularTotal(), 'S/')}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <Typography variant="body2">
                                     <strong>Observaciones:</strong> {watchedValues.observaciones || 'Sin observaciones'}
                                 </Typography>
@@ -1494,7 +1494,7 @@ const OrderEdit = () => {
                             Comparación entre los valores originales y los valores actuales
                         </Alert>
                         <Grid container spacing={3}>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="h6" sx={{ mb: 2, color: 'error.main' }}>
                                     📋 Valores Originales
                                 </Typography>
@@ -1513,7 +1513,7 @@ const OrderEdit = () => {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid size={{ xs: 6 }}>
                                 <Typography variant="h6" sx={{ mb: 2, color: 'success.main' }}>
                                     📋 Valores Actuales
                                 </Typography>
