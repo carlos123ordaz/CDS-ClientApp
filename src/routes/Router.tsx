@@ -11,6 +11,18 @@ const BlankLayout = lazy(() => import('../layouts/blank/BlankLayout'));
 const Dashboard = lazy(() => import("../views/dashboard/page"));
 const OrderCreate = lazy(() => import('../views/order/Create'));
 const OrderList = lazy(() => import('../views/order/List'));
+const OrderDetails = lazy(() => import('../views/order/Details'));
+const OrderEdit = lazy(() => import('../views/order/Details'));
+
+const VendorCreate = lazy(() => import('../views/vendor/Create'));
+const VendorList = lazy(() => import('../views/vendor/List'));
+
+const ProductCreate = lazy(() => import('../views/product/Create'));
+const ProductList = lazy(() => import('../views/product/List'));
+
+const ServiceCreate = lazy(() => import('../views/service/Create'));
+const ServiceList = lazy(() => import('../views/service/List'));
+
 const Error = lazy(() => import('../views/authentication/NotFound'));
 const Register = lazy(() => import('../views/authentication/Register'));
 const Login = lazy(() => import('../views/authentication/Login'));
@@ -27,6 +39,18 @@ const Router = [
       { path: '/ui/shadow', exact: true, element: <Shadow /> },
       { path: '/order-create', exact: true, element: <OrderCreate /> },
       { path: '/order-list', exact: true, element: <OrderList /> },
+      { path: '/order-details/:id', exact: true, element: <OrderDetails /> },
+      { path: '/order-edit/:id', exact: true, element: <OrderEdit /> },
+
+      { path: '/vendor-create', exact: true, element: <VendorCreate /> },
+      { path: '/vendor-list', exact: true, element: <VendorList /> },
+
+      { path: '/product-create', exact: true, element: <ProductCreate /> },
+      { path: '/product-list', exact: true, element: <ProductList /> },
+
+      { path: '/service-create', exact: true, element: <sERRVICE /> },
+      { path: '/service-list', exact: true, element: <ProductList /> },
+
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

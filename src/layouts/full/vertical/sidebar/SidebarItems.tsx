@@ -9,8 +9,6 @@ import {
 
 import Menuitems from "./MenuItems";
 import { Icon } from "@iconify/react";
-import { Upgrade } from "./Upgrade";
-
 const renderMenuItems = (items: any[], pathDirect: string) => {
 
   return items.map((item) => {
@@ -89,7 +87,6 @@ const SidebarItems = () => {
       <MUI_Sidebar width={"100%"} showProfile={false} themeColor={"#43ced7"} themeSecondaryColor={'#1b84ff1a'}>
         {renderMenuItems(Menuitems, pathDirect)}
       </MUI_Sidebar>
-      <Upgrade />
     </Box>
   );
 };

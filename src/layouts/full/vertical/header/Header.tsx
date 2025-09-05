@@ -51,8 +51,6 @@ const Header = () => {
       }
     };
     window.addEventListener('resize', handleResize);
-
-    // Cleanup function to remove event listener on unmount
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -64,10 +62,10 @@ const Header = () => {
   const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
 
   const handleClick = (event: any) => {
-    const rect = event.currentTarget.getBoundingClientRect(); // Get exact position
+    const rect = event.currentTarget.getBoundingClientRect(); 
     setMenuPosition({
-      top: rect.bottom + window.scrollY, // Position menu below the icon
-      left: rect.left + window.scrollX, // Align with icon
+      top: rect.bottom + window.scrollY, 
+      left: rect.left + window.scrollX, 
     });
     setAnchorEl(event.currentTarget);
   };
@@ -80,10 +78,6 @@ const Header = () => {
     <>
       <AppBarStyled color="default">
         <ToolbarStyled>
-          {/* ------------------------------------------- */}
-          {/* Logo */}
-          {/* ------------------------------------------- */}
-
           {lgUp ? (
             <>
               <Box
@@ -103,10 +97,6 @@ const Header = () => {
               <Icon icon="solar:list-bold" height={20} />
             </IconButton>
           )}
-          {/* ------------------------------------------- */}
-          {/* Toggle Button Sidebar */}
-          {/* ------------------------------------------- */}
-
           <IconButton
             aria-label="show 4 new mails"
             color="inherit"
@@ -118,22 +108,21 @@ const Header = () => {
               <IconBell size="21" stroke="1.5" />
             </Badge>
           </IconButton>
-
           <Menu
             id="notification-menu"
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleClose}
-            anchorReference="anchorPosition" // Use custom positioning
+            anchorReference="anchorPosition" 
             anchorPosition={
               menuPosition ? { top: menuPosition.top, left: menuPosition.left } : undefined
             }
             slotProps={{
               paper: {
                 sx: {
-                  mt: 1, // Ensures the menu appears slightly below the bell icon
-                  boxShadow: 9, // Optional: Improves visibility with a shadow
-                  minWidth: '200px', // Adjust width to ensure proper alignment
+                  mt: 1, 
+                  boxShadow: 9, 
+                  minWidth: '200px',
                 },
               },
             }}
@@ -147,7 +136,6 @@ const Header = () => {
           </Menu>
 
           <Box flexGrow={1} />
-
           {lgUp ? (
             <>
               <Stack spacing={2} direction="row" alignItems="center">
