@@ -13,8 +13,6 @@ import { Upgrade } from "./Upgrade";
 
 const renderMenuItems = (items: any[], pathDirect: string) => {
 
-
-
   return items.map((item) => {
     if (item.subheader) {
       // Display Subheader

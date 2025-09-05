@@ -29,7 +29,7 @@ const ProfileCard = () => {
             sx={{ width: 100, height: 100, m: "0 auto" }}
           />
           <Typography variant="h5" fontSize='24px' mt={4} mb={1}>
-            Víctor Balboa
+            Víctor 2 Balboa 2
           </Typography>
           <Typography variant="subtitle1" color="textSecondary" mb={2}>
             Desarrollador de Software Backend

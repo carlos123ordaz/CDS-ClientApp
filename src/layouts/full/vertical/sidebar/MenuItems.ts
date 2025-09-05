@@ -34,19 +34,19 @@ const Menuitems: MenuitemsType[] = [
     id: uniqueId(),
     title: 'Orden de Pedido',
     icon: "box-minimalistic-bold-duotone",
-    href: '/form-layouts',
+    href: '/order-create',
     children: [
       {
         id: uniqueId(),
         title: 'Crear registro',
         icon: 'stop-circle-line-duotone',
-        href: '/form-layouts',
+        href: '/order-create',
       },
       {
         id: uniqueId(),
         title: 'Buscar registro',
         icon: 'stop-circle-line-duotone',
-        href: '/form-elements/checkbox',
+        href: '/order-list',
       },
     ],
   },
