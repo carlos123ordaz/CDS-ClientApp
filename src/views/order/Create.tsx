@@ -41,7 +41,7 @@ export interface FormData {
 export interface Vendedor {
     idVdr: string;
     nomVdr: string;
-    ibLider: boolean | number;
+    ibLider: boolean;
 }
 
 export interface Clientes {
@@ -78,29 +78,37 @@ const OrderCreate = () => {
                 return true;
             });
     }, [clientes]);
-    const lideres = vendedores.filter(v => v.ibLider === true || v.ibLider === 1);
+
+    const lideres = vendedores.filter(v => v.ibLider);
 
     const guardarPedido = (data: FormData) => {
+        console.log('data: ', data)
         const order = {
             ...data,
             idFp: Number(data.idFp),
             idMda: Number(data.idMda),
             totalSinIgv: Number(data.totalSinIgv),
-            ibLider: Number(data.ibLider),
         }
+        console.log(order)
         createOrdenPedido(order)
             .then(_ => {
-                setLoading(false);
                 alert('Pedido guardado con éxito');
+                setLoading(false);
             })
             .catch((err) => {
                 setLoading(false);
-                alert('error :c')
+                alert('error :1')
                 console.log(err)
             })
     };
-
     React.useEffect(() => {
+        getMonedas()
+            .then((res) => setMonedas(res.data as Monedas[]))
+            .catch((err) => {
+                console.error('Error al obtener monedas:', err);
+                setLoading(false);
+            });
+
         getVendedores()
             .then((res) => {
                 setVendedores(res.data as Vendedor[]);
@@ -109,16 +117,14 @@ const OrderCreate = () => {
                 console.error('Error al obtener vendedores:', err);
                 setLoading(false);
             });
-    }, []);
-    React.useEffect(() => {
+
         getClientes()
             .then((res) => setClientes(res.data as Clientes[]))
             .catch((err) => {
                 console.error('Error al obtener clientes:', err);
                 setLoading(false);
             });
-    }, []);
-    React.useEffect(() => {
+
         getFormaPago()
             .then((res) => setFormaPago(res.data as FormaPago[]))
             .catch((err) => {
@@ -126,15 +132,6 @@ const OrderCreate = () => {
                 setLoading(false);
             });
     }, []);
-    React.useEffect(() => {
-        getMonedas()
-            .then((res) => setMonedas(res.data as Monedas[]))
-            .catch((err) => {
-                console.error('Error al obtener monedas:', err);
-                setLoading(false);
-            });
-    }, []);
-
 
     return (
         <div>
@@ -419,7 +416,7 @@ const OrderCreate = () => {
                                             }}
                                             InputLabelProps={{ style: { fontSize: '13px' } }}
                                             sx={{ mb: 2, minWidth: 220 }}
-                                       
+
                                         />
                                     )}
                                     sx={{ width: 250, fontSize: '13px' }}
