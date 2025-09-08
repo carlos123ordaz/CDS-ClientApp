@@ -1,727 +1,783 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    Box,
-    Card,
-    CardContent,
-    Typography,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Button,
-    Grid,
-    Paper,
-    IconButton,
-    Avatar,
-    Chip,
-    Alert,
-    Breadcrumbs,
-    Link,
-    InputAdornment,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Fab,
-    Snackbar,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TablePagination,
-    Checkbox,
-    Menu,
-    ListItemIcon,
-    ListItemText,
-    Divider,
-    Badge,
-    Tooltip,
-    Stack,
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+  IconButton,
+  Chip,
+  TextField,
+  InputAdornment,
+  Toolbar,
+  Stack,
+  Card,
+  CardContent,
+  Avatar,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Tooltip,
+  Breadcrumbs,
+  Link,
+  Grid,
 } from '@mui/material';
 import {
-    Inventory as InventoryIcon,
-    Add as AddIcon,
-    Search as SearchIcon,
-    FilterList as FilterIcon,
-    MoreVert as MoreVertIcon,
-    Edit as EditIcon,
-    Delete as DeleteIcon,
-    Visibility as ViewIcon,
-    Download as DownloadIcon,
-    Upload as UploadIcon,
-    Home as HomeIcon,
-    NavigateNext as NavigateNextIcon,
-    Category as CategoryIcon,
-    QrCode as QrCodeIcon,
-    LocalOffer as TagIcon,
-    Clear as ClearIcon,
-    Refresh as RefreshIcon,
-    Print as PrintIcon,
+  Add as AddIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Search as SearchIcon,
+  Visibility as VisibilityIcon,
+  Inventory as InventoryIcon,
+  Home as HomeIcon,
+  NavigateNext as NavigateNextIcon,
+  FilterList as FilterIcon,
+  Download as DownloadIcon,
+  RefreshOutlined as RefreshIcon,
+  Language as LanguageIcon,
+  QrCode as QrCodeIcon,
+  ShoppingCart as ShoppingCartIcon,
+  TrendingUp as TrendingUpIcon,
+  Warning as WarningIcon,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
-// Interface para productos
+// Interfaz para los datos del producto
 interface Product {
-    id: string;
-    codERP: string;
-    marca: string;
-    codComercial: string;
-    descripcion: string;
-    unidadMedida: string;
-    clase: string;
-    subClase: string;
-    subSubClase: string;
-    bbssSunat: string;
-    estado: 'ACTIVO' | 'INACTIVO' | 'DESCONTINUADO' | 'EN_DESARROLLO';
-    fechaCreacion: string;
-    fechaModificacion: string;
+  id: string;
+  codERP: string;
+  marca: string;
+  codComercial: string;
+  descripcion: string;
+  unidadMedida: string;
+  clase: string;
+  subClase: string;
+  subSubClase: string;
+  modeloTraduccion?: string;
+  descripcionTraduccion?: string;
+  materialTraduccion?: string;
+  usoTraduccion?: string;
+  bbssSunat: string;
+  estado: 'ACTIVO' | 'INACTIVO' | 'DESCONTINUADO' | 'EN_DESARROLLO';
+  // Información adicional
+  precio?: number;
+  stock?: number;
+  stockMinimo?: number;
+  fechaCreacion?: Date;
+  ultimaVenta?: Date;
 }
 
-// Datos de ejemplo
-const productosEjemplo: Product[] = [
+// Interfaz para el formulario de búsqueda
+interface SearchForm {
+  searchTerm: string;
+  marca: string;
+  clase: string;
+  estado: string;
+  unidadMedida: string;
+}
+
+const ListProducts: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { register, watch, reset } = useForm<SearchForm>({
+    defaultValues: {
+      searchTerm: '',
+      marca: '',
+      clase: '',
+      estado: '',
+      unidadMedida: '',
+    }
+  });
+
+  const searchTerm = watch('searchTerm');
+  const marcaFilter = watch('marca');
+  const claseFilter = watch('clase');
+  const estadoFilter = watch('estado');
+  const unidadMedidaFilter = watch('unidadMedida');
+
+  // Datos de ejemplo basados en la imagen
+  const mockProducts: Product[] = [
     {
-        id: '1',
-        codERP: 'ANT-VEN-123456',
-        marca: 'ANTICIPEL',
-        codComercial: 'COD-001',
-        descripcion: 'Detector de gases industriales modelo XRT-500 con calibración automática',
-        unidadMedida: 'UND',
-        clase: 'VENTA',
-        subClase: 'ELECTRONICO',
-        subSubClase: 'NUEVO',
-        bbssSunat: 'USD',
-        estado: 'ACTIVO',
-        fechaCreacion: '2024-01-15',
-        fechaModificacion: '2024-01-20',
+      id: '1',
+      codERP: 'PQ02028',
+      marca: 'Endress+Hauser',
+      codComercial: 'HAW5E9-CBXC1-PA',
+      descripcion: 'Sensor de presión diferencial para líquidos',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '1A-INST',
+      subSubClase: '1A1-PRES',
+      modeloTraduccion: 'Differential Pressure Sensor',
+      descripcionTraduccion: 'Differential pressure sensor for liquids',
+      materialTraduccion: 'Stainless Steel 316L',
+      usoTraduccion: 'Industrial pressure measurement',
+      bbssSunat: 'USD',
+      estado: 'ACTIVO',
+      precio: 1250.00,
+      stock: 15,
+      stockMinimo: 5,
+      fechaCreacion: new Date('2023-01-15'),
+      ultimaVenta: new Date('2024-08-20'),
     },
     {
-        id: '2',
-        codERP: 'CRE-SER-789012',
-        marca: 'CREDITO',
-        codComercial: 'COD-002',
-        descripcion: 'Servicio de mantenimiento preventivo para equipos de detección',
-        unidadMedida: 'UND',
-        clase: 'SERVICIO',
-        subClase: 'MECANICO',
-        subSubClase: 'GARANTIA',
-        bbssSunat: 'PEN',
-        estado: 'ACTIVO',
-        fechaCreacion: '2024-01-10',
-        fechaModificacion: '2024-01-18',
+      id: '2',
+      codERP: 'PQ03446',
+      marca: 'Endress+Hauser',
+      codComercial: 'CPF51E-AASLA02',
+      descripcion: 'Sensor de pH para aplicaciones químicas',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '1A-INST',
+      subSubClase: '1A2-ANAL',
+      modeloTraduccion: 'pH Sensor',
+      descripcionTraduccion: 'pH sensor for chemical applications',
+      materialTraduccion: 'Glass electrode',
+      usoTraduccion: 'Chemical process monitoring',
+      bbssSunat: 'USD',
+      estado: 'ACTIVO',
+      precio: 850.00,
+      stock: 8,
+      stockMinimo: 3,
+      fechaCreacion: new Date('2023-02-10'),
+      ultimaVenta: new Date('2024-09-05'),
     },
     {
-        id: '3',
-        codERP: 'EFE-PRO-345678',
-        marca: 'EFECTIVO',
-        codComercial: 'COD-003',
-        descripcion: 'Proyecto de instalación de sistema de monitoreo ambiental',
-        unidadMedida: 'UND',
-        clase: 'PROYECTO',
-        subClase: 'ELECTRONICO',
-        subSubClase: 'STOCK',
-        bbssSunat: 'USD',
-        estado: 'EN_DESARROLLO',
-        fechaCreacion: '2024-01-05',
-        fechaModificacion: '2024-01-22',
+      id: '3',
+      codERP: 'PQ00087',
+      marca: 'Endress+Hauser',
+      codComercial: 'CYK10-A101',
+      descripcion: 'Transmisor de conductividad',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '1A-INST',
+      subSubClase: '1A2-ANAL',
+      modeloTraduccion: 'Conductivity Transmitter',
+      descripcionTraduccion: 'Conductivity transmitter for water treatment',
+      materialTraduccion: 'Plastic housing',
+      usoTraduccion: 'Water quality monitoring',
+      bbssSunat: 'USD',
+      estado: 'DESCONTINUADO',
+      precio: 650.00,
+      stock: 2,
+      stockMinimo: 0,
+      fechaCreacion: new Date('2022-05-20'),
+      ultimaVenta: new Date('2023-12-15'),
     },
     {
-        id: '4',
-        codERP: 'LET-IMP-901234',
-        marca: 'LETRA',
-        codComercial: 'COD-004',
-        descripcion: 'Importación de sensores de presión alta precisión',
-        unidadMedida: 'UND',
-        clase: 'IMPORTACION',
-        subClase: 'QUIMICO',
-        subSubClase: 'BACKORDER',
-        bbssSunat: 'EUR',
-        estado: 'ACTIVO',
-        fechaCreacion: '2024-01-12',
-        fechaModificacion: '2024-01-25',
+      id: '4',
+      codERP: 'PQ00810',
+      marca: 'Endress+Hauser',
+      codComercial: 'CTA11-A4Z1B2A8',
+      descripcion: 'Analizador de temperatura multicanal',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '1A-INST',
+      subSubClase: '1A3-TEMP',
+      modeloTraduccion: 'Multi-channel Temperature Analyzer',
+      descripcionTraduccion: 'Multi-channel temperature analyzer',
+      materialTraduccion: 'Aluminum housing',
+      usoTraduccion: 'Process temperature control',
+      bbssSunat: 'USD',
+      estado: 'ACTIVO',
+      precio: 2100.00,
+      stock: 5,
+      stockMinimo: 2,
+      fechaCreacion: new Date('2023-06-12'),
+      ultimaVenta: new Date('2024-07-30'),
     },
     {
-        id: '5',
-        codERP: 'OTR-EXP-567890',
-        marca: 'OTROS',
-        codComercial: 'COD-005',
-        descripcion: 'Equipo refurbished para exportación - Analizador de gases',
-        unidadMedida: 'UND',
-        clase: 'EXPORTACION',
-        subClase: 'ELECTRONICO',
-        subSubClase: 'REFURBISHED',
-        bbssSunat: 'USD',
-        estado: 'DESCONTINUADO',
-        fechaCreacion: '2024-01-08',
-        fechaModificacion: '2024-01-15',
+      id: '5',
+      codERP: 'PQ04452',
+      marca: 'Endress+Hauser',
+      codComercial: 'CPT20-EN2D1',
+      descripcion: 'Transmisor de presión absoluta',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '1A-INST',
+      subSubClase: '1A1-PRES',
+      modeloTraduccion: 'Absolute Pressure Transmitter',
+      descripcionTraduccion: 'Absolute pressure transmitter',
+      materialTraduccion: 'Stainless Steel',
+      usoTraduccion: 'Vacuum and pressure measurement',
+      bbssSunat: 'USD',
+      estado: 'EN_DESARROLLO',
+      precio: 1800.00,
+      stock: 0,
+      stockMinimo: 3,
+      fechaCreacion: new Date('2024-01-08'),
+      ultimaVenta: undefined,
     },
-];
+    {
+      id: '6',
+      codERP: 'PQ00473',
+      marca: 'Endress+Hauser',
+      codComercial: 'CPT20-G02D1',
+      descripcion: 'Transmisor de presión manométrica',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '1A-INST',
+      subSubClase: '1A1-PRES',
+      modeloTraduccion: 'Gauge Pressure Transmitter',
+      descripcionTraduccion: 'Gauge pressure transmitter',
+      materialTraduccion: 'Stainless Steel 316',
+      usoTraduccion: 'Industrial pressure monitoring',
+      bbssSunat: 'USD',
+      estado: 'ACTIVO',
+      precio: 1650.00,
+      stock: 12,
+      stockMinimo: 4,
+      fechaCreacion: new Date('2023-03-25'),
+      ultimaVenta: new Date('2024-08-15'),
+    },
+    {
+      id: '7',
+      codERP: 'PQ00811',
+      marca: 'Endress+Hauser',
+      codComercial: '71158246',
+      descripcion: 'Cable de extensión para sensores',
+      unidadMedida: 'M',
+      clase: '02-ACC',
+      subClase: '2A-CAB',
+      subSubClase: '2A1-EXT',
+      modeloTraduccion: 'Extension Cable',
+      descripcionTraduccion: 'Extension cable for sensors',
+      materialTraduccion: 'PVC insulated copper',
+      usoTraduccion: 'Sensor signal transmission',
+      bbssSunat: 'USD',
+      estado: 'ACTIVO',
+      precio: 25.00,
+      stock: 150,
+      stockMinimo: 50,
+      fechaCreacion: new Date('2022-11-10'),
+      ultimaVenta: new Date('2024-09-01'),
+    },
+  ];
 
-const ProductList = () => {
-    const navigate = useNavigate();
-    
-    // Estados principales
-    const [productos, setProductos] = React.useState<Product[]>(productosEjemplo);
-    const [filteredProductos, setFilteredProductos] = React.useState<Product[]>(productosEjemplo);
-    const [loading, setLoading] = React.useState(false);
-    const [searchTerm, setSearchTerm] = React.useState('');
-    const [filterEstado, setFilterEstado] = React.useState('');
-    const [filterClase, setFilterClase] = React.useState('');
-    const [filterMarca, setFilterMarca] = React.useState('');
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [selected, setSelected] = React.useState<string[]>([]);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
-    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
-    const [detailDialogOpen, setDetailDialogOpen] = React.useState(false);
-    const [snackbar, setSnackbar] = React.useState({ 
-        open: false, 
-        message: '', 
-        severity: 'success' as 'success' | 'error' | 'warning' | 'info' 
-    });
+  useEffect(() => {
+    // Simular carga de datos
+    setLoading(true);
+    setTimeout(() => {
+      setProducts(mockProducts);
+      setFilteredProducts(mockProducts);
+      setLoading(false);
+    }, 1000);
+  }, []);
 
-    // Opciones para filtros
-    const estados = ['ACTIVO', 'INACTIVO', 'DESCONTINUADO', 'EN_DESARROLLO'];
-    const clases = ['VENTA', 'SERVICIO', 'PROYECTO', 'IMPORTACION', 'EXPORTACION'];
-    const marcas = ['ANTICIPEL', 'CREDITO', 'EFECTIVO', 'LETRA', 'OTROS'];
+  // Filtrar productos basado en los criterios de búsqueda
+  useEffect(() => {
+    let filtered = products;
 
-    // Filtrar productos
-    React.useEffect(() => {
-        let filtered = productos.filter(producto => {
-            const matchesSearch = searchTerm === '' || 
-                producto.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                producto.codERP.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                producto.codComercial.toLowerCase().includes(searchTerm.toLowerCase());
-            
-            const matchesEstado = filterEstado === '' || producto.estado === filterEstado;
-            const matchesClase = filterClase === '' || producto.clase === filterClase;
-            const matchesMarca = filterMarca === '' || producto.marca === filterMarca;
+    if (searchTerm) {
+      filtered = filtered.filter((product) =>
+        product.codERP.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.codComercial.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.descripcionTraduccion?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-            return matchesSearch && matchesEstado && matchesClase && matchesMarca;
-        });
+    if (marcaFilter) {
+      filtered = filtered.filter(product => product.marca === marcaFilter);
+    }
 
-        setFilteredProductos(filtered);
-        setPage(0);
-    }, [searchTerm, filterEstado, filterClase, filterMarca, productos]);
+    if (claseFilter) {
+      filtered = filtered.filter(product => product.clase === claseFilter);
+    }
 
-    // Manejar selección
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const newSelected = filteredProductos.map((n) => n.id);
-            setSelected(newSelected);
-            return;
-        }
-        setSelected([]);
-    };
+    if (estadoFilter) {
+      filtered = filtered.filter(product => product.estado === estadoFilter);
+    }
 
-    const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-        const selectedIndex = selected.indexOf(id);
-        let newSelected: string[] = [];
+    if (unidadMedidaFilter) {
+      filtered = filtered.filter(product => product.unidadMedida === unidadMedidaFilter);
+    }
 
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-        setSelected(newSelected);
-    };
+    setFilteredProducts(filtered);
+    setPage(0);
+  }, [searchTerm, marcaFilter, claseFilter, estadoFilter, unidadMedidaFilter, products]);
 
-    const isSelected = (id: string) => selected.indexOf(id) !== -1;
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
 
-    // Manejar acciones
-    const handleMenuClick = (event: React.MouseEvent<HTMLElement>, producto: Product) => {
-        setAnchorEl(event.currentTarget);
-        setSelectedProduct(producto);
-    };
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        setSelectedProduct(null);
-    };
+  const handleAddProduct = () => {
+    navigate('/product-create');
+  };
 
-    const handleViewProduct = () => {
-        setDetailDialogOpen(true);
-        handleMenuClose();
-    };
+  const handleEditProduct = (productId: string) => {
+    console.log('Editar producto:', productId);
+  };
 
-    const handleEditProduct = () => {
-        if (selectedProduct) {
-            navigate(`/productos/editar/${selectedProduct.id}`);
-        }
-        handleMenuClose();
-    };
+  const handleViewProduct = (productId: string) => {
+    console.log('Ver producto:', productId);
+  };
 
-    const handleDeleteProduct = () => {
-        setDeleteDialogOpen(true);
-        handleMenuClose();
-    };
+  const handleDeleteProduct = (productId: string) => {
+    console.log('Eliminar producto:', productId);
+  };
 
-    const confirmDelete = () => {
-        if (selectedProduct) {
-            setProductos(productos.filter(p => p.id !== selectedProduct.id));
-            setSnackbar({
-                open: true,
-                message: 'Producto eliminado correctamente',
-                severity: 'success'
-            });
-        }
-        setDeleteDialogOpen(false);
-        setSelectedProduct(null);
-    };
+  const handleRefresh = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
 
-    const clearFilters = () => {
-        setSearchTerm('');
-        setFilterEstado('');
-        setFilterClase('');
-        setFilterMarca('');
-    };
+  const handleClearFilters = () => {
+    reset();
+  };
 
-    const getEstadoColor = (estado: string) => {
-        switch (estado) {
-            case 'ACTIVO': return 'success';
-            case 'INACTIVO': return 'error';
-            case 'DESCONTINUADO': return 'warning';
-            case 'EN_DESARROLLO': return 'info';
-            default: return 'default';
-        }
-    };
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'ACTIVO': return 'success';
+      case 'INACTIVO': return 'default';
+      case 'DESCONTINUADO': return 'error';
+      case 'EN_DESARROLLO': return 'info';
+      default: return 'default';
+    }
+  };
 
-    return (
-        <Box sx={{ p: 3, maxWidth: '1400px', mx: 'auto' }}>
-            {/* Breadcrumbs */}
-            <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                sx={{ mb: 3 }}
-            >
-                <Link
-                    underline="hover"
-                    color="inherit"
-                    href="#"
-                    onClick={() => navigate('/')}
-                    sx={{ display: 'flex', alignItems: 'center' }}
-                >
-                    <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                    Inicio
-                </Link>
-                <Typography color="text.primary" sx={{ display: 'flex', alignItems: 'center' }}>
-                    <InventoryIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                    Productos
-                </Typography>
-            </Breadcrumbs>
+  const getStockStatus = (stock: number, stockMinimo: number) => {
+    if (stock === 0) return { color: 'error', label: 'Sin Stock' };
+    if (stock <= stockMinimo) return { color: 'warning', label: 'Stock Bajo' };
+    return { color: 'success', label: 'Stock OK' };
+  };
 
-            {/* Header */}
-            <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%)' }}>
-                <CardContent sx={{ color: 'white', pb: '16px !important' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                Gestión de Productos
-                            </Typography>
-                            <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                                {filteredProductos.length} productos encontrados
-                            </Typography>
-                        </Box>
-                        <Box sx={{ textAlign: 'right' }}>
-                            <Avatar
-                                sx={{ 
-                                    width: 80, 
-                                    height: 80, 
-                                    bgcolor: 'rgba(255,255,255,0.2)',
-                                    border: '3px solid rgba(255,255,255,0.3)'
-                                }}
-                            >
-                                <InventoryIcon sx={{ fontSize: 40 }} />
-                            </Avatar>
-                        </Box>
-                    </Box>
-                </CardContent>
-            </Card>
+  // Opciones para filtros
+  const marcas = Array.from(new Set(products.map(p => p.marca))).map(marca => ({ value: marca, label: marca }));
 
-            {/* Controles y filtros */}
-            <Card sx={{ mb: 3 }}>
-                <CardContent>
-                    <Grid container spacing={3} alignItems="center">
-                        {/* Búsqueda */}
-                        <Grid size={{ xs: 12, md: 4 }}>
-                            <TextField
-                                fullWidth
-                                size="small"
-                                placeholder="Buscar productos..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <SearchIcon />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
+  const clases = [
+    { value: '01-PROD', label: '01-PROD - Productos' },
+    { value: '02-ACC', label: '02-ACC - Accesorios' },
+    { value: '03-SRV', label: '03-SRV - Servicios' },
+    { value: '04-REP', label: '04-REP - Repuestos' },
+  ];
 
-                        {/* Filtros */}
-                        <Grid size={{ xs: 12, md: 2 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Estado</InputLabel>
-                                <Select
-                                    value={filterEstado}
-                                    label="Estado"
-                                    onChange={(e) => setFilterEstado(e.target.value)}
-                                >
-                                    <MenuItem value="">Todos</MenuItem>
-                                    {estados.map(estado => (
-                                        <MenuItem key={estado} value={estado}>{estado}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
+  const estadosProducto = [
+    { value: 'ACTIVO', label: 'Activo' },
+    { value: 'INACTIVO', label: 'Inactivo' },
+    { value: 'DESCONTINUADO', label: 'Descontinuado' },
+    { value: 'EN_DESARROLLO', label: 'En Desarrollo' },
+  ];
 
-                        <Grid size={{ xs: 12, md: 2 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Clase</InputLabel>
-                                <Select
-                                    value={filterClase}
-                                    label="Clase"
-                                    onChange={(e) => setFilterClase(e.target.value)}
-                                >
-                                    <MenuItem value="">Todas</MenuItem>
-                                    {clases.map(clase => (
-                                        <MenuItem key={clase} value={clase}>{clase}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
+  const unidadesMedida = [
+    { value: 'UND', label: 'Unidad' },
+    { value: 'M', label: 'Metro' },
+    { value: 'KG', label: 'Kilogramo' },
+    { value: 'L', label: 'Litro' },
+  ];
 
-                        <Grid size={{ xs: 12, md: 2 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Marca</InputLabel>
-                                <Select
-                                    value={filterMarca}
-                                    label="Marca"
-                                    onChange={(e) => setFilterMarca(e.target.value)}
-                                >
-                                    <MenuItem value="">Todas</MenuItem>
-                                    {marcas.map(marca => (
-                                        <MenuItem key={marca} value={marca}>{marca}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
+  // Calcular estadísticas
+  const productosActivos = filteredProducts.filter(p => p.estado === 'ACTIVO').length;
+  const valorInventario = filteredProducts.reduce((sum, product) => sum + ((product.precio || 0) * (product.stock || 0)), 0);
+  const productosStockBajo = filteredProducts.filter(p => (p.stock || 0) <= (p.stockMinimo || 0)).length;
+  const valorPromedio = filteredProducts.length > 0 ? 
+    filteredProducts.reduce((sum, product) => sum + (product.precio || 0), 0) / filteredProducts.length : 0;
 
-                        {/* Botones de acción */}
-                        <Grid size={{ xs: 12, md: 2 }}>
-                            <Stack direction="row" spacing={1}>
-                                <Tooltip title="Limpiar filtros">
-                                    <IconButton onClick={clearFilters} size="small">
-                                        <ClearIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Actualizar">
-                                    <IconButton onClick={() => setLoading(true)} size="small">
-                                        <RefreshIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Exportar">
-                                    <IconButton size="small">
-                                        <DownloadIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </Stack>
-                        </Grid>
-                    </Grid>
-
-                    {/* Acciones masivas */}
-                    {selected.length > 0 && (
-                        <Box sx={{ mt: 2, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
-                            <Stack direction="row" spacing={2} alignItems="center">
-                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                                    {selected.length} productos seleccionados
-                                </Typography>
-                                <Button size="small" startIcon={<DeleteIcon />} color="error">
-                                    Eliminar seleccionados
-                                </Button>
-                                <Button size="small" startIcon={<DownloadIcon />}>
-                                    Exportar seleccionados
-                                </Button>
-                            </Stack>
-                        </Box>
-                    )}
-                </CardContent>
-            </Card>
-
-            {/* Tabla de productos */}
-            <Card>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        color="primary"
-                                        indeterminate={selected.length > 0 && selected.length < filteredProductos.length}
-                                        checked={filteredProductos.length > 0 && selected.length === filteredProductos.length}
-                                        onChange={handleSelectAllClick}
-                                    />
-                                </TableCell>
-                                <TableCell>Código ERP</TableCell>
-                                <TableCell>Descripción</TableCell>
-                                <TableCell>Marca</TableCell>
-                                <TableCell>Clase</TableCell>
-                                <TableCell>Sub-Clase</TableCell>
-                                <TableCell>Estado</TableCell>
-                                <TableCell>Fecha Creación</TableCell>
-                                <TableCell align="center">Acciones</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredProductos
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((producto) => {
-                                    const isItemSelected = isSelected(producto.id);
-                                    return (
-                                        <TableRow
-                                            hover
-                                            key={producto.id}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    onClick={(event) => handleClick(event, producto.id)}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                    <QrCodeIcon sx={{ mr: 1, color: 'primary.main' }} />
-                                                    <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                                                        {producto.codERP}
-                                                    </Typography>
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography variant="body2" sx={{ maxWidth: 200 }}>
-                                                    {producto.descripcion.length > 60 
-                                                        ? `${producto.descripcion.substring(0, 60)}...` 
-                                                        : producto.descripcion
-                                                    }
-                                                </Typography>
-                                                <Typography variant="caption" color="text.secondary">
-                                                    {producto.codComercial}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Chip 
-                                                    label={producto.marca} 
-                                                    size="small" 
-                                                    variant="outlined"
-                                                />
-                                            </TableCell>
-                                            <TableCell>{producto.clase}</TableCell>
-                                            <TableCell>{producto.subClase}</TableCell>
-                                            <TableCell>
-                                                <Chip
-                                                    label={producto.estado}
-                                                    color={getEstadoColor(producto.estado) as any}
-                                                    size="small"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography variant="body2">
-                                                    {new Date(producto.fechaCreacion).toLocaleDateString()}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={(e) => handleMenuClick(e, producto)}
-                                                >
-                                                    <MoreVertIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                {/* Paginación */}
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25, 50]}
-                    component="div"
-                    count={filteredProductos.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={(event, newPage) => setPage(newPage)}
-                    onRowsPerPageChange={(event) => {
-                        setRowsPerPage(parseInt(event.target.value, 10));
-                        setPage(0);
-                    }}
-                    labelRowsPerPage="Filas por página:"
-                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-                />
-            </Card>
-
-            {/* Botón flotante para agregar */}
-            <Fab
-                color="primary"
-                sx={{
-                    position: 'fixed',
-                    bottom: 16,
-                    right: 16,
+  return (
+    <Box sx={{ p: 3 }}>
+     
+      <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+        <CardContent sx={{ color: 'white', pb: '16px !important' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box>
+              <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                Gestión de Productos
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+                {filteredProducts.length} producto(s) registrado(s)
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'right' }}>
+              <Avatar
+                sx={{ 
+                  width: 80, 
+                  height: 80, 
+                  bgcolor: 'rgba(255,255,255,0.2)',
+                  border: '3px solid rgba(255,255,255,0.3)'
                 }}
-                onClick={() => navigate('/productos/crear')}
-            >
-                <AddIcon />
-            </Fab>
+              >
+                <InventoryIcon sx={{ fontSize: 40 }} />
+              </Avatar>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
 
-            {/* Menú contextual */}
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-            >
-                <MenuItem onClick={handleViewProduct}>
-                    <ListItemIcon>
-                        <ViewIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Ver detalles</ListItemText>
-                </MenuItem>
-                <MenuItem onClick={handleEditProduct}>
-                    <ListItemIcon>
-                        <EditIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Editar</ListItemText>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleDeleteProduct} sx={{ color: 'error.main' }}>
-                    <ListItemIcon>
-                        <DeleteIcon fontSize="small" color="error" />
-                    </ListItemIcon>
-                    <ListItemText>Eliminar</ListItemText>
-                </MenuItem>
-            </Menu>
+      {/* Cards de estadísticas */}
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid size={{ xs: 12, sm:6, md:3}}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ bgcolor: 'success.main', mr: 2 }}>
+                  <InventoryIcon />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6">{productosActivos}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Productos Activos
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={{ xs: 12, sm:6, md:3}}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ bgcolor: 'info.main', mr: 2 }}>
+                  <TrendingUpIcon />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6">
+                    ${(valorInventario / 1000).toFixed(0)}K
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Valor Inventario
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={{ xs: 12, sm:6, md:3}}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ bgcolor: 'warning.main', mr: 2 }}>
+                  <WarningIcon />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6">{productosStockBajo}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Stock Bajo
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={{ xs: 12, sm:6, md:3}}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                  <ShoppingCartIcon />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6">
+                    ${valorPromedio.toFixed(0)}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Precio Promedio
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
-            {/* Diálogo de confirmación de eliminación */}
-            <Dialog
-                open={deleteDialogOpen}
-                onClose={() => setDeleteDialogOpen(false)}
-            >
-                <DialogTitle>Confirmar eliminación</DialogTitle>
-                <DialogContent>
-                    <Typography>
-                        ¿Está seguro que desea eliminar el producto "{selectedProduct?.descripcion}"?
-                        Esta acción no se puede deshacer.
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setDeleteDialogOpen(false)}>
-                        Cancelar
-                    </Button>
-                    <Button onClick={confirmDelete} color="error" variant="contained">
-                        Eliminar
-                    </Button>
-                </DialogActions>
-            </Dialog>
+      {/* Toolbar con búsqueda y filtros */}
+      <Paper sx={{ mb: 2 }}>
+        <Toolbar sx={{ px: 2, py: 2 }}>
+          <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
+            <TextField
+              {...register('searchTerm')}
+              placeholder="Buscar por código ERP, código comercial o descripción..."
+              variant="outlined"
+              size="small"
+              sx={{ minWidth: 350 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
 
-            {/* Diálogo de detalles del producto */}
-            <Dialog
-                open={detailDialogOpen}
-                onClose={() => setDetailDialogOpen(false)}
-                maxWidth="md"
-                fullWidth
-            >
-                <DialogTitle>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <InventoryIcon sx={{ mr: 1 }} />
-                        Detalles del Producto
-                    </Box>
-                </DialogTitle>
-                <DialogContent>
-                    {selectedProduct && (
-                        <Grid container spacing={2}>
-                            <Grid size={{ xs: 12 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                    <Avatar sx={{ width: 60, height: 60, mr: 2, bgcolor: 'primary.main' }}>
-                                        <InventoryIcon fontSize="large" />
-                                    </Avatar>
-                                    <Box>
-                                        <Typography variant="h6">{selectedProduct.descripcion}</Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            {selectedProduct.codERP} | {selectedProduct.codComercial}
-                                        </Typography>
-                                        <Chip
-                                            label={selectedProduct.estado}
-                                            color={getEstadoColor(selectedProduct.estado) as any}
-                                            size="small"
-                                        />
-                                    </Box>
-                                </Box>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Marca:</strong> {selectedProduct.marca}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Unidad:</strong> {selectedProduct.unidadMedida}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Clase:</strong> {selectedProduct.clase}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Sub-Clase:</strong> {selectedProduct.subClase}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Sub-Sub-Clase:</strong> {selectedProduct.subSubClase}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>BBSS SUNAT:</strong> {selectedProduct.bbssSunat}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Fecha Creación:</strong> {new Date(selectedProduct.fechaCreacion).toLocaleDateString()}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 6 }}>
-                                <Typography variant="body2"><strong>Última Modificación:</strong> {new Date(selectedProduct.fechaModificacion).toLocaleDateString()}</Typography>
-                            </Grid>
-                        </Grid>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setDetailDialogOpen(false)}>
-                        Cerrar
-                    </Button>
-                    <Button onClick={handleEditProduct} variant="contained">
-                        Editar
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <InputLabel>Marca</InputLabel>
+              <Select
+                {...register('marca')}
+                label="Marca"
+              >
+                <MenuItem value="">Todas</MenuItem>
+                {marcas.map(marca => (
+                  <MenuItem key={marca.value} value={marca.value}>
+                    {marca.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-            {/* Snackbar para notificaciones */}
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={6000}
-                onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <InputLabel>Clase</InputLabel>
+              <Select
+                {...register('clase')}
+                label="Clase"
+              >
+                <MenuItem value="">Todas</MenuItem>
+                {clases.map(clase => (
+                  <MenuItem key={clase.value} value={clase.value}>
+                    {clase.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <InputLabel>Estado</InputLabel>
+              <Select
+                {...register('estado')}
+                label="Estado"
+              >
+                <MenuItem value="">Todos</MenuItem>
+                {estadosProducto.map(estado => (
+                  <MenuItem key={estado.value} value={estado.value}>
+                    {estado.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 100 }}>
+              <InputLabel>Unidad</InputLabel>
+              <Select
+                {...register('unidadMedida')}
+                label="Unidad"
+              >
+                <MenuItem value="">Todas</MenuItem>
+                {unidadesMedida.map(unidad => (
+                  <MenuItem key={unidad.value} value={unidad.value}>
+                    {unidad.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack direction="row" spacing={1}>
+            <Tooltip title="Limpiar filtros">
+              <IconButton onClick={handleClearFilters} size="small">
+                <FilterIcon />
+              </IconButton>
+            </Tooltip>
+            
+            <Tooltip title="Actualizar">
+              <IconButton onClick={handleRefresh} size="small">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Exportar">
+              <IconButton size="small">
+                <DownloadIcon />
+              </IconButton>
+            </Tooltip>
+
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleAddProduct}
+              size="large"
+              sx={{
+                background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
+                boxShadow: '0 3px 5px 2px rgba(102, 126, 234, .3)',
+              }}
             >
-                <Alert 
-                    onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
-                    severity={snackbar.severity}
-                    sx={{ width: '100%' }}
-                >
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
-        </Box>
-    );
+              Agregar Producto
+            </Button>
+          </Stack>
+        </Toolbar>
+      </Paper>
+
+      {/* Tabla */}
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 1600 }} aria-label="tabla de productos">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: 'primary.main' }}>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Cód. ERP</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Marca</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Cód. Comercial</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Descripción</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Unidad</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Clasificación</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Stock</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Precio</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Estado</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredProducts
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((product) => {
+                const stockStatus = getStockStatus(product.stock || 0, product.stockMinimo || 0);
+                return (
+                  <TableRow
+                    key={product.id}
+                    sx={{ 
+                      '&:nth-of-type(odd)': { backgroundColor: 'action.hover' },
+                      '&:hover': { backgroundColor: 'action.selected' }
+                    }}
+                  >
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <QrCodeIcon fontSize="small" color="action" />
+                        <Typography variant="body2" sx={{ fontWeight: 'medium', fontFamily: 'monospace' }}>
+                          {product.codERP}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={product.marca} size="small" variant="outlined" color="primary" />
+                    </TableCell>
+                    <TableCell sx={{ maxWidth: 200 }}>
+                      <Typography variant="body2" noWrap title={product.codComercial} sx={{ fontFamily: 'monospace' }}>
+                        {product.codComercial}
+                      </Typography>
+                    </TableCell>
+                    <TableCell sx={{ maxWidth: 250 }}>
+                      <Box>
+                        <Typography variant="body2" noWrap title={product.descripcion}>
+                          {product.descripcion}
+                        </Typography>
+                        {product.descripcionTraduccion && (
+                          <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                            <LanguageIcon fontSize="small" />
+                            {product.descripcionTraduccion}
+                          </Typography>
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={product.unidadMedida} size="small" variant="filled" />
+                    </TableCell>
+                    <TableCell>
+                      <Stack spacing={0.5}>
+                        <Chip label={product.clase} size="small" variant="outlined" />
+                        <Typography variant="caption" color="text.secondary">
+                          {product.subClase} → {product.subSubClase}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                            {product.stock || 0}
+                          </Typography>
+                          <Chip
+                            label={stockStatus.label}
+                            color={stockStatus.color as any}
+                            size="small"
+                            variant="outlined"
+                          />
+                        </Box>
+                        <Typography variant="caption" color="text.secondary">
+                          Mín: {product.stockMinimo || 0}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                          ${(product.precio || 0).toFixed(2)}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {product.bbssSunat}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={product.estado}
+                        color={getStatusColor(product.estado) as any}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Stack direction="row" spacing={1}>
+                        <Tooltip title="Ver detalles">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewProduct(product.id)}
+                          >
+                            <VisibilityIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Editar">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEditProduct(product.id)}
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Eliminar">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteProduct(product.id)}
+                            color="error"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            {filteredProducts.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={10} align="center" sx={{ py: 4 }}>
+                  <Typography variant="body1" color="text.secondary">
+                    No se encontraron productos que coincidan con los filtros
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Paginación */}
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        component="div"
+        count={filteredProducts.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Filas por página:"
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
+        }
+      />
+    </Box>
+  );
 };
 
-export default ProductList;
+export default ListProducts;

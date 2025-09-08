@@ -20,15 +20,19 @@ const VendorList = lazy(() => import('../views/vendor/List'));
 const ProductCreate = lazy(() => import('../views/product/Create'));
 const ProductList = lazy(() => import('../views/product/List'));
 
-
 const ServiceCreate = lazy(() => import('../views/servicios/Create'));
 const ServiceList= lazy(() => import('../views/servicios/ListServices'));
+
+const CustomerCreate = lazy(() => import('../views/customer/CreateApp'));
+const CustomerList= lazy(() => import('../views/customer/List'));
+
+const ProjectCreate = lazy(() => import('../views/projects/Create'));
+const ProjectList= lazy(() => import('../views/projects/List'));
 
 const Error = lazy(() => import('../views/authentication/NotFound'));
 const Register = lazy(() => import('../views/authentication/Register'));
 const Login = lazy(() => import('../views/authentication/Login'));
-const TypographyPage = lazy(() => import('../views/utilities/TypographyPage'))
-const Shadow = lazy(() => import('../views/utilities/Shadow'))
+
 
 const Router = [
   {
@@ -36,8 +40,6 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/', exact: true, element: <Dashboard /> },
-      { path: '/ui/typography', exact: true, element: <TypographyPage /> },
-      { path: '/ui/shadow', exact: true, element: <Shadow /> },
       { path: '/order-create', exact: true, element: <OrderCreate /> },
       { path: '/order-list', exact: true, element: <OrderList /> },
       { path: '/order-details/:id', exact: true, element: <OrderDetails /> },
@@ -50,7 +52,13 @@ const Router = [
       { path: '/product-list', exact: true, element: <ProductList /> },
 
       { path: '/service-create', exact: true, element: <ServiceCreate /> },
-      { path: '/service-list', exact: true, element: <ServiceList /> },
+      { path: '/services-list', exact: true, element: <ServiceList /> },
+
+      { path: '/customer-create', exact: true, element: <CustomerCreate /> },
+      { path: '/customer-list', exact: true, element: <CustomerList /> },
+
+      { path: '/project-create', exact: true, element: <ProjectCreate /> },
+      { path: '/projects-list', exact: true, element: <ProjectList /> },
 
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],

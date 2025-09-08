@@ -732,7 +732,7 @@ const Details = () => {
                                 <Card variant="outlined">
                                     <CardContent>
                                         <Grid container spacing={2}>
-                                            <Grid size={{ xs: 12 }} md={8}>
+                                            <Grid size={{ xs: 12, md: 8}}>
                                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
                                                     <Avatar sx={{ bgcolor: 'primary.main', mr: 2, mt: 0.5 }}>
                                                         {index + 1}
@@ -1179,7 +1179,7 @@ const Details = () => {
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2} sx={{ mt: 1 }}>
-                        <Grid size={{ xs: 12 }} sm={6}>
+                        <Grid size={{ xs: 12 , sm:6}} >
                             <FormControl fullWidth size="small">
                                 <InputLabel>Status</InputLabel>
                                 <Select
@@ -1194,7 +1194,7 @@ const Details = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid size={{ xs: 12 }} sm={6}>
+                        <Grid size={{ xs: 12 , sm:6}} >
                             <FormControl fullWidth size="small">
                                 <InputLabel>Prioridad</InputLabel>
                                 <Select

@@ -536,7 +536,7 @@ const ProductCreate = () => {
                                             📝 Descripción y Medidas
                                         </Typography>
                                         <Grid container spacing={2}>
-                                            <Grid size={{ xs: 12 }} md={8}>
+                                            <Grid size={{ xs: 12, md: 8}}>
                                                 <TextField
                                                     label="Descripción del Producto"
                                                     {...register('descripcion', { required: 'Campo requerido' })}
@@ -721,7 +721,7 @@ const ProductCreate = () => {
                                             </Alert>
                                             <Grid container spacing={1}>
                                                 {serviciosComplementarios.map((servicio, index) => (
-                                                    <Grid size={{ xs: 12 }} sm={6} md={4} key={index}>
+                                                    <Grid size={{ xs: 12 , sm:6, md:4}}  key={index}>
                                                         <Chip
                                                             label={servicio}
                                                             variant="outlined"
@@ -860,7 +860,7 @@ const ProductCreate = () => {
                                             </Alert>
                                             <Grid container spacing={1}>
                                                 {condicionesPago.map((condicion, index) => (
-                                                    <Grid size={{ xs: 12 }} sm={6} md={4} key={index}>
+                                                    <Grid size={{ xs: 12 , sm:6, md:4}}  key={index}>
                                                         <Chip
                                                             label={condicion}
                                                             variant="outlined"
