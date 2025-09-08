@@ -1,5 +1,5 @@
 const typography: any = {
-  fontFamily: "'Poppins', sans-serif;",
+  fontFamily: "'Roboto', sans-serif;",
   h1: {
     fontWeight: 500,
     fontSize: '2.25rem',

@@ -67,8 +67,9 @@ const renderMenuItems = (items: any[], pathDirect: string) => {
         badgeTextColor="#1b84ff"
         disabled={item.disabled}
       >
-        <Link to={item.href} target={item.href.startsWith("https") ? "_blank" : "_self"} rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <Typography component='span' color={pathDirect === item?.href ? '#fff' : 'inherit'}>
+        <Link to={item.href} target={item.href.startsWith("https") ? "_blank" : "_self"} rel="noopener noreferrer" 
+        style={{ textDecoration: 'none',height:'100%', color: 'inherit' ,display:'flex' ,flexGrow:1}}>
+          <Typography component='span' color={pathDirect === item?.href ? '#fff' : 'inherit'} sx={{}}>
             {item.title}</Typography>
         </Link>
       </MenuItem>

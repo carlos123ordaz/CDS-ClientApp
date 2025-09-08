@@ -37,11 +37,9 @@ import {
   LinearProgress,
   FormHelperText,
   Autocomplete,
-  Switch,
-  FormControlLabel,
 } from '@mui/material';
 import {
-  SupportAgent as SalesIcon,
+  Business as BusinessIcon,
   Save as SaveIcon,
   Clear as ClearIcon,
   ArrowBack as ArrowBackIcon,
@@ -50,71 +48,86 @@ import {
   Home as HomeIcon,
   Person as PersonIcon,
   Add as AddIcon,
+  LocationOn as LocationIcon,
   ContactPhone as ContactIcon,
   CheckCircle as CheckCircleIcon,
   Description as DescriptionIcon,
   Preview as PreviewIcon,
   AccountBox as DocumentIcon,
-  Work as WorkIcon,
-  TrendingUp as PerformanceIcon,
-  AttachMoney as MoneyIcon,
+  Work as IndustryIcon,
+  Public as GlobalIcon,
 } from '@mui/icons-material';
 import { Controller, useForm } from "react-hook-form";
 
 // Interfaces
-interface SellerFormData {
-  // Información personal
+interface ClientFormData {
   tipoDocumento: string;
   nroDocumento: string;
-  nombres: string;
-  apellidos: string;
-  fechaNacimiento: string;
-  genero: string;
-  estadoCivil: string;
-  
+  razonSocial: string;
+  nombreCliente: string;
+  tipoCliente: string;
+  industria: string;
+  sector: string;
+  zona: string;
+  pais: string;
+  estado: string;
   // Información de contacto
+  contactoPrincipal: string;
+  cargoContacto: string;
   telefono: string;
   email: string;
   direccion: string;
   distrito: string;
   provincia: string;
   departamento: string;
-  
-  // Información laboral
-  fechaIngreso: string;
-  zona: string;
-  tipoContrato: string;
-  salarioBase: string;
-  comision: string;
-  metaMensual: string;
-  supervisor: string;
-  
-  // Configuración
-  estado: string;
-  accesoCRM: boolean;
-  nivelAcceso: string;
+  codigoPostal: string;
+  // Información comercial
+  condicionPago: string;
+  limitCredito: string;
+  vendedorAsignado: string;
+  canalVenta: string;
+  // Información adicional
+  sitioWeb: string;
   observaciones: string;
 }
 
 // Catálogos
 const tiposDocumento = [
+  { value: 'RUC', label: 'RUC - Registro Único de Contribuyentes' },
   { value: 'DNI', label: 'DNI - Documento Nacional de Identidad' },
   { value: 'CE', label: 'CE - Carnet de Extranjería' },
   { value: 'PASSPORT', label: 'Pasaporte' },
 ];
 
-const generos = [
-  { value: 'M', label: 'Masculino' },
-  { value: 'F', label: 'Femenino' },
-  { value: 'O', label: 'Otro' },
+const tiposCliente = [
+  { value: 'EMPRESA', label: 'Empresa' },
+  { value: 'PERSONA', label: 'Persona Natural' },
+  { value: 'GOBIERNO', label: 'Entidad Gubernamental' },
+  { value: 'ONG', label: 'Organización sin Fines de Lucro' },
 ];
 
-const estadosCiviles = [
-  { value: 'SOLTERO', label: 'Soltero(a)' },
-  { value: 'CASADO', label: 'Casado(a)' },
-  { value: 'DIVORCIADO', label: 'Divorciado(a)' },
-  { value: 'VIUDO', label: 'Viudo(a)' },
-  { value: 'CONVIVIENTE', label: 'Conviviente' },
+const industrias = [
+  { value: 'Minería', label: 'Minería' },
+  { value: 'Manufactura', label: 'Manufactura' },
+  { value: 'Automotriz', label: 'Automotriz' },
+  { value: 'Alimentos', label: 'Alimentos y Bebidas' },
+  { value: 'Construcción', label: 'Construcción' },
+  { value: 'Servicios', label: 'Servicios' },
+  { value: 'Tecnología', label: 'Tecnología' },
+  { value: 'Salud', label: 'Salud' },
+  { value: 'Educación', label: 'Educación' },
+  { value: 'Financiero', label: 'Financiero' },
+  { value: 'Retail', label: 'Retail' },
+  { value: 'Agricultura', label: 'Agricultura' },
+];
+
+const sectores = [
+  { value: 'Extractivo', label: 'Extractivo' },
+  { value: 'Industrial', label: 'Industrial' },
+  { value: 'Consumo', label: 'Consumo' },
+  { value: 'Servicios', label: 'Servicios' },
+  { value: 'Tecnológico', label: 'Tecnológico' },
+  { value: 'Financiero', label: 'Financiero' },
 ];
 
 const zonas = [
@@ -125,26 +138,45 @@ const zonas = [
   { value: 'Occidente', label: 'Occidente' },
 ];
 
-const tiposContrato = [
-  { value: 'INDEFINIDO', label: 'Contrato Indefinido' },
-  { value: 'TEMPORAL', label: 'Contrato Temporal' },
-  { value: 'PRACTICAS', label: 'Contrato de Prácticas' },
-  { value: 'FREELANCE', label: 'Freelance' },
-  { value: 'COMISION', label: 'Solo Comisión' },
-];
-
-const nivelesAcceso = [
-  { value: 'BASICO', label: 'Básico - Solo consulta' },
-  { value: 'INTERMEDIO', label: 'Intermedio - Gestión de clientes' },
-  { value: 'AVANZADO', label: 'Avanzado - Gestión completa' },
-  { value: 'SUPERVISOR', label: 'Supervisor - Acceso total' },
+const paises = [
+  { value: 'Perú', label: 'Perú' },
+  { value: 'Colombia', label: 'Colombia' },
+  { value: 'Ecuador', label: 'Ecuador' },
+  { value: 'Chile', label: 'Chile' },
+  { value: 'Bolivia', label: 'Bolivia' },
+  { value: 'Brasil', label: 'Brasil' },
+  { value: 'Argentina', label: 'Argentina' },
+  { value: 'México', label: 'México' },
+  { value: 'Estados Unidos', label: 'Estados Unidos' },
+  { value: 'Canadá', label: 'Canadá' },
 ];
 
 const estados = [
   { value: 'ACTIVO', label: 'Activo', color: 'success' },
   { value: 'INACTIVO', label: 'Inactivo', color: 'default' },
-  { value: 'SUSPENDIDO', label: 'Suspendido', color: 'error' },
-  { value: 'VACACIONES', label: 'Vacaciones', color: 'warning' },
+  { value: 'SUSPENDIDO', label: 'Suspendido', color: 'warning' },
+  { value: 'PROSPECTO', label: 'Prospecto', color: 'info' },
+];
+
+const condicionesPago = [
+  'Contado',
+  'Crédito 15 días',
+  'Crédito 30 días',
+  'Crédito 45 días',
+  'Crédito 60 días',
+  'Crédito 90 días',
+  'Letra 30 días',
+  'Letra 60 días',
+  'Letra 90 días',
+];
+
+const canalesVenta = [
+  'Venta directa',
+  'Distribuidor',
+  'Online',
+  'Retail',
+  'Mayorista',
+  'Exportación',
 ];
 
 const departamentos = [
@@ -154,15 +186,7 @@ const departamentos = [
   'Apurímac', 'Huancavelica', 'Moquegua', 'Pasco', 'Madre de Dios', 'Puno'
 ];
 
-const supervisores = [
-  'Ana García - Supervisor Norte',
-  'Carlos Mendoza - Supervisor Centro',
-  'María Rodriguez - Supervisor Sur',
-  'Luis Torres - Gerente de Ventas',
-  'Roberto Silva - Director Comercial',
-];
-
-const CreateSeller: React.FC = () => {
+const CreateClient: React.FC = () => {
   // Estados principales
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -183,61 +207,62 @@ const CreateSeller: React.FC = () => {
     formState: { errors }, 
     trigger,
     reset 
-  } = useForm<SellerFormData>({
+  } = useForm<ClientFormData>({
     defaultValues: {
-      tipoDocumento: 'DNI',
+      tipoDocumento: 'RUC',
       nroDocumento: '',
-      nombres: '',
-      apellidos: '',
-      fechaNacimiento: '',
-      genero: 'M',
-      estadoCivil: 'SOLTERO',
+      razonSocial: '',
+      nombreCliente: '',
+      tipoCliente: 'EMPRESA',
+      industria: '',
+      sector: '',
+      zona: 'Centro',
+      pais: 'Perú',
+      estado: 'ACTIVO',
+      contactoPrincipal: '',
+      cargoContacto: '',
       telefono: '',
       email: '',
       direccion: '',
       distrito: '',
       provincia: '',
       departamento: 'Lima',
-      fechaIngreso: new Date().toISOString().split('T')[0],
-      zona: 'Centro',
-      tipoContrato: 'INDEFINIDO',
-      salarioBase: '',
-      comision: '3.0',
-      metaMensual: '50000',
-      supervisor: '',
-      estado: 'ACTIVO',
-      accesoCRM: true,
-      nivelAcceso: 'BASICO',
+      codigoPostal: '',
+      condicionPago: 'Crédito 30 días',
+      limitCredito: '',
+      vendedorAsignado: '',
+      canalVenta: 'Venta directa',
+      sitioWeb: '',
       observaciones: ''
     }
   });
 
   // Watch para campos dependientes
   const watchTipoDocumento = watch('tipoDocumento');
-  const watchNombres = watch('nombres');
-  const watchApellidos = watch('apellidos');
+  const watchTipoCliente = watch('tipoCliente');
+  const watchPais = watch('pais');
 
   // Stepper steps
   const steps = [
     {
-      label: 'Información Personal',
-      description: 'Datos personales del vendedor',
-      icon: <PersonIcon />,
+      label: 'Información Básica',
+      description: 'Documento e identificación',
+      icon: <DocumentIcon />,
+    },
+    {
+      label: 'Clasificación',
+      description: 'Tipo, industria y ubicación',
+      icon: <IndustryIcon />,
     },
     {
       label: 'Información de Contacto',
-      description: 'Contacto y dirección',
+      description: 'Datos de contacto y dirección',
       icon: <ContactIcon />,
     },
     {
-      label: 'Información Laboral',
-      description: 'Datos del puesto de trabajo',
-      icon: <WorkIcon />,
-    },
-    {
-      label: 'Configuración',
-      description: 'Accesos y permisos',
-      icon: <PerformanceIcon />,
+      label: 'Información Comercial',
+      description: 'Condiciones comerciales',
+      icon: <BusinessIcon />,
     },
     {
       label: 'Revisión Final',
@@ -252,12 +277,13 @@ const CreateSeller: React.FC = () => {
     if (!value) return 'Campo requerido';
     
     switch (tipoDoc) {
+      case 'RUC':
+        if (value.length !== 11) return 'RUC debe tener 11 dígitos';
+        if (!/^\d+$/.test(value)) return 'RUC solo debe contener números';
+        break;
       case 'DNI':
         if (value.length !== 8) return 'DNI debe tener 8 dígitos';
         if (!/^\d+$/.test(value)) return 'DNI solo debe contener números';
-        break;
-      case 'CE':
-        if (value.length < 9) return 'CE debe tener al menos 9 caracteres';
         break;
     }
     return true;
@@ -270,23 +296,13 @@ const CreateSeller: React.FC = () => {
     return true;
   };
 
-  const validateAge = (value: string) => {
-    if (!value) return 'Campo requerido';
-    const birthDate = new Date(value);
-    const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    if (age < 18) return 'Debe ser mayor de 18 años';
-    if (age > 65) return 'Edad máxima permitida: 65 años';
-    return true;
-  };
-
   // Validar paso actual
   const validateStep = async (step: number) => {
-    const fieldsToValidate: Record<number, (keyof SellerFormData)[]> = {
-      0: ['tipoDocumento', 'nroDocumento', 'nombres', 'apellidos', 'fechaNacimiento'],
-      1: ['telefono', 'email', 'direccion', 'departamento'],
-      2: ['fechaIngreso', 'zona', 'tipoContrato', 'metaMensual'],
-      3: ['nivelAcceso'],
+    const fieldsToValidate: Record<number, (keyof ClientFormData)[]> = {
+      0: ['tipoDocumento', 'nroDocumento', 'razonSocial', 'nombreCliente'],
+      1: ['tipoCliente', 'industria', 'sector', 'zona', 'pais'],
+      2: ['contactoPrincipal', 'telefono', 'email', 'direccion', 'departamento'],
+      3: ['condicionPago', 'canalVenta'],
     };
 
     if (fieldsToValidate[step]) {
@@ -308,17 +324,17 @@ const CreateSeller: React.FC = () => {
     setActiveStep(prev => prev - 1);
   };
 
-  // Guardar vendedor
-  const guardarVendedor = (data: SellerFormData) => {
+  // Guardar cliente
+  const guardarCliente = (data: ClientFormData) => {
     setLoading(true);
     
     // Simular guardado
     setTimeout(() => {
-      console.log('Vendedor guardado:', data);
+      console.log('Cliente guardado:', data);
       setLoading(false);
       setSnackbar({
         open: true,
-        message: 'Vendedor registrado correctamente',
+        message: 'Cliente registrado correctamente',
         severity: 'success'
       });
     }, 2000);
@@ -330,66 +346,42 @@ const CreateSeller: React.FC = () => {
     setActiveStep(0);
   };
 
-  // Generar email automáticamente
-  const generarEmail = () => {
-    const nombres = watch('nombres');
-    const apellidos = watch('apellidos');
-    
-    if (nombres && apellidos) {
-      const nombresParts = nombres.toLowerCase().split(' ');
-      const apellidosParts = apellidos.toLowerCase().split(' ');
+  // Generar nombre cliente automáticamente
+  const generarNombreCliente = () => {
+    const razonSocial = watch('razonSocial');
+    if (razonSocial) {
+      // Extraer palabras clave para generar nombre corto
+      const palabras = razonSocial.split(' ');
+      let nombreCorto = '';
       
-      const primerNombre = nombresParts[0];
-      const primerApellido = apellidosParts[0];
+      for (const palabra of palabras) {
+        if (palabra.length > 3 && !['SAA', 'SRL', 'SA', 'EIRL', 'del', 'de', 'la', 'las', 'los'].includes(palabra.toUpperCase())) {
+          nombreCorto = palabra;
+          break;
+        }
+      }
       
-      const email = `${primerNombre}.${primerApellido}@empresa.com`;
-      setValue('email', email);
+      if (nombreCorto) {
+        setValue('nombreCliente', nombreCorto);
+      }
     }
   };
 
-  // Efecto para generar email automáticamente
+  // Efecto para generar nombre cliente automáticamente
   useEffect(() => {
-    generarEmail();
-  }, [watchNombres, watchApellidos]);
+    generarNombreCliente();
+  }, [watch('razonSocial')]);
 
   return (
     <Box sx={{ p: 3, maxWidth: '1200px', mx: 'auto' }}>
       {/* Breadcrumbs */}
-      <Breadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
-        sx={{ mb: 3 }}
-      >
-        <Link
-          underline="hover"
-          color="inherit"
-          href="#"
-          sx={{ display: 'flex', alignItems: 'center' }}
-        >
-          <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-          Inicio
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="#"
-          sx={{ display: 'flex', alignItems: 'center' }}
-        >
-          <SalesIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-          Vendedores
-        </Link>
-        <Typography color="text.primary" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AddIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-          Nuevo Vendedor
-        </Typography>
-      </Breadcrumbs>
-
       {/* Header */}
       <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
         <CardContent sx={{ color: 'white', pb: '16px !important' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Box>
               <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                Registro de Nuevo Vendedor
+                Registro de Nuevo Cliente
               </Typography>
               <Typography variant="h6" sx={{ opacity: 0.9 }}>
                 Paso {activeStep + 1} de {steps.length}: {steps[activeStep]?.label}
@@ -404,7 +396,7 @@ const CreateSeller: React.FC = () => {
                   border: '3px solid rgba(255,255,255,0.3)'
                 }}
               >
-                <SalesIcon sx={{ fontSize: 40 }} />
+                <BusinessIcon sx={{ fontSize: 40 }} />
               </Avatar>
             </Box>
           </Box>
@@ -463,14 +455,14 @@ const CreateSeller: React.FC = () => {
         </CardContent>
       </Card>
 
-      <form onSubmit={handleSubmit(guardarVendedor)}>
-        {/* Paso 1: Información Personal */}
+      <form onSubmit={handleSubmit(guardarCliente)}>
+        {/* Paso 1: Información Básica */}
         {activeStep === 0 && (
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-                <PersonIcon sx={{ mr: 1 }} />
-                Información Personal del Vendedor
+                <DocumentIcon sx={{ mr: 1 }} />
+                Información Básica del Cliente
               </Typography>
 
               <Grid container spacing={3}>
@@ -521,7 +513,7 @@ const CreateSeller: React.FC = () => {
                           required
                           error={!!errors.nroDocumento}
                           helperText={errors.nroDocumento?.message}
-                          placeholder={watchTipoDocumento === 'DNI' ? '12345678' : 'Ingrese documento'}
+                          placeholder={watchTipoDocumento === 'RUC' ? '20123456789' : '12345678'}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -541,226 +533,71 @@ const CreateSeller: React.FC = () => {
                   </Paper>
                 </Grid>
 
-                {/* Información personal */}
+                {/* Información de la empresa/persona */}
                 <Grid size={{ xs: 12}}>
                   <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
                     <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                      Datos Personales
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <TextField
-                          label="Nombres"
-                          {...register('nombres', { required: 'Campo requerido' })}
-                          size="small"
-                          fullWidth
-                          required
-                          error={!!errors.nombres}
-                          helperText={errors.nombres?.message}
-                          placeholder="Juan Carlos"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <PersonIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <TextField
-                          label="Apellidos"
-                          {...register('apellidos', { required: 'Campo requerido' })}
-                          size="small"
-                          fullWidth
-                          required
-                          error={!!errors.apellidos}
-                          helperText={errors.apellidos?.message}
-                          placeholder="Pérez García"
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <TextField
-                          label="Fecha de Nacimiento"
-                          {...register('fechaNacimiento', { 
-                            required: 'Campo requerido',
-                            validate: validateAge
-                          })}
-                          size="small"
-                          fullWidth
-                          required
-                          type="date"
-                          error={!!errors.fechaNacimiento}
-                          helperText={errors.fechaNacimiento?.message}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <FormControl fullWidth size="small" required>
-                          <InputLabel>Género</InputLabel>
-                          <Controller
-                            name="genero"
-                            control={control}
-                            render={({ field }) => (
-                              <Select {...field} label="Género">
-                                {generos.map(genero => (
-                                  <MenuItem key={genero.value} value={genero.value}>
-                                    {genero.label}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            )}
-                          />
-                        </FormControl>
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <FormControl fullWidth size="small">
-                          <InputLabel>Estado Civil</InputLabel>
-                          <Controller
-                            name="estadoCivil"
-                            control={control}
-                            render={({ field }) => (
-                              <Select {...field} label="Estado Civil">
-                                {estadosCiviles.map(estado => (
-                                  <MenuItem key={estado.value} value={estado.value}>
-                                    {estado.label}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            )}
-                          />
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Paso 2: Información de Contacto */}
-        {activeStep === 1 && (
-          <Card>
-            <CardContent>
-              <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-                <ContactIcon sx={{ mr: 1 }} />
-                Información de Contacto
-              </Typography>
-
-              <Grid container spacing={3}>
-                {/* Contacto */}
-                <Grid size={{ xs: 12}}>
-                  <Paper sx={{ p: 2, bgcolor: 'info.50', border: '1px solid', borderColor: 'info.200' }}>
-                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                      Datos de Contacto
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <TextField
-                          label="Teléfono"
-                          {...register('telefono', { required: 'Campo requerido' })}
-                          size="small"
-                          fullWidth
-                          required
-                          error={!!errors.telefono}
-                          helperText={errors.telefono?.message}
-                          placeholder="+51 987654321"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <ContactIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <TextField
-                          label="Email (Generado automáticamente)"
-                          {...register('email', { 
-                            required: 'Campo requerido',
-                            validate: validateEmail
-                          })}
-                          size="small"
-                          fullWidth
-                          required
-                          error={!!errors.email}
-                          helperText={errors.email?.message || 'Se genera automáticamente con nombres y apellidos'}
-                          type="email"
-                          sx={{ 
-                            '& .MuiInputBase-input': {
-                              color: 'primary.main'
-                            }
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                </Grid>
-
-                {/* Dirección */}
-                <Grid size={{ xs: 12}}>
-                  <Paper sx={{ p: 2, bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.200' }}>
-                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                      Dirección
+                      Información del Cliente
                     </Typography>
                     <Grid container spacing={2}>
                       <Grid size={{ xs: 12}}>
                         <TextField
-                          label="Dirección"
-                          {...register('direccion', { required: 'Campo requerido' })}
+                          label={watchTipoCliente === 'PERSONA' ? 'Nombres y Apellidos' : 'Razón Social'}
+                          {...register('razonSocial', { required: 'Campo requerido' })}
                           size="small"
                           fullWidth
                           required
-                          error={!!errors.direccion}
-                          helperText={errors.direccion?.message}
-                          placeholder="Av. Principal 123, Piso 2"
+                          error={!!errors.razonSocial}
+                          helperText={errors.razonSocial?.message}
+                          placeholder={watchTipoCliente === 'PERSONA' ? 'Juan Pérez García' : 'Sociedad Minera Ejemplo SAA'}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <DescriptionIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
+                      <Grid size={{ xs: 12, md: 6}}>
                         <TextField
-                          label="Distrito"
-                          {...register('distrito')}
+                          label="Nombre Comercial/Corto"
+                          {...register('nombreCliente', { required: 'Campo requerido' })}
                           size="small"
                           fullWidth
-                          placeholder="San Isidro"
+                          required
+                          error={!!errors.nombreCliente}
+                          helperText={errors.nombreCliente?.message || 'Nombre corto para identificación rápida'}
+                          placeholder="Ejemplo SA"
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <TextField
-                          label="Provincia"
-                          {...register('provincia')}
-                          size="small"
-                          fullWidth
-                          placeholder="Lima"
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <Controller
-                          name="departamento"
-                          control={control}
-                          rules={{ required: 'Campo requerido' }}
-                          render={({ field }) => (
-                            <Autocomplete
-                              {...field}
-                              options={departamentos}
-                              size="small"
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Departamento"
-                                  required
-                                  error={!!errors.departamento}
-                                  helperText={errors.departamento?.message}
-                                />
-                              )}
-                              onChange={(_, value) => field.onChange(value || '')}
-                            />
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <FormControl fullWidth size="small" required>
+                          <InputLabel>Tipo de Cliente</InputLabel>
+                          <Controller
+                            name="tipoCliente"
+                            control={control}
+                            rules={{ required: 'Campo requerido' }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                label="Tipo de Cliente"
+                                error={!!errors.tipoCliente}
+                              >
+                                {tiposCliente.map(tipo => (
+                                  <MenuItem key={tipo.value} value={tipo.value}>
+                                    {tipo.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                          {errors.tipoCliente && (
+                            <FormHelperText error>
+                              {errors.tipoCliente.message}
+                            </FormHelperText>
                           )}
-                        />
+                        </FormControl>
                       </Grid>
                     </Grid>
                   </Paper>
@@ -770,41 +607,119 @@ const CreateSeller: React.FC = () => {
           </Card>
         )}
 
-        {/* Paso 3: Información Laboral */}
-        {activeStep === 2 && (
+        {/* Paso 2: Clasificación */}
+        {activeStep === 1 && (
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-                <WorkIcon sx={{ mr: 1 }} />
-                Información Laboral
+                <IndustryIcon sx={{ mr: 1 }} />
+                Clasificación del Cliente
               </Typography>
 
               <Grid container spacing={3}>
-                {/* Datos del puesto */}
                 <Grid size={{ xs: 12}}>
-                  <Paper sx={{ p: 2, bgcolor: 'error.50', border: '1px solid', borderColor: 'error.200' }}>
+                  <Paper sx={{ p: 2, bgcolor: 'info.50', border: '1px solid', borderColor: 'info.200' }}>
                     <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                      Datos del Puesto
+                      Clasificación Comercial
                     </Typography>
                     <Grid container spacing={2}>
                       <Grid size={{ xs: 12, md: 6}}>
-                        <TextField
-                          label="Fecha de Ingreso"
-                          {...register('fechaIngreso', { required: 'Campo requerido' })}
-                          size="small"
-                          fullWidth
-                          required
-                          type="date"
-                          error={!!errors.fechaIngreso}
-                          helperText={errors.fechaIngreso?.message}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
+                        <FormControl fullWidth size="small" required>
+                          <InputLabel>Industria</InputLabel>
+                          <Controller
+                            name="industria"
+                            control={control}
+                            rules={{ required: 'Campo requerido' }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                label="Industria"
+                                error={!!errors.industria}
+                              >
+                                {industrias.map(industria => (
+                                  <MenuItem key={industria.value} value={industria.value}>
+                                    {industria.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                          {errors.industria && (
+                            <FormHelperText error>
+                              {errors.industria.message}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
                       </Grid>
                       <Grid size={{ xs: 12, md: 6}}>
                         <FormControl fullWidth size="small" required>
-                          <InputLabel>Zona Asignada</InputLabel>
+                          <InputLabel>Sector</InputLabel>
+                          <Controller
+                            name="sector"
+                            control={control}
+                            rules={{ required: 'Campo requerido' }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                label="Sector"
+                                error={!!errors.sector}
+                              >
+                                {sectores.map(sector => (
+                                  <MenuItem key={sector.value} value={sector.value}>
+                                    {sector.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                          {errors.sector && (
+                            <FormHelperText error>
+                              {errors.sector.message}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                </Grid>
+
+                <Grid size={{ xs: 12}}>
+                  <Paper sx={{ p: 2, bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.200' }}>
+                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
+                      Ubicación Geográfica
+                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, md: 4}}>
+                        <FormControl fullWidth size="small" required>
+                          <InputLabel>País</InputLabel>
+                          <Controller
+                            name="pais"
+                            control={control}
+                            rules={{ required: 'Campo requerido' }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                label="País"
+                                error={!!errors.pais}
+                              >
+                                {paises.map(pais => (
+                                  <MenuItem key={pais.value} value={pais.value}>
+                                    {pais.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                          {errors.pais && (
+                            <FormHelperText error>
+                              {errors.pais.message}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 4}}>
+                        <FormControl fullWidth size="small" required>
+                          <InputLabel>Zona</InputLabel>
                           <Controller
                             name="zona"
                             control={control}
@@ -812,7 +727,7 @@ const CreateSeller: React.FC = () => {
                             render={({ field }) => (
                               <Select
                                 {...field}
-                                label="Zona Asignada"
+                                label="Zona"
                                 error={!!errors.zona}
                               >
                                 {zonas.map(zona => (
@@ -830,172 +745,7 @@ const CreateSeller: React.FC = () => {
                           )}
                         </FormControl>
                       </Grid>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <FormControl fullWidth size="small" required>
-                          <InputLabel>Tipo de Contrato</InputLabel>
-                          <Controller
-                            name="tipoContrato"
-                            control={control}
-                            rules={{ required: 'Campo requerido' }}
-                            render={({ field }) => (
-                              <Select
-                                {...field}
-                                label="Tipo de Contrato"
-                                error={!!errors.tipoContrato}
-                              >
-                                {tiposContrato.map(tipo => (
-                                  <MenuItem key={tipo.value} value={tipo.value}>
-                                    {tipo.label}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            )}
-                          />
-                          {errors.tipoContrato && (
-                            <FormHelperText error>
-                              {errors.tipoContrato.message}
-                            </FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <Controller
-                          name="supervisor"
-                          control={control}
-                          render={({ field }) => (
-                            <Autocomplete
-                              {...field}
-                              options={supervisores}
-                              size="small"
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Supervisor Asignado"
-                                  placeholder="Seleccionar supervisor"
-                                />
-                              )}
-                              onChange={(_, value) => field.onChange(value || '')}
-                            />
-                          )}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                </Grid>
-
-                {/* Información salarial */}
-                <Grid size={{ xs: 12}}>
-                  <Paper sx={{ p: 2, bgcolor: 'secondary.50', border: '1px solid', borderColor: 'secondary.200' }}>
-                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                      Información Salarial y Metas
-                    </Typography>
-                    <Grid container spacing={2}>
                       <Grid size={{ xs: 12, md: 4}}>
-                        <TextField
-                          label="Salario Base"
-                          {...register('salarioBase')}
-                          size="small"
-                          fullWidth
-                          placeholder="2500"
-                          type="number"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MoneyIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <TextField
-                          label="Comisión (%)"
-                          {...register('comision')}
-                          size="small"
-                          fullWidth
-                          placeholder="3.0"
-                          type="number"
-                          inputProps={{ step: "0.1", min: "0", max: "10" }}
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">%</InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 4}}>
-                        <TextField
-                          label="Meta Mensual"
-                          {...register('metaMensual', { required: 'Campo requerido' })}
-                          size="small"
-                          fullWidth
-                          required
-                          error={!!errors.metaMensual}
-                          helperText={errors.metaMensual?.message}
-                          placeholder="50000"
-                          type="number"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                S/.
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Paso 4: Configuración */}
-        {activeStep === 3 && (
-          <Card>
-            <CardContent>
-              <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-                <PerformanceIcon sx={{ mr: 1 }} />
-                Configuración y Accesos
-              </Typography>
-
-              <Grid container spacing={3}>
-                <Grid size={{ xs: 12}}>
-                  <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
-                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                      Configuración del Sistema
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid size={{ xs: 12, md: 6}}>
-                        <FormControl fullWidth size="small" required>
-                          <InputLabel>Nivel de Acceso</InputLabel>
-                          <Controller
-                            name="nivelAcceso"
-                            control={control}
-                            rules={{ required: 'Campo requerido' }}
-                            render={({ field }) => (
-                              <Select
-                                {...field}
-                                label="Nivel de Acceso"
-                                error={!!errors.nivelAcceso}
-                              >
-                                {nivelesAcceso.map(nivel => (
-                                  <MenuItem key={nivel.value} value={nivel.value}>
-                                    {nivel.label}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            )}
-                          />
-                          {errors.nivelAcceso && (
-                            <FormHelperText error>
-                              {errors.nivelAcceso.message}
-                            </FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-                      <Grid size={{ xs: 12, md: 6}}>
                         <FormControl fullWidth size="small">
                           <InputLabel>Estado</InputLabel>
                           <Controller
@@ -1019,20 +769,269 @@ const CreateSeller: React.FC = () => {
                           />
                         </FormControl>
                       </Grid>
+                    </Grid>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Paso 3: Información de Contacto */}
+        {activeStep === 2 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+                <ContactIcon sx={{ mr: 1 }} />
+                Información de Contacto
+              </Typography>
+
+              <Grid container spacing={3}>
+                {/* Contacto principal */}
+                <Grid size={{ xs: 12}}>
+                  <Paper sx={{ p: 2, bgcolor: 'error.50', border: '1px solid', borderColor: 'error.200' }}>
+                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
+                      Contacto Principal
+                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <TextField
+                          label="Nombre del Contacto"
+                          {...register('contactoPrincipal', { required: 'Campo requerido' })}
+                          size="small"
+                          fullWidth
+                          required
+                          error={!!errors.contactoPrincipal}
+                          helperText={errors.contactoPrincipal?.message}
+                          placeholder="Juan Pérez García"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PersonIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <TextField
+                          label="Cargo del Contacto"
+                          {...register('cargoContacto')}
+                          size="small"
+                          fullWidth
+                          placeholder="Gerente de Compras"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <TextField
+                          label="Teléfono"
+                          {...register('telefono', { required: 'Campo requerido' })}
+                          size="small"
+                          fullWidth
+                          required
+                          error={!!errors.telefono}
+                          helperText={errors.telefono?.message}
+                          placeholder="+51 1 1234567"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <ContactIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <TextField
+                          label="Email"
+                          {...register('email', { 
+                            required: 'Campo requerido',
+                            validate: validateEmail
+                          })}
+                          size="small"
+                          fullWidth
+                          required
+                          error={!!errors.email}
+                          helperText={errors.email?.message}
+                          placeholder="contacto@empresa.com"
+                          type="email"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                </Grid>
+
+                {/* Dirección */}
+                <Grid size={{ xs: 12}}>
+                  <Paper sx={{ p: 2, bgcolor: 'secondary.50', border: '1px solid', borderColor: 'secondary.200' }}>
+                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
+                      Dirección
+                    </Typography>
+                    <Grid container spacing={2}>
                       <Grid size={{ xs: 12}}>
+                        <TextField
+                          label="Dirección"
+                          {...register('direccion', { required: 'Campo requerido' })}
+                          size="small"
+                          fullWidth
+                          required
+                          error={!!errors.direccion}
+                          helperText={errors.direccion?.message}
+                          placeholder="Av. Principal 123, Piso 5"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <LocationIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 3}}>
+                        <TextField
+                          label="Distrito"
+                          {...register('distrito')}
+                          size="small"
+                          fullWidth
+                          placeholder="San Isidro"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 3}}>
+                        <TextField
+                          label="Provincia"
+                          {...register('provincia')}
+                          size="small"
+                          fullWidth
+                          placeholder="Lima"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 3}}>
                         <Controller
-                          name="accesoCRM"
+                          name="departamento"
                           control={control}
+                          rules={{ required: 'Campo requerido' }}
                           render={({ field }) => (
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  checked={field.value}
-                                  onChange={(e) => field.onChange(e.target.checked)}
-                                  color="primary"
+                            <Autocomplete
+                              {...field}
+                              options={departamentos}
+                              size="small"
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Departamento"
+                                  required
+                                  error={!!errors.departamento}
+                                  helperText={errors.departamento?.message}
                                 />
-                              }
-                              label="Acceso al CRM"
+                              )}
+                              onChange={(_, value) => field.onChange(value || '')}
+                            />
+                          )}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 3}}>
+                        <TextField
+                          label="Código Postal"
+                          {...register('codigoPostal')}
+                          size="small"
+                          fullWidth
+                          placeholder="15036"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Paso 4: Información Comercial */}
+        {activeStep === 3 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+                <BusinessIcon sx={{ mr: 1 }} />
+                Información Comercial
+              </Typography>
+
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12}}>
+                  <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
+                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
+                      Condiciones Comerciales
+                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <Controller
+                          name="condicionPago"
+                          control={control}
+                          rules={{ required: 'Campo requerido' }}
+                          render={({ field }) => (
+                            <Autocomplete
+                              {...field}
+                              options={condicionesPago}
+                              size="small"
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Condición de Pago"
+                                  required
+                                  error={!!errors.condicionPago}
+                                  helperText={errors.condicionPago?.message}
+                                />
+                              )}
+                              onChange={(_, value) => field.onChange(value || '')}
+                            />
+                          )}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <TextField
+                          label="Límite de Crédito"
+                          {...register('limitCredito')}
+                          size="small"
+                          fullWidth
+                          placeholder="50000"
+                          type="number"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                S/.
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <TextField
+                          label="Vendedor Asignado"
+                          {...register('vendedorAsignado')}
+                          size="small"
+                          fullWidth
+                          placeholder="Carlos Rodriguez"
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, md: 6}}>
+                        <Controller
+                          name="canalVenta"
+                          control={control}
+                          rules={{ required: 'Campo requerido' }}
+                          render={({ field }) => (
+                            <Autocomplete
+                              {...field}
+                              options={canalesVenta}
+                              size="small"
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Canal de Venta"
+                                  required
+                                  error={!!errors.canalVenta}
+                                  helperText={errors.canalVenta?.message}
+                                />
+                              )}
+                              onChange={(_, value) => field.onChange(value || '')}
                             />
                           )}
                         />
@@ -1041,7 +1040,7 @@ const CreateSeller: React.FC = () => {
                   </Paper>
                 </Grid>
 
-                {/* Observaciones */}
+                {/* Información adicional */}
                 <Grid size={{ xs: 12}}>
                   <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -1050,14 +1049,34 @@ const CreateSeller: React.FC = () => {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <TextField
-                        label="Observaciones"
-                        {...register('observaciones')}
-                        fullWidth
-                        multiline
-                        rows={4}
-                        placeholder="Información adicional relevante sobre el vendedor..."
-                      />
+                      <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, md: 6}}>
+                          <TextField
+                            label="Sitio Web"
+                            {...register('sitioWeb')}
+                            size="small"
+                            fullWidth
+                            placeholder="https://www.empresa.com"
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <GlobalIcon />
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
+                        <Grid size={{ xs: 12}}>
+                          <TextField
+                            label="Observaciones"
+                            {...register('observaciones')}
+                            fullWidth
+                            multiline
+                            rows={3}
+                            placeholder="Información adicional relevante sobre el cliente..."
+                          />
+                        </Grid>
+                      </Grid>
                     </AccordionDetails>
                   </Accordion>
                 </Grid>
@@ -1076,16 +1095,16 @@ const CreateSeller: React.FC = () => {
               </Typography>
 
               <Alert severity="success" sx={{ mb: 3 }}>
-                Revisa toda la información antes de guardar el registro del vendedor.
+                Revisa toda la información antes de guardar el registro del cliente.
               </Alert>
 
               <Grid container spacing={3}>
-                {/* Resumen información personal */}
+                {/* Resumen información básica */}
                 <Grid size={{ xs: 12, md: 6}}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-                        Información Personal
+                        Información Básica
                       </Typography>
                       <List dense>
                         <ListItem>
@@ -1102,26 +1121,69 @@ const CreateSeller: React.FC = () => {
                         </ListItem>
                         <ListItem>
                           <ListItemText
-                            primary="Nombre Completo"
-                            secondary={`${watch('nombres')} ${watch('apellidos')}`}
+                            primary="Razón Social"
+                            secondary={watch('razonSocial')}
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
-                            primary="Fecha de Nacimiento"
-                            secondary={watch('fechaNacimiento')}
+                            primary="Nombre Cliente"
+                            secondary={watch('nombreCliente')}
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
-                            primary="Género"
-                            secondary={generos.find(g => g.value === watch('genero'))?.label}
+                            primary="Tipo de Cliente"
+                            secondary={tiposCliente.find(t => t.value === watch('tipoCliente'))?.label}
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
-                            primary="Estado Civil"
-                            secondary={estadosCiviles.find(e => e.value === watch('estadoCivil'))?.label}
+                            primary="Estado"
+                            secondary={
+                              <Chip
+                                label={estados.find(e => e.value === watch('estado'))?.label}
+                                color={estados.find(e => e.value === watch('estado'))?.color as any}
+                                size="small"
+                              />
+                            }
+                          />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid>
+
+                {/* Resumen clasificación */}
+                <Grid size={{ xs: 12, md: 6}}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="h6" sx={{ mb: 2, color: 'secondary.main' }}>
+                        Clasificación
+                      </Typography>
+                      <List dense>
+                        <ListItem>
+                          <ListItemText
+                            primary="Industria"
+                            secondary={industrias.find(i => i.value === watch('industria'))?.label}
+                          />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary="Sector"
+                            secondary={sectores.find(s => s.value === watch('sector'))?.label}
+                          />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary="País"
+                            secondary={watch('pais')}
+                          />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary="Zona"
+                            secondary={watch('zona')}
                           />
                         </ListItem>
                       </List>
@@ -1133,10 +1195,22 @@ const CreateSeller: React.FC = () => {
                 <Grid size={{ xs: 12, md: 6}}>
                   <Card variant="outlined">
                     <CardContent>
-                      <Typography variant="h6" sx={{ mb: 2, color: 'secondary.main' }}>
+                      <Typography variant="h6" sx={{ mb: 2, color: 'info.main' }}>
                         Información de Contacto
                       </Typography>
                       <List dense>
+                        <ListItem>
+                          <ListItemText
+                            primary="Contacto Principal"
+                            secondary={watch('contactoPrincipal')}
+                          />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary="Cargo"
+                            secondary={watch('cargoContacto') || 'No especificado'}
+                          />
+                        </ListItem>
                         <ListItem>
                           <ListItemText
                             primary="Teléfono"
@@ -1152,13 +1226,7 @@ const CreateSeller: React.FC = () => {
                         <ListItem>
                           <ListItemText
                             primary="Dirección"
-                            secondary={watch('direccion')}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Ubicación"
-                            secondary={`${watch('distrito')}, ${watch('departamento')}`}
+                            secondary={`${watch('direccion')}, ${watch('distrito')} - ${watch('departamento')}`}
                           />
                         </ListItem>
                       </List>
@@ -1166,97 +1234,42 @@ const CreateSeller: React.FC = () => {
                   </Card>
                 </Grid>
 
-                {/* Resumen laboral */}
-                <Grid size={{ xs: 12, md: 6}}>
-                  <Card variant="outlined">
-                    <CardContent>
-                      <Typography variant="h6" sx={{ mb: 2, color: 'info.main' }}>
-                        Información Laboral
-                      </Typography>
-                      <List dense>
-                        <ListItem>
-                          <ListItemText
-                            primary="Fecha de Ingreso"
-                            secondary={watch('fechaIngreso')}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Zona Asignada"
-                            secondary={watch('zona')}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Tipo de Contrato"
-                            secondary={tiposContrato.find(t => t.value === watch('tipoContrato'))?.label}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Supervisor"
-                            secondary={watch('supervisor') || 'No asignado'}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Salario Base"
-                            secondary={watch('salarioBase') ? `S/. ${watch('salarioBase')}` : 'No definido'}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Comisión"
-                            secondary={`${watch('comision')}%`}
-                          />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemText
-                            primary="Meta Mensual"
-                            secondary={`S/. ${watch('metaMensual')}`}
-                          />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                {/* Resumen configuración */}
+                {/* Resumen comercial */}
                 <Grid size={{ xs: 12, md: 6}}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="h6" sx={{ mb: 2, color: 'warning.main' }}>
-                        Configuración
+                        Información Comercial
                       </Typography>
                       <List dense>
                         <ListItem>
                           <ListItemText
-                            primary="Estado"
-                            secondary={
-                              <Chip
-                                label={estados.find(e => e.value === watch('estado'))?.label}
-                                color={estados.find(e => e.value === watch('estado'))?.color as any}
-                                size="small"
-                              />
-                            }
+                            primary="Condición de Pago"
+                            secondary={watch('condicionPago')}
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
-                            primary="Nivel de Acceso"
-                            secondary={nivelesAcceso.find(n => n.value === watch('nivelAcceso'))?.label}
+                            primary="Límite de Crédito"
+                            secondary={watch('limitCredito') ? `S/. ${watch('limitCredito')}` : 'No definido'}
                           />
                         </ListItem>
                         <ListItem>
                           <ListItemText
-                            primary="Acceso al CRM"
-                            secondary={
-                              <Chip
-                                label={watch('accesoCRM') ? 'Sí' : 'No'}
-                                color={watch('accesoCRM') ? 'success' : 'default'}
-                                size="small"
-                              />
-                            }
+                            primary="Vendedor Asignado"
+                            secondary={watch('vendedorAsignado') || 'No asignado'}
+                          />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary="Canal de Venta"
+                            secondary={watch('canalVenta')}
+                          />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary="Sitio Web"
+                            secondary={watch('sitioWeb') || 'No especificado'}
                           />
                         </ListItem>
                       </List>
@@ -1327,7 +1340,7 @@ const CreateSeller: React.FC = () => {
                   ¿Todo está correcto?
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Revisa la información antes de guardar el vendedor
+                  Revisa la información antes de guardar el cliente
                 </Typography>
               </Grid>
               <Grid size={{ xs: 12, md: 6}}>
@@ -1360,7 +1373,7 @@ const CreateSeller: React.FC = () => {
                       minWidth: 150,
                     }}
                   >
-                    {loading ? 'Guardando...' : 'Guardar Vendedor'}
+                    {loading ? 'Guardando...' : 'Guardar Cliente'}
                   </Button>
                 </Box>
               </Grid>
@@ -1371,7 +1384,7 @@ const CreateSeller: React.FC = () => {
               <Box sx={{ mt: 2 }}>
                 <LinearProgress />
                 <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
-                  Procesando registro del vendedor...
+                  Procesando registro del cliente...
                 </Typography>
               </Box>
             )}
@@ -1387,19 +1400,19 @@ const CreateSeller: React.FC = () => {
         fullWidth
       >
         <DialogTitle>
-          Vista Previa del Vendedor
+          Vista Previa del Cliente
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={2}>
             <Grid size={{ xs: 12}}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Avatar sx={{ width: 60, height: 60, mr: 2, bgcolor: 'primary.main' }}>
-                  {`${watch('nombres')} ${watch('apellidos')}`.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                  <BusinessIcon fontSize="large" />
                 </Avatar>
                 <Box>
-                  <Typography variant="h6">{`${watch('nombres')} ${watch('apellidos')}`}</Typography>
+                  <Typography variant="h6">{watch('razonSocial')}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {watch('nroDocumento')} | {watch('email')}
+                    {watch('nroDocumento')} | {watch('nombreCliente')}
                   </Typography>
                   <Chip
                     label={estados.find(e => e.value === watch('estado'))?.label}
@@ -1409,23 +1422,23 @@ const CreateSeller: React.FC = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid size={{ xs: 6}}>
-              <Typography variant="body2"><strong>Zona:</strong> {watch('zona')}</Typography>
+            <Grid size={{ xs: 6}} >
+              <Typography variant="body2"><strong>Tipo:</strong> {tiposCliente.find(t => t.value === watch('tipoCliente'))?.label}</Typography>
             </Grid>
-            <Grid size={{ xs: 6}}>
+            <Grid size={{ xs: 6}} >
+              <Typography variant="body2"><strong>Industria:</strong> {industrias.find(i => i.value === watch('industria'))?.label}</Typography>
+            </Grid>
+            <Grid size={{ xs: 6}} >
+              <Typography variant="body2"><strong>Contacto:</strong> {watch('contactoPrincipal')}</Typography>
+            </Grid>
+            <Grid size={{ xs: 6}} >
               <Typography variant="body2"><strong>Teléfono:</strong> {watch('telefono')}</Typography>
             </Grid>
-            <Grid size={{ xs: 6}}>
-              <Typography variant="body2"><strong>Tipo Contrato:</strong> {tiposContrato.find(t => t.value === watch('tipoContrato'))?.label}</Typography>
+            <Grid size={{ xs: 12}}>
+              <Typography variant="body2"><strong>Email:</strong> {watch('email')}</Typography>
             </Grid>
-            <Grid size={{ xs: 6}}>
-              <Typography variant="body2"><strong>Meta Mensual:</strong> S/. {watch('metaMensual')}</Typography>
-            </Grid>
-            <Grid size={{ xs: 6}}>
-              <Typography variant="body2"><strong>Comisión:</strong> {watch('comision')}%</Typography>
-            </Grid>
-            <Grid size={{ xs: 6}}>
-              <Typography variant="body2"><strong>Acceso CRM:</strong> {watch('accesoCRM') ? 'Sí' : 'No'}</Typography>
+            <Grid size={{ xs: 12}}>
+              <Typography variant="body2"><strong>Dirección:</strong> {watch('direccion')}</Typography>
             </Grid>
           </Grid>
         </DialogContent>
@@ -1467,4 +1480,4 @@ const CreateSeller: React.FC = () => {
   );
 };
 
-export default CreateSeller;
+export default CreateClient;

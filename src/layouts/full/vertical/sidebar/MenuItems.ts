@@ -74,102 +74,32 @@ const Menuitems: MenuitemsType[] = [
     id: uniqueId(),
     title: 'Vendedores',
     icon: "box-minimalistic-bold-duotone",
-    href: '/order-create',
-    children: [
-      {
-        id: uniqueId(),
-        title: 'Crear registro',
-        icon: 'stop-circle-line-duotone',
-        href: '/vendor-create',
-      },
-      {
-        id: uniqueId(),
-        title: 'Buscar registro',
-        icon: 'stop-circle-line-duotone',
-        href: '/vendor-list',
-      },
-    ],
+    href: '/vendor-list'
   },
   {
     id: uniqueId(),
     title: 'Clientes',
     icon: "box-minimalistic-bold-duotone",
-    href: '/customer-create',
-    children: [
-      {
-        id: uniqueId(),
-        title: 'Crear',
-        icon: 'stop-circle-line-duotone',
-        href: '/customer-create',
-      },
-      {
-        id: uniqueId(),
-        title: 'Buscar',
-        icon: 'stop-circle-line-duotone',
-        href: '/customer-list',
-      },
-    ],
+    href: '/customer-list'
   },
   {
     id: uniqueId(),
     title: 'Productos',
     icon: "box-minimalistic-bold-duotone",
-    href: '/product-create',
-    children: [
-      {
-        id: uniqueId(),
-        title: 'Registrar',
-        icon: 'stop-circle-line-duotone',
-        href: '/product-create',
-      },
-      {
-        id: uniqueId(),
-        title: 'Buscar',
-        icon: 'stop-circle-line-duotone',
-        href: '/product-list',
-      },
-    ],
+    href: '/product-list'
   },
  
   {
     id: uniqueId(),
     title: 'Servicios',
     icon: "box-minimalistic-bold-duotone",
-    href: '/service-create',
-    children: [
-      {
-        id: uniqueId(),
-        title: 'Crear',
-        icon: 'stop-circle-line-duotone',
-        href: '/service-create',
-      },
-      {
-        id: uniqueId(),
-        title: 'Buscar',
-        icon: 'stop-circle-line-duotone',
-        href: '/service-list',
-      },
-    ],
+    href: '/services-list'
   },
   {
     id: uniqueId(),
     title: 'Proyectos',
     icon: "box-minimalistic-bold-duotone",
-    href: '/order-create',
-    children: [
-      {
-        id: uniqueId(),
-        title: 'Crear',
-        icon: 'stop-circle-line-duotone',
-        href: '/order-create',
-      },
-      {
-        id: uniqueId(),
-        title: 'Buscar',
-        icon: 'stop-circle-line-duotone',
-        href: '/order-list',
-      },
-    ],
+    href: '/projects-list'
   },
 ];
 

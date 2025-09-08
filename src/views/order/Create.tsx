@@ -40,11 +40,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import BaseCard from 'src/components/BaseCard/BaseCard';
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import { getVendedores } from 'src/services/VendorService';
-import { getClientes } from 'src/services/CustomerService';
 import { getFormaPago } from 'src/services/PaymentService';
 import { getMonedas } from 'src/services/CurrencyService';
 import { createOrdenPedido } from 'src/services/OrderService';
 import dayjs from 'dayjs';
+import { getCustomers } from 'src/services/CustomerService';
 
 // Interfaces principales
 export interface FormData {
@@ -276,7 +276,7 @@ const OrderCreate = () => {
         Promise.all([
             getMonedas(),
             getVendedores(),
-            getClientes(),
+            getCustomers(),
             getFormaPago()
         ])
         .then(([monedasRes, vendedoresRes, clientesRes, formaPagoRes]) => {
@@ -369,7 +369,7 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
+                                                    
                                                     options={clientesUnicos}
                                                     onChange={(_, value) => field.onChange(value?.idClt)}
                                                     getOptionLabel={(option) => option.razonSocial}
@@ -392,7 +392,7 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
+                                                    
                                                     options={clientesUnicos}
                                                     getOptionLabel={(option) => option.razonSocial}
                                                     onChange={(_, value) => field.onChange(value?.idClt)}
@@ -415,7 +415,7 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
+                                                    
                                                     options={clientesUnicos}
                                                     getOptionLabel={(option) => option.razonSocial}
                                                     onChange={(_, value) => field.onChange(value?.idClt)}
@@ -440,7 +440,7 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
+                                                    
                                                     options={vendedores}
                                                     getOptionLabel={(option) => option.nomVdr}
                                                     onChange={(_, value) => field.onChange(value?.idVdr)}
@@ -463,7 +463,7 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
+                                                   
                                                     options={vendedores}
                                                     getOptionLabel={(option) => option.nomVdr}
                                                     onChange={(_, value) => field.onChange(value?.idVdr)}
@@ -486,7 +486,6 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
                                                     options={lideres}
                                                     getOptionLabel={(option) => option.nomVdr}
                                                     onChange={(_, value) => field.onChange(value?.idVdr)}
@@ -520,7 +519,6 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
                                                     options={monedas}
                                                     getOptionLabel={(option) => {
                                                         const simbolos: Record<string, string> = {
@@ -562,7 +560,6 @@ const OrderCreate = () => {
                                             control={control}
                                             render={({ field }) => (
                                                 <Autocomplete
-                                                    {...field}
                                                     options={formaPago}
                                                     getOptionLabel={(option) => option.descrip}
                                                     onChange={(_, value) => field.onChange(value?.idFp)}

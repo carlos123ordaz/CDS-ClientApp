@@ -84,7 +84,7 @@ const baselightTheme = {
           color: theme.palette.primary.main,
         }),
         '.MuiTypography-root, .MuiListSubheader-root, .MuiChip-label': {
-          fontFamily: '"poppins", sans !important'
+          fontFamily: '"Roboto", sans-serif !important'
         },
         '@keyframes gradient': {
           '0%': {
