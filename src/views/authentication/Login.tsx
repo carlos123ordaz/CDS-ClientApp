@@ -1,75 +1,76 @@
+import React, { useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Paper
+} from '@mui/material';
 
-import { Link } from 'react-router';
-import { Grid, Box, Card, Stack, Typography } from '@mui/material';
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-
-import AuthLogin from './auth/AuthLogin';
-import AuthLogo from 'src/layouts/full/shared/logo/AuthLogo';
-
-
-const Login2 = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Email:', email);
+    console.log('Password:', password);
+    // You would typically handle authentication here (e.g., API call)
+  };
 
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        '&:before': {
-          content: '""',
-          background: 'radial-gradient(#d2f1df, #d3d7fa, #bad8f4)',
-          backgroundSize: '400% 400%',
-          animation: 'gradient 15s ease infinite',
-          position: 'absolute',
-          height: '100%',
-          width: '100%',
-          opacity: '0.3',
-        },
-      }}
-    >
-      <Grid container spacing={0} justifyContent="center" sx={{ height: '100vh' }}>
-        <Grid
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          size={{
-            xs: 12,
-            sm: 12,
-            lg: 4,
-            xl: 3
-          }}>
-          <Card elevation={9} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: '500px' }}>
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <AuthLogo />
-            </Box>
-            <AuthLogin
-              subtext={
-                <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
-                  Your Social Campaigns
-                </Typography>
-              }
-              subtitle={
-                <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
-                  <Typography color="textSecondary" variant="h6" fontWeight="500">
-                    New to MaterialPro?
-                  </Typography>
-                  <Typography
-                    component={Link}
-                    to="/auth/register"
-                    fontWeight="500"
-                    sx={{
-                      textDecoration: 'none',
-                      color: 'primary.main',
-                    }}
-                  >
-                    Create an account
-                  </Typography>
-                </Stack>
-              }
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
+          <Typography component="h1" variant="h5" align="center">
+            Iniciar Sesión
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Correo Electrónico"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Acceder
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    </Container>
   );
 };
 
-export default Login2;
+export default Login;

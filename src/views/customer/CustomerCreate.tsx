@@ -374,8 +374,6 @@ const CreateClient: React.FC = () => {
 
   return (
     <Box sx={{ p: 3, maxWidth: '1200px', mx: 'auto' }}>
-      {/* Breadcrumbs */}
-      {/* Header */}
       <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
         <CardContent sx={{ color: 'white', pb: '16px !important' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -400,8 +398,6 @@ const CreateClient: React.FC = () => {
               </Avatar>
             </Box>
           </Box>
-          
-          {/* Barra de progreso */}
           <Box sx={{ mt: 2 }}>
             <LinearProgress 
               variant="determinate" 
@@ -422,8 +418,6 @@ const CreateClient: React.FC = () => {
           </Box>
         </CardContent>
       </Card>
-
-      {/* Stepper */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Stepper activeStep={activeStep} alternativeLabel>
@@ -454,9 +448,7 @@ const CreateClient: React.FC = () => {
           </Stepper>
         </CardContent>
       </Card>
-
       <form onSubmit={handleSubmit(guardarCliente)}>
-        {/* Paso 1: Información Básica */}
         {activeStep === 0 && (
           <Card>
             <CardContent>
@@ -464,9 +456,7 @@ const CreateClient: React.FC = () => {
                 <DocumentIcon sx={{ mr: 1 }} />
                 Información Básica del Cliente
               </Typography>
-
               <Grid container spacing={3}>
-                {/* Documento de identificación */}
                 <Grid size={{ xs: 12}}>
                   <Paper sx={{ p: 2, bgcolor: 'primary.50', border: '1px solid', borderColor: 'primary.200' }}>
                     <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
@@ -532,8 +522,6 @@ const CreateClient: React.FC = () => {
                     </Grid>
                   </Paper>
                 </Grid>
-
-                {/* Información de la empresa/persona */}
                 <Grid size={{ xs: 12}}>
                   <Paper sx={{ p: 2, bgcolor: 'success.50', border: '1px solid', borderColor: 'success.200' }}>
                     <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
@@ -606,8 +594,6 @@ const CreateClient: React.FC = () => {
             </CardContent>
           </Card>
         )}
-
-        {/* Paso 2: Clasificación */}
         {activeStep === 1 && (
           <Card>
             <CardContent>
