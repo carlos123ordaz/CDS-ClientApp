@@ -25,10 +25,16 @@ import {
   Select,
   MenuItem,
   Tooltip,
-  Breadcrumbs,
-  Link,
   Grid,
   LinearProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Alert,
+  Divider,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -50,9 +56,13 @@ import {
   CheckCircle as CompleteIcon,
   PlayArrow as ActiveIcon,
   Pause as PausedIcon,
+  Close as CloseIcon,
+  Save as SaveIcon,
+  Person as PersonIcon,
+  CalendarToday as CalendarIcon,
+  Description as DescriptionIcon,
 } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useForm, Controller } from 'react-hook-form';
 
 // Interfaz para los datos del proyecto
 interface Project {
@@ -64,7 +74,6 @@ interface Project {
   clase: string;
   subClase: string;
   subSubClase: string;
-  // Información adicional específica de proyectos
   nombreProyecto: string;
   cliente: string;
   fechaInicio: Date;
@@ -74,6 +83,11 @@ interface Project {
   estado: 'PLANIFICACION' | 'EN_PROGRESO' | 'PAUSADO' | 'COMPLETADO' | 'CANCELADO';
   responsable: string;
   descripcion: string;
+  tipoProyecto?: string;
+  prioridad?: string;
+  ubicacion?: string;
+  equipoTrabajo?: string;
+  riesgos?: string;
 }
 
 // Interfaz para el formulario de búsqueda
@@ -85,13 +99,40 @@ interface SearchForm {
   responsable: string;
 }
 
+// Interfaz para el formulario de proyecto
+interface ProjectForm {
+  codERP: string;
+  marca: string;
+  codComercial: string;
+  unidadMedida: string;
+  clase: string;
+  subClase: string;
+  subSubClase: string;
+  nombreProyecto: string;
+  cliente: string;
+  fechaInicio: string;
+  fechaFin: string;
+  presupuesto: number;
+  estado: 'PLANIFICACION' | 'EN_PROGRESO' | 'PAUSADO' | 'COMPLETADO' | 'CANCELADO';
+  responsable: string;
+  descripcion: string;
+  tipoProyecto: string;
+  prioridad: string;
+  ubicacion: string;
+  equipoTrabajo: string;
+  riesgos: string;
+  incluirDetallesAdicionales: boolean;
+}
+
 const ListProjects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
   const { register, watch, reset } = useForm<SearchForm>({
     defaultValues: {
       searchTerm: '',
@@ -102,17 +143,51 @@ const ListProjects: React.FC = () => {
     }
   });
 
+  const {
+    register: registerProject,
+    control: controlProject,
+    handleSubmit: handleSubmitProject,
+    reset: resetProject,
+    watch: watchProject,
+    formState: { errors }
+  } = useForm<ProjectForm>({
+    defaultValues: {
+      codERP: '',
+      marca: 'Consusa',
+      codComercial: '',
+      unidadMedida: 'UND',
+      clase: '03-PROY',
+      subClase: '',
+      subSubClase: '',
+      nombreProyecto: '',
+      cliente: '',
+      fechaInicio: '',
+      fechaFin: '',
+      presupuesto: 0,
+      estado: 'PLANIFICACION',
+      responsable: '',
+      descripcion: '',
+      tipoProyecto: 'CONSULTORIA',
+      prioridad: 'MEDIA',
+      ubicacion: '',
+      equipoTrabajo: '',
+      riesgos: '',
+      incluirDetallesAdicionales: false,
+    }
+  });
+
   const searchTerm = watch('searchTerm');
   const marcaFilter = watch('marca');
   const claseFilter = watch('clase');
   const estadoFilter = watch('estado');
   const responsableFilter = watch('responsable');
+  const incluirDetallesAdicionales = watchProject('incluirDetallesAdicionales');
 
-  // Datos de ejemplo basados en la imagen
+  // Datos mock para ejemplo
   const mockProjects: Project[] = [
     {
       id: '1',
-      codERP: 'SRV0005',
+      codERP: 'PRY0001',
       marca: 'Consusa',
       codComercial: 'Proy.PTC.Consultoria.Otros',
       unidadMedida: 'UND',
@@ -128,10 +203,12 @@ const ListProjects: React.FC = () => {
       estado: 'EN_PROGRESO',
       responsable: 'Carlos Rodriguez',
       descripcion: 'Consultoría técnica para implementación de sistema de control automatizado',
+      tipoProyecto: 'CONSULTORIA',
+      prioridad: 'ALTA',
     },
     {
       id: '2',
-      codERP: 'SRV0005',
+      codERP: 'PRY0002',
       marca: 'Consusa',
       codComercial: 'Proy.Servicio.Ejec.Directa',
       unidadMedida: 'UND',
@@ -147,10 +224,12 @@ const ListProjects: React.FC = () => {
       estado: 'EN_PROGRESO',
       responsable: 'Maria Gonzales',
       descripcion: 'Proyecto de instalación y puesta en marcha de equipos de instrumentación',
+      tipoProyecto: 'INSTALACION',
+      prioridad: 'MEDIA',
     },
     {
       id: '3',
-      codERP: 'SRV0005',
+      codERP: 'PRY0003',
       marca: 'Consusa',
       codComercial: 'Proy.PTC.Material.Mecanicos',
       unidadMedida: 'UND',
@@ -166,75 +245,24 @@ const ListProjects: React.FC = () => {
       estado: 'COMPLETADO',
       responsable: 'Luis Torres',
       descripcion: 'Suministro e instalación de componentes mecánicos para planta concentradora',
-    },
-    {
-      id: '4',
-      codERP: 'SRV0006',
-      marca: 'Consusa',
-      codComercial: 'Proy.Mantenimiento.Preventivo',
-      unidadMedida: 'UND',
-      clase: '03-PROY',
-      subClase: '3D-MANT',
-      subSubClase: '3D1-PREV',
-      nombreProyecto: 'Mantenimiento Preventivo Anual',
-      cliente: 'Southern Copper',
-      fechaInicio: new Date('2024-03-01'),
-      fechaFin: new Date('2024-12-31'),
-      presupuesto: 120000,
-      progreso: 25,
-      estado: 'EN_PROGRESO',
-      responsable: 'Ana Silva',
-      descripcion: 'Programa anual de mantenimiento preventivo para equipos críticos',
-    },
-    {
-      id: '5',
-      codERP: 'SRV0007',
-      marca: 'Consusa',
-      codComercial: 'Proy.Modernizacion.Control',
-      unidadMedida: 'UND',
-      clase: '03-PROY',
-      subClase: '3E-MOD',
-      subSubClase: '3E1-CTRL',
-      nombreProyecto: 'Modernización Sistema de Control',
-      cliente: 'Buenaventura',
-      fechaInicio: new Date('2024-05-01'),
-      fechaFin: new Date('2024-10-31'),
-      presupuesto: 300000,
-      progreso: 10,
-      estado: 'PLANIFICACION',
-      responsable: 'Roberto Silva',
-      descripcion: 'Actualización completa del sistema de control de planta',
-    },
-    {
-      id: '6',
-      codERP: 'SRV0008',
-      marca: 'Consusa',
-      codComercial: 'Proy.Capacitacion.Personal',
-      unidadMedida: 'UND',
-      clase: '03-PROY',
-      subClase: '3F-CAP',
-      subSubClase: '3F1-TEC',
-      nombreProyecto: 'Capacitación Técnica Especializada',
-      cliente: 'Volcan Compañía Minera',
-      fechaInicio: new Date('2024-01-10'),
-      fechaFin: new Date('2024-03-10'),
-      presupuesto: 45000,
-      progreso: 90,
-      estado: 'PAUSADO',
-      responsable: 'Patricia Mendoza',
-      descripcion: 'Programa de capacitación técnica para operadores de planta',
+      tipoProyecto: 'SUMINISTRO',
+      prioridad: 'BAJA',
     },
   ];
 
   useEffect(() => {
-    // Simular carga de datos
+    handleGetProjects();
+  }, []);
+
+  const handleGetProjects = () => {
     setLoading(true);
+    // Simular llamada a API
     setTimeout(() => {
       setProjects(mockProjects);
       setFilteredProjects(mockProjects);
       setLoading(false);
     }, 1000);
-  }, []);
+  };
 
   // Filtrar proyectos basado en los criterios de búsqueda
   useEffect(() => {
@@ -245,7 +273,8 @@ const ListProjects: React.FC = () => {
         project.codERP.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.codComercial.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.nombreProyecto.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.cliente.toLowerCase().includes(searchTerm.toLowerCase())
+        project.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.responsable.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -262,7 +291,7 @@ const ListProjects: React.FC = () => {
     }
 
     if (responsableFilter) {
-      filtered = filtered.filter(project => 
+      filtered = filtered.filter(project =>
         project.responsable.toLowerCase().includes(responsableFilter.toLowerCase())
       );
     }
@@ -281,7 +310,56 @@ const ListProjects: React.FC = () => {
   };
 
   const handleAddProject = () => {
-    navigate('/project-create');
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    resetProject();
+  };
+
+  const onSubmitProject = async (data: ProjectForm) => {
+    setSubmitting(true);
+
+    try {
+      // Simular llamada a API
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      const newProject: Project = {
+        id: String(Date.now()),
+        codERP: data.codERP,
+        marca: data.marca,
+        codComercial: data.codComercial,
+        unidadMedida: data.unidadMedida,
+        clase: data.clase,
+        subClase: data.subClase,
+        subSubClase: data.subSubClase,
+        nombreProyecto: data.nombreProyecto,
+        cliente: data.cliente,
+        fechaInicio: new Date(data.fechaInicio),
+        fechaFin: data.fechaFin ? new Date(data.fechaFin) : undefined,
+        presupuesto: data.presupuesto,
+        progreso: 0,
+        estado: data.estado,
+        responsable: data.responsable,
+        descripcion: data.descripcion,
+        tipoProyecto: data.tipoProyecto,
+        prioridad: data.incluirDetallesAdicionales ? data.prioridad : undefined,
+        ubicacion: data.incluirDetallesAdicionales ? data.ubicacion : undefined,
+        equipoTrabajo: data.incluirDetallesAdicionales ? data.equipoTrabajo : undefined,
+        riesgos: data.incluirDetallesAdicionales ? data.riesgos : undefined,
+      };
+
+      setProjects(prev => [newProject, ...prev]);
+      setFilteredProjects(prev => [newProject, ...prev]);
+      handleCloseModal();
+
+      alert('Proyecto creado exitosamente');
+    } catch (error) {
+      alert('Error al crear el proyecto');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleEditProject = (projectId: string) => {
@@ -294,13 +372,6 @@ const ListProjects: React.FC = () => {
 
   const handleDeleteProject = (projectId: string) => {
     console.log('Eliminar proyecto:', projectId);
-  };
-
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
   };
 
   const handleClearFilters = () => {
@@ -335,7 +406,16 @@ const ListProjects: React.FC = () => {
     return 'error';
   };
 
-  // Opciones para filtros
+  const getPrioridadColor = (prioridad: string) => {
+    switch (prioridad) {
+      case 'ALTA': return 'error';
+      case 'MEDIA': return 'warning';
+      case 'BAJA': return 'success';
+      default: return 'default';
+    }
+  };
+
+  // Opciones para filtros y formulario
   const marcas = Array.from(new Set(projects.map(p => p.marca))).map(marca => ({ value: marca, label: marca }));
 
   const clases = [
@@ -343,6 +423,36 @@ const ListProjects: React.FC = () => {
     { value: '04-CONS', label: '04-CONS - Consultoría' },
     { value: '05-SERV', label: '05-SERV - Servicios Especiales' },
   ];
+
+  const subClasesMap: Record<string, Array<{ value: string; label: string }>> = {
+    '03-PROY': [
+      { value: '3A-CONS', label: '3A-CONS - Consultoría' },
+      { value: '3B-EJEC', label: '3B-EJEC - Ejecución' },
+      { value: '3C-MAT', label: '3C-MAT - Materiales' },
+      { value: '3D-MANT', label: '3D-MANT - Mantenimiento' },
+      { value: '3E-MOD', label: '3E-MOD - Modernización' },
+      { value: '3F-CAP', label: '3F-CAP - Capacitación' },
+    ],
+    '04-CONS': [
+      { value: '4A-TEC', label: '4A-TEC - Técnica' },
+      { value: '4B-GER', label: '4B-GER - Gerencial' },
+    ],
+    '05-SERV': [
+      { value: '5A-ESP', label: '5A-ESP - Especializado' },
+      { value: '5B-GEN', label: '5B-GEN - General' },
+    ],
+  };
+
+  const subSubClasesMap: Record<string, Array<{ value: string; label: string }>> = {
+    '3A-CONS': [
+      { value: '3A1-TEC', label: '3A1-TEC - Técnica' },
+      { value: '3A2-GER', label: '3A2-GER - Gerencial' },
+    ],
+    '3B-EJEC': [
+      { value: '3B1-DIR', label: '3B1-DIR - Directa' },
+      { value: '3B2-SUP', label: '3B2-SUP - Supervisión' },
+    ],
+  };
 
   const estadosProyecto = [
     { value: 'PLANIFICACION', label: 'Planificación' },
@@ -352,48 +462,40 @@ const ListProjects: React.FC = () => {
     { value: 'CANCELADO', label: 'Cancelado' },
   ];
 
+  const tiposProyecto = [
+    { value: 'CONSULTORIA', label: 'Consultoría' },
+    { value: 'INSTALACION', label: 'Instalación' },
+    { value: 'MANTENIMIENTO', label: 'Mantenimiento' },
+    { value: 'SUMINISTRO', label: 'Suministro' },
+    { value: 'MODERNIZACION', label: 'Modernización' },
+    { value: 'CAPACITACION', label: 'Capacitación' },
+  ];
+
+  const prioridades = [
+    { value: 'ALTA', label: 'Alta' },
+    { value: 'MEDIA', label: 'Media' },
+    { value: 'BAJA', label: 'Baja' },
+  ];
+
+  const unidadesMedida = [
+    { value: 'UND', label: 'Unidad' },
+    { value: 'PROY', label: 'Proyecto' },
+    { value: 'FASE', label: 'Fase' },
+  ];
+
   const responsables = Array.from(new Set(projects.map(p => p.responsable))).map(resp => ({ value: resp, label: resp }));
 
   // Calcular estadísticas
   const proyectosActivos = filteredProjects.filter(p => p.estado === 'EN_PROGRESO').length;
   const presupuestoTotal = filteredProjects.reduce((sum, project) => sum + project.presupuesto, 0);
-  const progresoPromedio = filteredProjects.length > 0 ? 
+  const progresoPromedio = filteredProjects.length > 0 ?
     Math.round(filteredProjects.reduce((sum, project) => sum + project.progreso, 0) / filteredProjects.length) : 0;
   const proyectosCompletados = filteredProjects.filter(p => p.estado === 'COMPLETADO').length;
 
   return (
     <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-        <CardContent sx={{ color: 'white', pb: '16px !important' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                Gestión de Proyectos
-              </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                {filteredProjects.length} proyecto(s) registrado(s)
-              </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'right' }}>
-              <Avatar
-                sx={{ 
-                  width: 80, 
-                  height: 80, 
-                  bgcolor: 'rgba(255,255,255,0.2)',
-                  border: '3px solid rgba(255,255,255,0.3)'
-                }}
-              >
-                <ProjectIcon sx={{ fontSize: 40 }} />
-              </Avatar>
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-
-      {/* Cards de estadísticas */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid size={{ xs: 12, md: 3, sm: 6}}>
+        <Grid size={{ xs: 12, md: 3, sm: 6 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -410,7 +512,7 @@ const ListProjects: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, md: 3, sm: 6}}>
+        <Grid size={{ xs: 12, md: 3, sm: 6 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -429,7 +531,7 @@ const ListProjects: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, md: 3, sm: 6}}>
+        <Grid size={{ xs: 12, md: 3, sm: 6 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -446,7 +548,7 @@ const ListProjects: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, md: 3, sm: 6}}>
+        <Grid size={{ xs: 12, md: 3, sm: 6 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -471,7 +573,7 @@ const ListProjects: React.FC = () => {
           <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
             <TextField
               {...register('searchTerm')}
-              placeholder="Buscar por código ERP, nombre de proyecto o cliente..."
+              placeholder="Buscar por código ERP, nombre de proyecto, cliente o responsable..."
               variant="outlined"
               size="small"
               sx={{ minWidth: 350 }}
@@ -551,9 +653,9 @@ const ListProjects: React.FC = () => {
                 <FilterIcon />
               </IconButton>
             </Tooltip>
-            
+
             <Tooltip title="Actualizar">
-              <IconButton onClick={handleRefresh} size="small">
+              <IconButton onClick={handleGetProjects} size="small">
                 <RefreshIcon />
               </IconButton>
             </Tooltip>
@@ -568,17 +670,222 @@ const ListProjects: React.FC = () => {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleAddProject}
-              size="large"
-              sx={{
-                background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
-                boxShadow: '0 3px 5px 2px rgba(102, 126, 234, .3)',
-              }}
+              size="small"
             >
               Agregar Proyecto
             </Button>
           </Stack>
         </Toolbar>
       </Paper>
+
+      {/* Modal para agregar proyecto */}
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: { minHeight: '80vh' }
+        }}
+      >
+        <DialogTitle>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Typography variant="h6" component="div">
+              Agregar Nuevo Proyecto
+            </Typography>
+            <IconButton onClick={handleCloseModal} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+
+        <form onSubmit={handleSubmitProject(onSubmitProject)}>
+          <DialogContent dividers>
+            <Grid container spacing={3}>
+              {/* Información básica */}
+              <Grid size={12}>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Información Básica
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  {...registerProject('codERP', {
+                    required: 'El código ERP es requerido',
+                    pattern: { value: /^PRY\d{4}$/, message: 'Formato: PRY0000' }
+                  })}
+                  label="Código ERP"
+                  fullWidth
+                  placeholder="PRY0000"
+                  error={!!errors.codERP}
+                  helperText={errors.codERP?.message}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  {...registerProject('marca', { required: 'La marca es requerida' })}
+                  label="Marca"
+                  fullWidth
+                  error={!!errors.marca}
+                  helperText={errors.marca?.message}
+                />
+              </Grid>
+
+              <Grid size={12}>
+                <TextField
+                  {...registerProject('codComercial', { required: 'El código comercial es requerido' })}
+                  label="Código Comercial"
+                  fullWidth
+                  error={!!errors.codComercial}
+                  helperText={errors.codComercial?.message}
+                />
+              </Grid>
+
+              {/* Clasificación */}
+              <Grid size={12}>
+                <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
+                  Clasificación
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Unidad de Medida</InputLabel>
+                  <Controller
+                    name="unidadMedida"
+                    control={controlProject}
+                    render={({ field }) => (
+                      <Select {...field} label="Unidad de Medida">
+                        {unidadesMedida.map(unidad => (
+                          <MenuItem key={unidad.value} value={unidad.value}>
+                            {unidad.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth error={!!errors.clase}>
+                  <InputLabel>Clase</InputLabel>
+                  <Controller
+                    name="clase"
+                    control={controlProject}
+                    rules={{ required: 'La clase es requerida' }}
+                    render={({ field }) => (
+                      <Select {...field} label="Clase">
+                        {clases.map(clase => (
+                          <MenuItem key={clase.value} value={clase.value}>
+                            {clase.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {errors.clase && (
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                      {errors.clase.message}
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Estado</InputLabel>
+                  <Controller
+                    name="estado"
+                    control={controlProject}
+                    render={({ field }) => (
+                      <Select {...field} label="Estado">
+                        {estadosProyecto.map(estado => (
+                          <MenuItem key={estado.value} value={estado.value}>
+                            {estado.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Sub Clase</InputLabel>
+                  <Controller
+                    name="subClase"
+                    control={controlProject}
+                    render={({ field }) => (
+                      <Select {...field} label="Sub Clase">
+                        <MenuItem value="">Seleccionar</MenuItem>
+                        {(subClasesMap[watchProject('clase')] || []).map(subClase => (
+                          <MenuItem key={subClase.value} value={subClase.value}>
+                            {subClase.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Sub Sub Clase</InputLabel>
+                  <Controller
+                    name="subSubClase"
+                    control={controlProject}
+                    render={({ field }) => (
+                      <Select {...field} label="Sub Sub Clase">
+                        <MenuItem value="">Seleccionar</MenuItem>
+                        {(subSubClasesMap[watchProject('subClase')] || []).map(subSubClase => (
+                          <MenuItem key={subSubClase.value} value={subSubClase.value}>
+                            {subSubClase.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              {/* Información adicional */}
+              <Grid size={12}>
+                <Alert severity="info" sx={{ mt: 2 }}>
+                  <Typography variant="body2">
+                    <strong>Nota:</strong> Una vez creado el proyecto, se establecerá el progreso inicial en 0%
+                    y estará disponible para su gestión y seguimiento en el sistema.
+                  </Typography>
+                </Alert>
+              </Grid>
+            </Grid>
+          </DialogContent>
+
+          <DialogActions sx={{ p: 3 }}>
+            <Button
+              onClick={handleCloseModal}
+              variant="outlined"
+              disabled={submitting}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={submitting}
+              startIcon={submitting ? undefined : <SaveIcon />}
+            >
+              {submitting ? 'Guardando...' : 'Guardar Proyecto'}
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
 
       {/* Tabla */}
       <TableContainer component={Paper}>
@@ -588,11 +895,10 @@ const ListProjects: React.FC = () => {
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Cód. ERP</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Marca</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Cód. Comercial</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Proyecto</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Cliente</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Clasificación</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Progreso</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Presupuesto</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Unidad de medida</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Clase</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Sub-Clase</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Sub_Sub-Clase</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Estado</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Acciones</TableCell>
             </TableRow>
@@ -603,73 +909,47 @@ const ListProjects: React.FC = () => {
               .map((project) => (
                 <TableRow
                   key={project.id}
-                  sx={{ 
+                  sx={{
                     '&:nth-of-type(odd)': { backgroundColor: 'action.hover' },
                     '&:hover': { backgroundColor: 'action.selected' }
                   }}
                 >
                   <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium', fontFamily: 'monospace' }}>
-                      {project.codERP}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <ProjectIcon fontSize="small" color="action" />
+                      <Typography variant="body2" sx={{ fontWeight: 'medium', fontFamily: 'monospace' }}>
+                        {project.codERP}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 200 }}>
+                    <Typography variant="body2" noWrap title={project.codComercial} sx={{ fontFamily: 'monospace' }}>
+                      {project.marca}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Chip label={project.marca} size="small" variant="outlined" color="primary" />
+                    <Box sx={{ minWidth: 100 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>123</Typography>
+                    </Box>
                   </TableCell>
                   <TableCell sx={{ maxWidth: 200 }}>
                     <Typography variant="body2" noWrap title={project.codComercial} sx={{ fontFamily: 'monospace' }}>
                       {project.codComercial}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={{ maxWidth: 250 }}>
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 'medium' }} noWrap title={project.nombreProyecto}>
-                        {project.nombreProyecto}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {project.responsable}
-                      </Typography>
-                    </Box>
-                  </TableCell>
                   <TableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <BusinessIcon fontSize="small" color="action" />
-                      <Typography variant="body2">
-                        {project.cliente}
-                      </Typography>
+                    <Box sx={{ minWidth: 100 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>123</Typography>
                     </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Stack spacing={0.5}>
-                      <Chip label={project.clase} size="small" variant="outlined" />
-                      <Typography variant="caption" color="text.secondary">
-                        {project.subClase} → {project.subSubClase}
-                      </Typography>
-                    </Stack>
                   </TableCell>
                   <TableCell>
                     <Box sx={{ minWidth: 100 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                          {project.progreso}%
-                        </Typography>
-                      </Box>
-                      <LinearProgress
-                        variant="determinate"
-                        value={project.progreso}
-                        color={getProgressColor(project.progreso) as any}
-                        sx={{ height: 6, borderRadius: 3 }}
-                      />
+                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>123</Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                        ${project.presupuesto.toLocaleString()}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        USD
-                      </Typography>
+                    <Box sx={{ minWidth: 100 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'medium' }}>123</Typography>
                     </Box>
                   </TableCell>
                   <TableCell>

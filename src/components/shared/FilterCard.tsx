@@ -31,6 +31,7 @@ import {
     Close as CloseIcon,
     FilterAlt as FilterAltIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router';
 
 // Tipos mejorados
 type FieldOption = {
@@ -47,7 +48,6 @@ type Field = {
 };
 
 type Fields = Record<string, Field>;
-
 type FilterValues = Record<string, string | number>;
 
 interface FilterCardProps {
@@ -56,8 +56,10 @@ interface FilterCardProps {
     onClearFilters?: () => void;
     onRefresh?: () => void;
     onExport?: () => void;
-    onAddClient?: () => void;
     loading?: boolean;
+    path: string;
+    fieldsProp: Fields;
+    btnName: string;
 }
 
 export const FilterCard: React.FC<FilterCardProps> = ({
@@ -66,71 +68,18 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     onClearFilters,
     onRefresh,
     onExport,
-    onAddClient,
-    loading = false
+    loading = false,
+    path,
+    fieldsProp,
+    btnName
 }) => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
     const [isFieldsOpen, setIsFieldsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [appliedFilters, setAppliedFilters] = useState<FilterValues>({});
-
     const containerRef = useRef<HTMLDivElement>(null);
-
-    const [fields, setFields] = useState<Fields>({
-        socialReason: {
-            active: true,
-            name: "Razón social",
-            type: "text",
-            value: ""
-        },
-        cuit: {
-            active: true,
-            name: "CUIT",
-            type: "text",
-            value: ""
-        },
-        email: {
-            active: false,
-            name: "Email",
-            type: "text",
-            value: ""
-        },
-        status: {
-            active: false,
-            name: "Estado",
-            type: "select",
-            value: "",
-            options: [
-                { name: "Activo", value: "activo" },
-                { name: "Inactivo", value: "inactivo" }
-            ]
-        },
-        category: {
-            active: false,
-            name: "Categoría",
-            type: "select",
-            value: "",
-            options: [
-                { name: "Categoría 1", value: "categoria1" },
-                { name: "Categoría 2", value: "categoria2" },
-                { name: "Categoría 3", value: "categoria3" }
-            ]
-        },
-        date: {
-            active: false,
-            name: "Fecha de registro",
-            type: "date",
-            value: ""
-        },
-        amount: {
-            active: false,
-            name: "Monto mínimo",
-            type: "number",
-            value: ""
-        }
-    });
-
-    // Obtener campos activos con valores
+    const navigate = useNavigate();
+    const [fields, setFields] = useState<Fields>(fieldsProp);
     const getActiveFiltersWithValues = useCallback(() => {
         return Object.entries(fields)
             .filter(([_, field]) => field.active && field.value && field.value !== '')
@@ -139,8 +88,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 return acc;
             }, {} as FilterValues);
     }, [fields]);
-
-    // Manejar cambios en los valores de los campos
     const handleFieldValueChange = (fieldKey: string, value: string | number) => {
         setFields(prev => ({
             ...prev,
@@ -151,14 +98,13 @@ export const FilterCard: React.FC<FilterCardProps> = ({
         }));
     };
 
-    // Alternar activación de campos
     const toggleField = (key: string) => {
         setFields(prev => ({
             ...prev,
             [key]: {
                 ...prev[key],
                 active: !prev[key].active,
-                value: !prev[key].active ? prev[key].value : "" // Limpiar valor si se desactiva
+                value: !prev[key].active ? prev[key].value : ""
             }
         }));
     };
@@ -171,7 +117,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
         setIsFiltersOpen(false);
     };
 
-    // Limpiar todos los filtros
     const clearAllFilters = () => {
         setFields(prev => {
             const cleared = { ...prev };
@@ -185,7 +130,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
         onClearFilters?.();
     };
 
-    // Remover filtro específico
     const removeFilter = (filterKey: string) => {
         setFields(prev => ({
             ...prev,
@@ -194,14 +138,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 value: ""
             }
         }));
-
         const newFilters = { ...appliedFilters };
         delete newFilters[filterKey];
         setAppliedFilters(newFilters);
         onFiltersChange?.(newFilters);
     };
 
-    // Manejar búsqueda
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchValue(value);
@@ -399,15 +341,11 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
-                        size="large"
-                        onClick={onAddClient}
+                        size="small"
+                        onClick={() => navigate(path)}
                         disabled={loading}
-                        sx={{
-                            background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
-                            boxShadow: '0 3px 5px 2px rgba(102, 126, 234, .3)',
-                        }}
                     >
-                        Agregar Cliente
+                        {btnName}
                     </Button>
                 </Stack>
             </Toolbar>
@@ -418,8 +356,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                         position: 'absolute',
                         top: '100%',
                         left: 0,
-                        right: '50%',
-                        zIndex: 1300,
+                        right: '51%',
+                        zIndex: 1000,
                         mt: 1
                     }}
                 >
@@ -437,7 +375,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                                     borderRadius: 2,
                                     backgroundColor: 'background.paper',
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                                    minWidth: '400px'
+                                    minWidth: '350px'
                                 }}
                             >
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
