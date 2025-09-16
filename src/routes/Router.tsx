@@ -3,36 +3,28 @@
 import React, { lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router';
 
-/* ***Layouts**** */
 const FullLayout = lazy(() => import('../layouts/full/FullLayout'));
 const BlankLayout = lazy(() => import('../layouts/blank/BlankLayout'));
 
-/* ****Pages***** */
 const Dashboard = lazy(() => import("../views/dashboard/page"));
-const OrderCreate = lazy(() => import('../views/order/Create'));
-const OrderList = lazy(() => import('../views/order/List'));
-const OrderDetails = lazy(() => import('../views/order/Details'));
-const OrderEdit = lazy(() => import('../views/order/Details'));
-
-const VendorCreate = lazy(() => import('../views/vendor/Create'));
-const VendorList = lazy(() => import('../views/vendor/List'));
-
-const ProductCreate = lazy(() => import('../views/product/Create'));
-const ProductList = lazy(() => import('../views/product/List'));
-
-const ServiceCreate = lazy(() => import('../views/servicios/Create'));
-const ServiceList= lazy(() => import('../views/servicios/ListServices'));
-
-const CustomerCreate = lazy(() => import('../views/customer/CreateApp'));
-const CustomerList= lazy(() => import('../views/customer/List'));
-
-const ProjectCreate = lazy(() => import('../views/projects/Create'));
-const ProjectList= lazy(() => import('../views/projects/List'));
-
+const OrderSaleCreate = lazy(() => import('../views/saleOrder/SaleRegister'));
+const OrderSaleList = lazy(() => import('../views/saleOrder/SaleList'));
+const OrderSaleDetails = lazy(() => import('../views/saleOrder/SeleDetails'));
+const OrderPurchaseCreate = lazy(() => import('../views/purchaseOrder/PurchaseRegister'));
+const OrderPurchaseList = lazy(() => import('../views/purchaseOrder/PurchaseList'));
+const OrderPurchaseDetails = lazy(() => import('../views/purchaseOrder/PurchaseDetails'));
+const OrderPurchaseEdit = lazy(() => import('../views/purchaseOrder/PurchaseEdit'));
+const VendorList = lazy(() => import('../views/seller/SellerList'));
+const ProductList = lazy(() => import('../views/product/ProductList'));
+const ServiceCreate = lazy(() => import('../views/service/ServiceCreate'));
+const ServiceList = lazy(() => import('../views/service/ServiceList'));
+const CustomerCreate = lazy(() => import('../views/customer/CustomerCreate'));
+const CustomerList = lazy(() => import('../views/customer/CustomerList'));
+const ProjectCreate = lazy(() => import('../views/project/PorjectRegister'));
+const ProjectList = lazy(() => import('../views/project/ProjectList'));
 const Error = lazy(() => import('../views/authentication/NotFound'));
 const Register = lazy(() => import('../views/authentication/Register'));
 const Login = lazy(() => import('../views/authentication/Login'));
-
 
 const Router = [
   {
@@ -40,25 +32,21 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/', exact: true, element: <Dashboard /> },
-      { path: '/order-create', exact: true, element: <OrderCreate /> },
-      { path: '/order-list', exact: true, element: <OrderList /> },
-      { path: '/order-details/:id', exact: true, element: <OrderDetails /> },
-      { path: '/order-edit/:id', exact: true, element: <OrderEdit /> },
-
-      { path: '/vendor-create', exact: true, element: <VendorCreate /> },
-      { path: '/vendor-list', exact: true, element: <VendorList /> },
-
-      { path: '/product-create', exact: true, element: <ProductCreate /> },
-      { path: '/product-list', exact: true, element: <ProductList /> },
-
-      { path: '/service-create', exact: true, element: <ServiceCreate /> },
-      { path: '/services-list', exact: true, element: <ServiceList /> },
-
-      { path: '/customer-create', exact: true, element: <CustomerCreate /> },
-      { path: '/customer-list', exact: true, element: <CustomerList /> },
-
-      { path: '/project-create', exact: true, element: <ProjectCreate /> },
-      { path: '/projects-list', exact: true, element: <ProjectList /> },
+      { path: '/compras-crear', exact: true, element: <OrderPurchaseCreate /> },
+      { path: '/compras-lista', exact: true, element: <OrderPurchaseList /> },
+      { path: '/compras/:id', exact: true, element: <OrderPurchaseDetails /> },
+      { path: '/compras-editar/:id/', exact: true, element: <OrderPurchaseEdit /> },
+      { path: '/pedidos-crear', exact: true, element: <OrderSaleCreate /> },
+      { path: '/pedidos-lista', exact: true, element: <OrderSaleList /> },
+      { path: '/pedidos/:id', exact: true, element: <OrderSaleDetails /> },
+      { path: '/vendedores-lista', exact: true, element: <VendorList /> },
+      { path: '/productos-lista', exact: true, element: <ProductList /> },
+      { path: '/servicios-crear', exact: true, element: <ServiceCreate /> },
+      { path: '/servicios-lista', exact: true, element: <ServiceList /> },
+      { path: '/clientes-crear', exact: true, element: <CustomerCreate /> },
+      { path: '/clientes-lista', exact: true, element: <CustomerList /> },
+      { path: '/proyectos-crear', exact: true, element: <ProjectCreate /> },
+      { path: '/proyectos-lista', exact: true, element: <ProjectList /> },
 
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],

@@ -25,9 +25,15 @@ import {
   Select,
   MenuItem,
   Tooltip,
-  Breadcrumbs,
-  Link,
   Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Alert,
+  Divider,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -36,7 +42,6 @@ import {
   Search as SearchIcon,
   Visibility as VisibilityIcon,
   Inventory as InventoryIcon,
-  Home as HomeIcon,
   NavigateNext as NavigateNextIcon,
   FilterList as FilterIcon,
   Download as DownloadIcon,
@@ -46,9 +51,10 @@ import {
   ShoppingCart as ShoppingCartIcon,
   TrendingUp as TrendingUpIcon,
   Warning as WarningIcon,
+  Close as CloseIcon,
+  Save as SaveIcon,
 } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useForm, Controller } from 'react-hook-form';
 
 // Interfaz para los datos del producto
 interface Product {
@@ -67,7 +73,6 @@ interface Product {
   usoTraduccion?: string;
   bbssSunat: string;
   estado: 'ACTIVO' | 'INACTIVO' | 'DESCONTINUADO' | 'EN_DESARROLLO';
-  // Información adicional
   precio?: number;
   stock?: number;
   stockMinimo?: number;
@@ -84,13 +89,37 @@ interface SearchForm {
   unidadMedida: string;
 }
 
+// Interfaz para el formulario de producto
+interface ProductForm {
+  codERP: string;
+  marca: string;
+  codComercial: string;
+  descripcion: string;
+  unidadMedida: string;
+  clase: string;
+  subClase: string;
+  subSubClase: string;
+  modeloTraduccion: string;
+  descripcionTraduccion: string;
+  materialTraduccion: string;
+  usoTraduccion: string;
+  bbssSunat: string;
+  estado: 'ACTIVO' | 'INACTIVO' | 'DESCONTINUADO' | 'EN_DESARROLLO';
+  precio: number;
+  stock: number;
+  stockMinimo: number;
+  incluirTraducciones: boolean;
+}
+
 const ListProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
   const { register, watch, reset } = useForm<SearchForm>({
     defaultValues: {
       searchTerm: '',
@@ -101,11 +130,42 @@ const ListProducts: React.FC = () => {
     }
   });
 
+  const {
+    register: registerProduct,
+    control: controlProduct,
+    handleSubmit: handleSubmitProduct,
+    reset: resetProduct,
+    watch: watchProduct,
+    formState: { errors }
+  } = useForm<ProductForm>({
+    defaultValues: {
+      codERP: '',
+      marca: '',
+      codComercial: '',
+      descripcion: '',
+      unidadMedida: 'UND',
+      clase: '01-PROD',
+      subClase: '',
+      subSubClase: '',
+      modeloTraduccion: '',
+      descripcionTraduccion: '',
+      materialTraduccion: '',
+      usoTraduccion: '',
+      bbssSunat: 'USD',
+      estado: 'ACTIVO',
+      precio: 0,
+      stock: 0,
+      stockMinimo: 0,
+      incluirTraducciones: false,
+    }
+  });
+
   const searchTerm = watch('searchTerm');
   const marcaFilter = watch('marca');
   const claseFilter = watch('clase');
   const estadoFilter = watch('estado');
   const unidadMedidaFilter = watch('unidadMedida');
+  const incluirTraducciones = watchProduct('incluirTraducciones');
 
   // Datos de ejemplo basados en la imagen
   const mockProducts: Product[] = [
@@ -318,7 +378,54 @@ const ListProducts: React.FC = () => {
   };
 
   const handleAddProduct = () => {
-    navigate('/product-create');
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    resetProduct();
+  };
+
+  const onSubmitProduct = async (data: ProductForm) => {
+    setSubmitting(true);
+
+    try {
+      // Simular llamada a API
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      const newProduct: Product = {
+        id: String(Date.now()),
+        codERP: data.codERP,
+        marca: data.marca,
+        codComercial: data.codComercial,
+        descripcion: data.descripcion,
+        unidadMedida: data.unidadMedida,
+        clase: data.clase,
+        subClase: data.subClase,
+        subSubClase: data.subSubClase,
+        modeloTraduccion: data.incluirTraducciones ? data.modeloTraduccion : undefined,
+        descripcionTraduccion: data.incluirTraducciones ? data.descripcionTraduccion : undefined,
+        materialTraduccion: data.incluirTraducciones ? data.materialTraduccion : undefined,
+        usoTraduccion: data.incluirTraducciones ? data.usoTraduccion : undefined,
+        bbssSunat: data.bbssSunat,
+        estado: data.estado,
+        precio: data.precio,
+        stock: data.stock,
+        stockMinimo: data.stockMinimo,
+        fechaCreacion: new Date(),
+      };
+
+      setProducts(prev => [newProduct, ...prev]);
+      setFilteredProducts(prev => [newProduct, ...prev]);
+      handleCloseModal();
+
+      // Mostrar mensaje de éxito (podrías usar un snackbar aquí)
+      alert('Producto creado exitosamente');
+    } catch (error) {
+      alert('Error al crear el producto');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleEditProduct = (productId: string) => {
@@ -370,6 +477,43 @@ const ListProducts: React.FC = () => {
     { value: '04-REP', label: '04-REP - Repuestos' },
   ];
 
+  const subClasesMap: Record<string, Array<{ value: string; label: string }>> = {
+    '01-PROD': [
+      { value: '1A-INST', label: '1A-INST - Instrumentos' },
+      { value: '1B-EQUI', label: '1B-EQUI - Equipos' },
+      { value: '1C-COMP', label: '1C-COMP - Componentes' },
+    ],
+    '02-ACC': [
+      { value: '2A-CAB', label: '2A-CAB - Cables' },
+      { value: '2B-CON', label: '2B-CON - Conectores' },
+      { value: '2C-SOP', label: '2C-SOP - Soportes' },
+    ],
+    '03-SRV': [
+      { value: '3A-MAN', label: '3A-MAN - Mantenimiento' },
+      { value: '3B-CAL', label: '3B-CAL - Calibración' },
+      { value: '3C-INS', label: '3C-INS - Instalación' },
+    ],
+    '04-REP': [
+      { value: '4A-SEN', label: '4A-SEN - Sensores' },
+      { value: '4B-ELE', label: '4B-ELE - Electrónicos' },
+      { value: '4C-MEC', label: '4C-MEC - Mecánicos' },
+    ],
+  };
+
+  const subSubClasesMap: Record<string, Array<{ value: string; label: string }>> = {
+    '1A-INST': [
+      { value: '1A1-PRES', label: '1A1-PRES - Presión' },
+      { value: '1A2-ANAL', label: '1A2-ANAL - Analíticos' },
+      { value: '1A3-TEMP', label: '1A3-TEMP - Temperatura' },
+      { value: '1A4-FLOW', label: '1A4-FLOW - Flujo' },
+    ],
+    '2A-CAB': [
+      { value: '2A1-EXT', label: '2A1-EXT - Extensión' },
+      { value: '2A2-POW', label: '2A2-POW - Alimentación' },
+      { value: '2A3-SIG', label: '2A3-SIG - Señal' },
+    ],
+  };
+
   const estadosProducto = [
     { value: 'ACTIVO', label: 'Activo' },
     { value: 'INACTIVO', label: 'Inactivo' },
@@ -382,122 +526,25 @@ const ListProducts: React.FC = () => {
     { value: 'M', label: 'Metro' },
     { value: 'KG', label: 'Kilogramo' },
     { value: 'L', label: 'Litro' },
+    { value: 'M2', label: 'Metro cuadrado' },
+    { value: 'M3', label: 'Metro cúbico' },
+  ];
+
+  const monedas = [
+    { value: 'USD', label: 'USD - Dólar' },
+    { value: 'PEN', label: 'PEN - Sol' },
+    { value: 'EUR', label: 'EUR - Euro' },
   ];
 
   // Calcular estadísticas
   const productosActivos = filteredProducts.filter(p => p.estado === 'ACTIVO').length;
   const valorInventario = filteredProducts.reduce((sum, product) => sum + ((product.precio || 0) * (product.stock || 0)), 0);
   const productosStockBajo = filteredProducts.filter(p => (p.stock || 0) <= (p.stockMinimo || 0)).length;
-  const valorPromedio = filteredProducts.length > 0 ? 
+  const valorPromedio = filteredProducts.length > 0 ?
     filteredProducts.reduce((sum, product) => sum + (product.precio || 0), 0) / filteredProducts.length : 0;
 
   return (
     <Box sx={{ p: 3 }}>
-     
-      <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-        <CardContent sx={{ color: 'white', pb: '16px !important' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                Gestión de Productos
-              </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                {filteredProducts.length} producto(s) registrado(s)
-              </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'right' }}>
-              <Avatar
-                sx={{ 
-                  width: 80, 
-                  height: 80, 
-                  bgcolor: 'rgba(255,255,255,0.2)',
-                  border: '3px solid rgba(255,255,255,0.3)'
-                }}
-              >
-                <InventoryIcon sx={{ fontSize: 40 }} />
-              </Avatar>
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-
-      {/* Cards de estadísticas */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid size={{ xs: 12, sm:6, md:3}}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar sx={{ bgcolor: 'success.main', mr: 2 }}>
-                  <InventoryIcon />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6">{productosActivos}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Productos Activos
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, sm:6, md:3}}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar sx={{ bgcolor: 'info.main', mr: 2 }}>
-                  <TrendingUpIcon />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6">
-                    ${(valorInventario / 1000).toFixed(0)}K
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Valor Inventario
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, sm:6, md:3}}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar sx={{ bgcolor: 'warning.main', mr: 2 }}>
-                  <WarningIcon />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6">{productosStockBajo}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Stock Bajo
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, sm:6, md:3}}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                  <ShoppingCartIcon />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6">
-                    ${valorPromedio.toFixed(0)}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Precio Promedio
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      {/* Toolbar con búsqueda y filtros */}
       <Paper sx={{ mb: 2 }}>
         <Toolbar sx={{ px: 2, py: 2 }}>
           <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
@@ -583,7 +630,7 @@ const ListProducts: React.FC = () => {
                 <FilterIcon />
               </IconButton>
             </Tooltip>
-            
+
             <Tooltip title="Actualizar">
               <IconButton onClick={handleRefresh} size="small">
                 <RefreshIcon />
@@ -600,17 +647,387 @@ const ListProducts: React.FC = () => {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleAddProduct}
-              size="large"
-              sx={{
-                background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
-                boxShadow: '0 3px 5px 2px rgba(102, 126, 234, .3)',
-              }}
-            >
+              size="small" >
               Agregar Producto
             </Button>
           </Stack>
         </Toolbar>
       </Paper>
+
+      {/* Modal para agregar producto */}
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: { minHeight: '80vh' }
+        }}
+      >
+        <DialogTitle>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Typography variant="h6" component="div">
+              Agregar Nuevo Producto
+            </Typography>
+            <IconButton onClick={handleCloseModal} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+
+        <form onSubmit={handleSubmitProduct(onSubmitProduct)}>
+          <DialogContent dividers>
+            <Grid container spacing={3}>
+              {/* Información básica */}
+              <Grid size={12}>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Información Básica
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  {...registerProduct('codERP', {
+                    required: 'El código ERP es requerido',
+                    pattern: { value: /^PQ\d{5}$/, message: 'Formato: PQ00000' }
+                  })}
+                  label="Código ERP"
+                  fullWidth
+                  placeholder="PQ00000"
+                  error={!!errors.codERP}
+                  helperText={errors.codERP?.message}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  {...registerProduct('marca', { required: 'La marca es requerida' })}
+                  label="Marca"
+                  fullWidth
+                  error={!!errors.marca}
+                  helperText={errors.marca?.message}
+                />
+              </Grid>
+
+              <Grid size={12}>
+                <TextField
+                  {...registerProduct('codComercial', { required: 'El código comercial es requerido' })}
+                  label="Código Comercial"
+                  fullWidth
+                  error={!!errors.codComercial}
+                  helperText={errors.codComercial?.message}
+                />
+              </Grid>
+
+              <Grid size={12}>
+                <TextField
+                  {...registerProduct('descripcion', { required: 'La descripción es requerida' })}
+                  label="Descripción"
+                  fullWidth
+                  multiline
+                  rows={2}
+                  error={!!errors.descripcion}
+                  helperText={errors.descripcion?.message}
+                />
+              </Grid>
+
+              {/* Clasificación */}
+              <Grid size={12}>
+                <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
+                  Clasificación
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth error={!!errors.unidadMedida}>
+                  <InputLabel>Unidad de Medida</InputLabel>
+                  <Controller
+                    name="unidadMedida"
+                    control={controlProduct}
+                    rules={{ required: 'La unidad de medida es requerida' }}
+                    render={({ field }) => (
+                      <Select {...field} label="Unidad de Medida">
+                        {unidadesMedida.map(unidad => (
+                          <MenuItem key={unidad.value} value={unidad.value}>
+                            {unidad.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {errors.unidadMedida && (
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                      {errors.unidadMedida.message}
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth error={!!errors.clase}>
+                  <InputLabel>Clase</InputLabel>
+                  <Controller
+                    name="clase"
+                    control={controlProduct}
+                    rules={{ required: 'La clase es requerida' }}
+                    render={({ field }) => (
+                      <Select {...field} label="Clase">
+                        {clases.map(clase => (
+                          <MenuItem key={clase.value} value={clase.value}>
+                            {clase.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {errors.clase && (
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                      {errors.clase.message}
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <FormControl fullWidth error={!!errors.estado}>
+                  <InputLabel>Estado</InputLabel>
+                  <Controller
+                    name="estado"
+                    control={controlProduct}
+                    rules={{ required: 'El estado es requerido' }}
+                    render={({ field }) => (
+                      <Select {...field} label="Estado">
+                        {estadosProducto.map(estado => (
+                          <MenuItem key={estado.value} value={estado.value}>
+                            {estado.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {errors.estado && (
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                      {errors.estado.message}
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Sub Clase</InputLabel>
+                  <Controller
+                    name="subClase"
+                    control={controlProduct}
+                    render={({ field }) => (
+                      <Select {...field} label="Sub Clase">
+                        <MenuItem value="">Seleccionar</MenuItem>
+                        {(subClasesMap[watchProduct('clase')] || []).map(subClase => (
+                          <MenuItem key={subClase.value} value={subClase.value}>
+                            {subClase.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Sub Sub Clase</InputLabel>
+                  <Controller
+                    name="subSubClase"
+                    control={controlProduct}
+                    render={({ field }) => (
+                      <Select {...field} label="Sub Sub Clase">
+                        <MenuItem value="">Seleccionar</MenuItem>
+                        {(subSubClasesMap[watchProduct('subClase')] || []).map(subSubClase => (
+                          <MenuItem key={subSubClase.value} value={subSubClase.value}>
+                            {subSubClase.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              {/* Información comercial */}
+              <Grid size={12}>
+                <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
+                  Información Comercial
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <TextField
+                  {...registerProduct('precio', {
+                    required: 'El precio es requerido',
+                    min: { value: 0, message: 'El precio debe ser mayor a 0' }
+                  })}
+                  label="Precio"
+                  type="number"
+                  fullWidth
+                  inputProps={{ step: "0.01", min: 0 }}
+                  error={!!errors.precio}
+                  helperText={errors.precio?.message}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <TextField
+                  {...registerProduct('stock', {
+                    required: 'El stock es requerido',
+                    min: { value: 0, message: 'El stock debe ser mayor o igual a 0' }
+                  })}
+                  label="Stock Actual"
+                  type="number"
+                  fullWidth
+                  inputProps={{ min: 0 }}
+                  error={!!errors.stock}
+                  helperText={errors.stock?.message}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <TextField
+                  {...registerProduct('stockMinimo', {
+                    required: 'El stock mínimo es requerido',
+                    min: { value: 0, message: 'El stock mínimo debe ser mayor o igual a 0' }
+                  })}
+                  label="Stock Mínimo"
+                  type="number"
+                  fullWidth
+                  inputProps={{ min: 0 }}
+                  error={!!errors.stockMinimo}
+                  helperText={errors.stockMinimo?.message}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Moneda</InputLabel>
+                  <Controller
+                    name="bbssSunat"
+                    control={controlProduct}
+                    render={({ field }) => (
+                      <Select {...field} label="Moneda">
+                        {monedas.map(moneda => (
+                          <MenuItem key={moneda.value} value={moneda.value}>
+                            {moneda.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              {/* Traducciones */}
+              <Grid size={12}>
+                <Box sx={{ mt: 2 }}>
+                  <FormControlLabel
+                    control={
+                      <Controller
+                        name="incluirTraducciones"
+                        control={controlProduct}
+                        render={({ field }) => (
+                          <Switch {...field} checked={field.value} />
+                        )}
+                      />
+                    }
+                    label={
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LanguageIcon fontSize="small" />
+                        <Typography>Incluir traducciones al inglés</Typography>
+                      </Box>
+                    }
+                  />
+                </Box>
+              </Grid>
+
+              {incluirTraducciones && (
+                <>
+                  <Grid size={12}>
+                    <Typography variant="h6" gutterBottom color="primary">
+                      Traducciones
+                    </Typography>
+                    <Divider sx={{ mb: 2 }} />
+                  </Grid>
+
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      {...registerProduct('modeloTraduccion')}
+                      label="Modelo (Inglés)"
+                      fullWidth
+                    />
+                  </Grid>
+
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      {...registerProduct('materialTraduccion')}
+                      label="Material (Inglés)"
+                      fullWidth
+                    />
+                  </Grid>
+
+                  <Grid size={12}>
+                    <TextField
+                      {...registerProduct('descripcionTraduccion')}
+                      label="Descripción (Inglés)"
+                      fullWidth
+                      multiline
+                      rows={2}
+                    />
+                  </Grid>
+
+                  <Grid size={12}>
+                    <TextField
+                      {...registerProduct('usoTraduccion')}
+                      label="Uso/Aplicación (Inglés)"
+                      fullWidth
+                      multiline
+                      rows={2}
+                    />
+                  </Grid>
+                </>
+              )}
+
+              {/* Información adicional */}
+              <Grid size={12}>
+                <Alert severity="info" sx={{ mt: 2 }}>
+                  <Typography variant="body2">
+                    <strong>Nota:</strong> Una vez creado el producto, se generará automáticamente la fecha de creación
+                    y estará disponible para su gestión en el inventario.
+                  </Typography>
+                </Alert>
+              </Grid>
+            </Grid>
+          </DialogContent>
+
+          <DialogActions sx={{ p: 3 }}>
+            <Button
+              onClick={handleCloseModal}
+              variant="outlined"
+              disabled={submitting}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={submitting}
+              startIcon={submitting ? undefined : <SaveIcon />}
+            >
+              {submitting ? 'Guardando...' : 'Guardar Producto'}
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
 
       {/* Tabla */}
       <TableContainer component={Paper}>
@@ -637,7 +1054,7 @@ const ListProducts: React.FC = () => {
                 return (
                   <TableRow
                     key={product.id}
-                    sx={{ 
+                    sx={{
                       '&:nth-of-type(odd)': { backgroundColor: 'action.hover' },
                       '&:hover': { backgroundColor: 'action.selected' }
                     }}
