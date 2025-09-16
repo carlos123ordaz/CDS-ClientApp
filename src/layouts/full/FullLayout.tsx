@@ -88,6 +88,8 @@ const AdminLayout = () => {
       '/servicios-lista': { title: 'Servicios', description: 'Administra servicios disponibles' },
       '/clientes-lista': { title: 'Clientes', description: 'Administra clientes registrados' },
       '/proyectos-lista': { title: 'Proyectos', description: 'Administra proyectos disponibles' },
+      '/compras-crear': { title: 'Compras', description: 'Registra una orden de compra' },
+      '/pedidos-crear': { title: 'Pedidos', description: 'Registra una orden de pedido' },
     };
     return pageMap[location.pathname] || { title: 'Panel de Administración', description: 'Gestiona el flujo de suministro' };
   };

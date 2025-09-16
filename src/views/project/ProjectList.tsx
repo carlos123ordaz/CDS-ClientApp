@@ -678,7 +678,6 @@ const ListProjects: React.FC = () => {
         </Toolbar>
       </Paper>
 
-      {/* Modal para agregar proyecto */}
       <Dialog
         open={openModal}
         onClose={handleCloseModal}
@@ -702,7 +701,6 @@ const ListProjects: React.FC = () => {
         <form onSubmit={handleSubmitProject(onSubmitProject)}>
           <DialogContent dividers>
             <Grid container spacing={3}>
-              {/* Información básica */}
               <Grid size={12}>
                 <Typography variant="h6" gutterBottom color="primary">
                   Información Básica
@@ -743,8 +741,6 @@ const ListProjects: React.FC = () => {
                   helperText={errors.codComercial?.message}
                 />
               </Grid>
-
-              {/* Clasificación */}
               <Grid size={12}>
                 <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
                   Clasificación
@@ -854,8 +850,6 @@ const ListProjects: React.FC = () => {
                   />
                 </FormControl>
               </Grid>
-
-              {/* Información adicional */}
               <Grid size={12}>
                 <Alert severity="info" sx={{ mt: 2 }}>
                   <Typography variant="body2">
@@ -886,8 +880,6 @@ const ListProjects: React.FC = () => {
           </DialogActions>
         </form>
       </Dialog>
-
-      {/* Tabla */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 1600 }} aria-label="tabla de proyectos">
           <TableHead>

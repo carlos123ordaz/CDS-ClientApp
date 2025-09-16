@@ -10,9 +10,10 @@ const Dashboard = lazy(() => import("../views/dashboard/page"));
 const OrderSaleCreate = lazy(() => import('../views/saleOrder/SaleRegister'));
 const OrderSaleList = lazy(() => import('../views/saleOrder/SaleList'));
 const OrderSaleDetails = lazy(() => import('../views/saleOrder/SeleDetails'));
-const OrderPurchaseCreate = lazy(() => import('../views/puchaseOrder/PurchaseRegister'));
-const OrderPurchaseList = lazy(() => import('../views/puchaseOrder/PurchaseList'));
-const OrderPurchaseDetails = lazy(() => import('../views/puchaseOrder/PurchaseDetails'));
+const OrderPurchaseCreate = lazy(() => import('../views/purchaseOrder/PurchaseRegister'));
+const OrderPurchaseList = lazy(() => import('../views/purchaseOrder/PurchaseList'));
+const OrderPurchaseDetails = lazy(() => import('../views/purchaseOrder/PurchaseDetails'));
+const OrderPurchaseEdit = lazy(() => import('../views/purchaseOrder/PurchaseEdit'));
 const VendorList = lazy(() => import('../views/seller/SellerList'));
 const ProductList = lazy(() => import('../views/product/ProductList'));
 const ServiceCreate = lazy(() => import('../views/service/ServiceCreate'));
@@ -34,6 +35,7 @@ const Router = [
       { path: '/compras-crear', exact: true, element: <OrderPurchaseCreate /> },
       { path: '/compras-lista', exact: true, element: <OrderPurchaseList /> },
       { path: '/compras/:id', exact: true, element: <OrderPurchaseDetails /> },
+      { path: '/compras-editar/:id/', exact: true, element: <OrderPurchaseEdit /> },
       { path: '/pedidos-crear', exact: true, element: <OrderSaleCreate /> },
       { path: '/pedidos-lista', exact: true, element: <OrderSaleList /> },
       { path: '/pedidos/:id', exact: true, element: <OrderSaleDetails /> },

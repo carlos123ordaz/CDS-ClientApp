@@ -628,8 +628,6 @@ const List = () => {
                         </Box>
                     </CardContent>
                 </Card>
-
-                {/* FAB para agregar nueva orden */}
                 <Fab
                     color="primary"
                     sx={{
