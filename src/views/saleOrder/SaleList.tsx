@@ -581,7 +581,7 @@ const List = () => {
                                                                 <IconButton
                                                                     size="small"
                                                                     color="primary"
-                                                                    onClick={() => verDetalle(orden)}
+                                                                    onClick={() => navigate(`/pedidos/1`)}
                                                                 >
                                                                     <ViewIcon fontSize="small" />
                                                                 </IconButton>
@@ -590,7 +590,7 @@ const List = () => {
                                                                 <IconButton
                                                                     size="small"
                                                                     color="secondary"
-                                                                    onClick={() => editarOrden(orden)}
+                                                                    onClick={() => navigate(`/pedidos-editar/${orden.correlativoOPCI}`)}
                                                                 >
                                                                     <EditIcon fontSize="small" />
                                                                 </IconButton>
@@ -611,8 +611,6 @@ const List = () => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-
-                        {/* Paginación */}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
                             <Typography variant="body2" color="text.secondary">
                                 Mostrando {((page - 1) * rowsPerPage) + 1} - {Math.min(page * rowsPerPage, totalItems)} de {totalItems} registros

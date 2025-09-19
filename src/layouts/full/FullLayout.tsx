@@ -62,7 +62,7 @@ const AdminLayout = () => {
     { id: 'dashboard', label: 'Dashboard', icon: DashboardIcon, path: '/' },
     { id: 'pedidos', label: 'Pedidos', icon: AssignmentIcon, path: '/pedidos-lista' },
     { id: 'compras', label: 'Compras', icon: ShoppingCartIcon, path: '/compras-lista' },
-    { id: 'vendedores', label: 'Vendedores', icon: StorefrontIcon, path: '/vendedores-lista' },
+    { id: 'vendedores', label: 'Usuarios', icon: StorefrontIcon, path: '/vendedores-lista' },
     { id: 'productos', label: 'Productos', icon: InventoryIcon, path: '/productos-lista' },
     { id: 'servicios', label: 'Servicios', icon: BuildIcon, path: '/servicios-lista' },
     { id: 'clientes', label: 'Clientes', icon: GroupIcon, path: '/clientes-lista' },
@@ -77,13 +77,12 @@ const AdminLayout = () => {
     }
   };
 
-  // obtener info de la página actual en base a la ruta
   const getPageInfo = (): PageInfo => {
     const pageMap: Record<string, PageInfo> = {
       '/': { title: 'Dashboard', description: 'Resumen general del sistema' },
       '/pedidos-lista': { title: 'Gestión de Pedidos', description: 'Administra todos los pedidos disponibles' },
       '/compras-lista': { title: 'Gestión de Compras', description: 'Administra todas las compras disponibles' },
-      '/vendedores-lista': { title: 'Vendedores', description: 'Administra vendedores registrados' },
+      '/vendedores-lista': { title: 'Usuarios', description: 'Administra usuarios registrados' },
       '/productos-lista': { title: 'Productos', description: 'Administra productos disponibles' },
       '/servicios-lista': { title: 'Servicios', description: 'Administra servicios disponibles' },
       '/clientes-lista': { title: 'Clientes', description: 'Administra clientes registrados' },

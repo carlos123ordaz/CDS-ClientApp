@@ -30,11 +30,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Alert,
-  Divider,
-  Grid,
-  Switch,
   FormControlLabel,
+  Switch,
+  Grid,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -45,39 +43,32 @@ import {
   Business as BusinessIcon,
   Person as PersonIcon,
   LocationOn as LocationIcon,
-  Home as HomeIcon,
-  NavigateNext as NavigateNextIcon,
   FilterList as FilterIcon,
   Download as DownloadIcon,
   RefreshOutlined as RefreshIcon,
-  Close as CloseIcon,
-  Save as SaveIcon,
-  Phone as PhoneIcon,
-  Email as EmailIcon,
+  CheckCircle as CheckCircleIcon,
+  Cancel as CancelIcon,
 } from '@mui/icons-material';
 import { useForm, Controller } from 'react-hook-form';
+import { CustomerCreate } from 'src/components/customer/CustomerCreate';
+import { CustomerEdit } from 'src/components/customer/CustomerEdit';
 
-// Interfaz para los datos del cliente
-interface Customer {
-  idClt: string;
-  idTdi: number;
-  nDoc: string;
+// Interfaz basada en la tabla Empresa de la BD
+interface Empresa {
+  empresaID: number;
+  tipoDocumento: string;
+  numDoc: string;
   razonSocial: string;
-  nombreCliente?: string;
-  tipoCliente?: string;
-  industria?: string;
-  sector?: string;
-  zona?: string;
-  pais?: string;
-  telefClt?: string;
-  correoClt?: string;
-  estado: 'ACTIVO' | 'INACTIVO' | 'SUSPENDIDO';
-  fechaCreacion?: Date;
-  direccion?: string;
-  ciudad?: string;
-  codigoPostal?: string;
-  contactoPrincipal?: string;
-  cargoContacto?: string;
+  tipoCliente: string;
+  industria: string;
+  sector: string;
+  zona: string;
+  pais: string;
+  fecCreacion: Date;
+  fecModific: Date;
+  estado: boolean;
+  ib_Prv: boolean;  // Es proveedor
+  ib_Clt: boolean;  // Es cliente
 }
 
 // Interfaz para el formulario de búsqueda
@@ -87,37 +78,36 @@ interface SearchForm {
   tipoCliente: string;
   estado: string;
   industria: string;
+  sector: string;
+  zona: string;
+  pais: string;
+  soloClientes: boolean;
+  soloProveedores: boolean;
 }
 
-// Interfaz para el formulario de cliente
-interface CustomerForm {
-  idTdi: number;
-  nDoc: string;
+// Interfaz para el formulario de empresa
+interface EmpresaForm {
+  tipoDocumento: string;
+  numDoc: string;
   razonSocial: string;
-  nombreCliente: string;
   tipoCliente: string;
   industria: string;
   sector: string;
   zona: string;
   pais: string;
-  telefClt: string;
-  correoClt: string;
-  estado: 'ACTIVO' | 'INACTIVO' | 'SUSPENDIDO';
-  direccion: string;
-  ciudad: string;
-  codigoPostal: string;
-  contactoPrincipal: string;
-  cargoContacto: string;
-  incluirDatosAdicionales: boolean;
+  estado: boolean;
+  ib_Prv: boolean;
+  ib_Clt: boolean;
 }
 
 const ListClients: React.FC = () => {
-  const [clients, setClients] = useState<Customer[]>([]);
+  const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [filteredClients, setFilteredClients] = useState<Customer[]>([]);
+  const [filteredEmpresas, setFilteredEmpresas] = useState<Empresa[]>([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const { register, watch, reset } = useForm<SearchForm>({
@@ -127,36 +117,34 @@ const ListClients: React.FC = () => {
       tipoCliente: '',
       estado: '',
       industria: '',
+      sector: '',
+      zona: '',
+      pais: '',
+      soloClientes: false,
+      soloProveedores: false,
     }
   });
 
   const {
-    register: registerCustomer,
-    control: controlCustomer,
-    handleSubmit: handleSubmitCustomer,
-    reset: resetCustomer,
-    watch: watchCustomer,
+    register: registerEmpresa,
+    control: controlEmpresa,
+    handleSubmit: handleSubmitEmpresa,
+    reset: resetEmpresa,
+    watch: watchEmpresa,
     formState: { errors }
-  } = useForm<CustomerForm>({
+  } = useForm<EmpresaForm>({
     defaultValues: {
-      idTdi: 6,
-      nDoc: '',
+      tipoDocumento: 'RUC',
+      numDoc: '',
       razonSocial: '',
-      nombreCliente: '',
-      tipoCliente: 'EMPRESA',
+      tipoCliente: 'CORPORATIVO',
       industria: '',
       sector: '',
       zona: '',
       pais: 'Perú',
-      telefClt: '',
-      correoClt: '',
-      estado: 'ACTIVO',
-      direccion: '',
-      ciudad: '',
-      codigoPostal: '',
-      contactoPrincipal: '',
-      cargoContacto: '',
-      incluirDatosAdicionales: false,
+      estado: true,
+      ib_Prv: false,
+      ib_Clt: true,
     }
   });
 
@@ -165,107 +153,146 @@ const ListClients: React.FC = () => {
   const tipoClienteFilter = watch('tipoCliente');
   const estadoFilter = watch('estado');
   const industriaFilter = watch('industria');
-  const incluirDatosAdicionales = watchCustomer('incluirDatosAdicionales');
+  const sectorFilter = watch('sector');
+  const zonaFilter = watch('zona');
+  const paisFilter = watch('pais');
+  const soloClientes = watch('soloClientes');
+  const soloProveedores = watch('soloProveedores');
 
-  // Datos mock para ejemplo
-  const mockClients: Customer[] = [
+  // Datos mock basados en la estructura real de la BD
+  const mockEmpresas: Empresa[] = [
     {
-      idClt: '1',
-      idTdi: 6,
-      nDoc: '20123456789',
+      empresaID: 1,
+      tipoDocumento: 'RUC',
+      numDoc: '20123456789',
       razonSocial: 'Corporación Industrial SAC',
-      nombreCliente: 'Corporación Industrial',
-      tipoCliente: 'EMPRESA',
+      tipoCliente: 'CORPORATIVO',
       industria: 'Manufactura',
       sector: 'Industrial',
       zona: 'Lima Norte',
       pais: 'Perú',
-      telefClt: '+51 912 345 678',
-      correoClt: 'contacto@corporacion.com',
-      estado: 'ACTIVO',
-      fechaCreacion: new Date('2023-01-15'),
+      fecCreacion: new Date('2023-01-15'),
+      fecModific: new Date('2023-01-15'),
+      estado: true,
+      ib_Prv: false,
+      ib_Clt: true,
     },
     {
-      idClt: '2',
-      idTdi: 6,
-      nDoc: '20987654321',
+      empresaID: 2,
+      tipoDocumento: 'RUC',
+      numDoc: '20987654321',
       razonSocial: 'Tecnología Avanzada EIRL',
-      nombreCliente: 'TecnoAvanzada',
-      tipoCliente: 'EMPRESA',
+      tipoCliente: 'PYME',
       industria: 'Tecnología',
       sector: 'Software',
       zona: 'San Isidro',
       pais: 'Perú',
-      telefClt: '+51 987 654 321',
-      correoClt: 'info@tecnoavanzada.pe',
-      estado: 'ACTIVO',
-      fechaCreacion: new Date('2023-02-10'),
+      fecCreacion: new Date('2023-02-10'),
+      fecModific: new Date('2023-03-01'),
+      estado: true,
+      ib_Prv: true,
+      ib_Clt: true,
     },
     {
-      idClt: '3',
-      idTdi: 0,
-      nDoc: '12345678',
+      empresaID: 3,
+      tipoDocumento: 'DNI',
+      numDoc: '12345678',
       razonSocial: 'Juan Carlos Pérez López',
-      nombreCliente: 'Juan Pérez',
-      tipoCliente: 'PERSONA',
+      tipoCliente: 'PERSONA_NATURAL',
       industria: 'Servicios',
       sector: 'Consultoría',
       zona: 'Miraflores',
       pais: 'Perú',
-      telefClt: '+51 999 888 777',
-      correoClt: 'juan.perez@email.com',
-      estado: 'ACTIVO',
-      fechaCreacion: new Date('2023-03-05'),
+      fecCreacion: new Date('2023-03-05'),
+      fecModific: new Date('2023-03-05'),
+      estado: true,
+      ib_Prv: false,
+      ib_Clt: true,
+    },
+    {
+      empresaID: 4,
+      tipoDocumento: 'RUC',
+      numDoc: '20555666777',
+      razonSocial: 'Distribuidora Nacional SA',
+      tipoCliente: 'CORPORATIVO',
+      industria: 'Comercio',
+      sector: 'Distribución',
+      zona: 'Lima Centro',
+      pais: 'Perú',
+      fecCreacion: new Date('2023-04-12'),
+      fecModific: new Date('2023-04-15'),
+      estado: false,
+      ib_Prv: true,
+      ib_Clt: false,
     },
   ];
 
   useEffect(() => {
-    handleGetCustomers();
+    handleGetEmpresas();
   }, []);
 
-  const handleGetCustomers = () => {
+  const handleGetEmpresas = () => {
     setLoading(true);
     // Simular llamada a API
     setTimeout(() => {
-      setClients(mockClients);
-      setFilteredClients(mockClients);
+      setEmpresas(mockEmpresas);
+      setFilteredEmpresas(mockEmpresas);
       setLoading(false);
     }, 1000);
   };
 
-  // Filtrar clientes basado en los criterios de búsqueda
+  // Filtrar empresas basado en los criterios de búsqueda
   useEffect(() => {
-    let filtered = clients;
+    let filtered = empresas;
 
     if (searchTerm) {
-      filtered = filtered.filter((client) =>
-        client.nDoc.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.razonSocial.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.nombreCliente?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.telefClt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.correoClt?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter((empresa) =>
+        empresa.numDoc.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        empresa.razonSocial.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (tipoDocumentoFilter) {
-      filtered = filtered.filter(client => client.idTdi.toString() === tipoDocumentoFilter);
+      filtered = filtered.filter(empresa => empresa.tipoDocumento === tipoDocumentoFilter);
     }
 
     if (tipoClienteFilter) {
-      filtered = filtered.filter(client => client.tipoCliente === tipoClienteFilter);
+      filtered = filtered.filter(empresa => empresa.tipoCliente === tipoClienteFilter);
     }
 
     if (estadoFilter) {
-      filtered = filtered.filter(client => client.estado === estadoFilter);
+      const estadoBool = estadoFilter === 'true';
+      filtered = filtered.filter(empresa => empresa.estado === estadoBool);
     }
 
     if (industriaFilter) {
-      filtered = filtered.filter(client => client.industria === industriaFilter);
+      filtered = filtered.filter(empresa => empresa.industria === industriaFilter);
     }
 
-    setFilteredClients(filtered);
+    if (sectorFilter) {
+      filtered = filtered.filter(empresa => empresa.sector === sectorFilter);
+    }
+
+    if (zonaFilter) {
+      filtered = filtered.filter(empresa => empresa.zona === zonaFilter);
+    }
+
+    if (paisFilter) {
+      filtered = filtered.filter(empresa => empresa.pais === paisFilter);
+    }
+
+    if (soloClientes && !soloProveedores) {
+      filtered = filtered.filter(empresa => empresa.ib_Clt);
+    }
+
+    if (soloProveedores && !soloClientes) {
+      filtered = filtered.filter(empresa => empresa.ib_Prv);
+    }
+
+    setFilteredEmpresas(filtered);
     setPage(0);
-  }, [searchTerm, tipoDocumentoFilter, tipoClienteFilter, estadoFilter, industriaFilter, clients]);
+  }, [searchTerm, tipoDocumentoFilter, tipoClienteFilter, estadoFilter, industriaFilter,
+    sectorFilter, zonaFilter, paisFilter, soloClientes, soloProveedores, empresas]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -282,91 +309,80 @@ const ListClients: React.FC = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    resetCustomer();
+    resetEmpresa();
   };
 
-  const onSubmitCustomer = async (data: CustomerForm) => {
+  const onSubmitEmpresa = async (data: EmpresaForm) => {
     setSubmitting(true);
 
     try {
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      const newCustomer: Customer = {
-        idClt: String(Date.now()),
-        idTdi: data.idTdi,
-        nDoc: data.nDoc,
+      const newEmpresa: Empresa = {
+        empresaID: Date.now(),
+        tipoDocumento: data.tipoDocumento,
+        numDoc: data.numDoc,
         razonSocial: data.razonSocial,
-        nombreCliente: data.nombreCliente,
         tipoCliente: data.tipoCliente,
         industria: data.industria,
         sector: data.sector,
         zona: data.zona,
         pais: data.pais,
-        telefClt: data.telefClt,
-        correoClt: data.correoClt,
         estado: data.estado,
-        direccion: data.incluirDatosAdicionales ? data.direccion : undefined,
-        ciudad: data.incluirDatosAdicionales ? data.ciudad : undefined,
-        codigoPostal: data.incluirDatosAdicionales ? data.codigoPostal : undefined,
-        contactoPrincipal: data.incluirDatosAdicionales ? data.contactoPrincipal : undefined,
-        cargoContacto: data.incluirDatosAdicionales ? data.cargoContacto : undefined,
-        fechaCreacion: new Date(),
+        ib_Prv: data.ib_Prv,
+        ib_Clt: data.ib_Clt,
+        fecCreacion: new Date(),
+        fecModific: new Date(),
       };
 
-      setClients(prev => [newCustomer, ...prev]);
-      setFilteredClients(prev => [newCustomer, ...prev]);
+      setEmpresas(prev => [newEmpresa, ...prev]);
+      setFilteredEmpresas(prev => [newEmpresa, ...prev]);
       handleCloseModal();
 
-      alert('Cliente creado exitosamente');
+      alert('Empresa creada exitosamente');
     } catch (error) {
-      alert('Error al crear el cliente');
+      alert('Error al crear la empresa');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleViewClient = (clientId: string) => {
-    console.log('Ver cliente:', clientId);
+  const handleViewClient = (empresaId: number) => {
+    console.log('Ver empresa:', empresaId);
   };
 
   const handleClearFilters = () => {
     reset();
   };
 
-  const tipoDocumento: Record<number, string> = {
-    0: 'DNI',
-    6: 'RUC',
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'ACTIVO': return 'success';
-      case 'INACTIVO': return 'default';
-      case 'SUSPENDIDO': return 'error';
-      default: return 'default';
-    }
+  const getStatusColor = (estado: boolean) => {
+    return estado ? 'success' : 'error';
   };
 
   const getTipoClienteIcon = (tipo: string) => {
-    return tipo === 'EMPRESA' ? <BusinessIcon fontSize="small" /> : <PersonIcon fontSize="small" />;
+    return tipo === 'PERSONA_NATURAL' ? <PersonIcon fontSize="small" /> : <BusinessIcon fontSize="small" />;
   };
 
-  // Opciones para filtros
+  // Opciones para filtros basadas en la BD
   const tiposDocumento = [
-    { value: '0', label: 'DNI' },
-    { value: '6', label: 'RUC' },
+    { value: 'DNI', label: 'DNI' },
+    { value: 'RUC', label: 'RUC' },
+    { value: 'CE', label: 'Carnet de Extranjería' },
+    { value: 'PASAPORTE', label: 'Pasaporte' },
   ];
 
   const tiposCliente = [
-    { value: 'EMPRESA', label: 'Empresa' },
-    { value: 'PERSONA', label: 'Persona Natural' },
+    { value: 'CORPORATIVO', label: 'Corporativo' },
+    { value: 'PYME', label: 'PYME' },
+    { value: 'PERSONA_NATURAL', label: 'Persona Natural' },
+    { value: 'GOBIERNO', label: 'Gobierno' },
+    { value: 'ONG', label: 'ONG' },
   ];
 
   const estados = [
-    { value: 'ACTIVO', label: 'Activo' },
-    { value: 'INACTIVO', label: 'Inactivo' },
-    { value: 'SUSPENDIDO', label: 'Suspendido' },
+    { value: 'true', label: 'Activo' },
+    { value: 'false', label: 'Inactivo' },
   ];
 
   const industrias = [
@@ -376,6 +392,8 @@ const ListClients: React.FC = () => {
     { value: 'Construcción', label: 'Construcción' },
     { value: 'Minería', label: 'Minería' },
     { value: 'Agricultura', label: 'Agricultura' },
+    { value: 'Comercio', label: 'Comercio' },
+    { value: 'Transporte', label: 'Transporte' },
   ];
 
   const sectores = [
@@ -384,6 +402,8 @@ const ListClients: React.FC = () => {
     { value: 'Consultoría', label: 'Consultoría' },
     { value: 'Comercial', label: 'Comercial' },
     { value: 'Educación', label: 'Educación' },
+    { value: 'Distribución', label: 'Distribución' },
+    { value: 'Logística', label: 'Logística' },
   ];
 
   const zonas = [
@@ -394,6 +414,7 @@ const ListClients: React.FC = () => {
     { value: 'San Isidro', label: 'San Isidro' },
     { value: 'Miraflores', label: 'Miraflores' },
     { value: 'Callao', label: 'Callao' },
+    { value: 'Provincia', label: 'Provincia' },
   ];
 
   const paises = [
@@ -402,35 +423,45 @@ const ListClients: React.FC = () => {
     { value: 'Ecuador', label: 'Ecuador' },
     { value: 'Chile', label: 'Chile' },
     { value: 'Bolivia', label: 'Bolivia' },
+    { value: 'Brasil', label: 'Brasil' },
   ];
 
   // Calcular estadísticas
-  const clientesActivos = filteredClients.filter(c => c.estado === 'ACTIVO').length;
-  const empresas = filteredClients.filter(c => c.tipoCliente === 'EMPRESA').length;
-  const personas = filteredClients.filter(c => c.tipoCliente === 'PERSONA').length;
-
+  const empresasActivas = filteredEmpresas.filter(e => e.estado).length;
+  const soloClientesCount = filteredEmpresas.filter(e => e.ib_Clt && !e.ib_Prv).length;
+  const soloProveedoresCount = filteredEmpresas.filter(e => e.ib_Prv && !e.ib_Clt).length;
+  const clientesYProveedores = filteredEmpresas.filter(e => e.ib_Clt && e.ib_Prv).length;
+  const handleEditClient = (empresa: Empresa) => {
+    setOpenModalEdit(true);
+    setEmpresaSelected(empresa);
+  }
+  const handleCloseModalEdit = () => {
+    setOpenModalEdit(false);
+    setEmpresaSelected(null);
+  }
+  const [empresaSelected, setEmpresaSelected] = useState<Empresa | null>(null)
   return (
     <Box sx={{ p: 3 }}>
       {/* Estadísticas rápidas */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ bgcolor: 'success.main', mr: 2 }}>
-                  <BusinessIcon />
+                  <CheckCircleIcon />
                 </Avatar>
                 <Box>
-                  <Typography variant="h6">{clientesActivos}</Typography>
+                  <Typography variant="h6">{empresasActivas}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Clientes Activos
+                    Empresas Activas
                   </Typography>
                 </Box>
               </Box>
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -438,16 +469,16 @@ const ListClients: React.FC = () => {
                   <BusinessIcon />
                 </Avatar>
                 <Box>
-                  <Typography variant="h6">{empresas}</Typography>
+                  <Typography variant="h6">{soloClientesCount}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Empresas
+                    Solo Clientes
                   </Typography>
                 </Box>
               </Box>
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -455,9 +486,26 @@ const ListClients: React.FC = () => {
                   <PersonIcon />
                 </Avatar>
                 <Box>
-                  <Typography variant="h6">{personas}</Typography>
+                  <Typography variant="h6">{soloProveedoresCount}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Personas Naturales
+                    Solo Proveedores
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 3 }}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ bgcolor: 'warning.main', mr: 2 }}>
+                  <BusinessIcon />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6">{clientesYProveedores}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Cliente y Proveedor
                   </Typography>
                 </Box>
               </Box>
@@ -469,496 +517,205 @@ const ListClients: React.FC = () => {
       {/* Toolbar con búsqueda y filtros */}
       <Paper sx={{ mb: 2 }}>
         <Toolbar sx={{ px: 2, py: 2 }}>
-          <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
-            <TextField
-              {...register('searchTerm')}
-              placeholder="Buscar por documento, razón social, nombre o contacto..."
-              variant="outlined"
-              size="small"
-              sx={{ minWidth: 350 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
+          <Stack direction="column" spacing={2} sx={{ flexGrow: 1 }}>
+            {/* Primera fila de filtros */}
+            <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
+              <TextField
+                {...register('searchTerm')}
+                placeholder="Buscar por documento o razón social..."
+                variant="outlined"
+                size="small"
+                sx={{ minWidth: 300 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-            <FormControl size="small" sx={{ minWidth: 140 }}>
-              <InputLabel>Tipo Documento</InputLabel>
-              <Select
-                {...register('tipoDocumento')}
-                label="Tipo Documento"
-              >
-                <MenuItem value="">Todos</MenuItem>
-                {tiposDocumento.map(tipo => (
-                  <MenuItem key={tipo.value} value={tipo.value}>
-                    {tipo.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+              <FormControl size="small" sx={{ minWidth: 140 }}>
+                <InputLabel>Tipo Documento</InputLabel>
+                <Select
+                  {...register('tipoDocumento')}
+                  label="Tipo Documento"
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {tiposDocumento.map(tipo => (
+                    <MenuItem key={tipo.value} value={tipo.value}>
+                      {tipo.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <FormControl size="small" sx={{ minWidth: 140 }}>
-              <InputLabel>Tipo Cliente</InputLabel>
-              <Select
-                {...register('tipoCliente')}
-                label="Tipo Cliente"
-              >
-                <MenuItem value="">Todos</MenuItem>
-                {tiposCliente.map(tipo => (
-                  <MenuItem key={tipo.value} value={tipo.value}>
-                    {tipo.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+              <FormControl size="small" sx={{ minWidth: 140 }}>
+                <InputLabel>Tipo Cliente</InputLabel>
+                <Select
+                  {...register('tipoCliente')}
+                  label="Tipo Cliente"
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {tiposCliente.map(tipo => (
+                    <MenuItem key={tipo.value} value={tipo.value}>
+                      {tipo.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Estado</InputLabel>
-              <Select
-                {...register('estado')}
-                label="Estado"
-              >
-                <MenuItem value="">Todos</MenuItem>
-                {estados.map(estado => (
-                  <MenuItem key={estado.value} value={estado.value}>
-                    {estado.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+              <FormControl size="small" sx={{ minWidth: 120 }}>
+                <InputLabel>Estado</InputLabel>
+                <Select
+                  {...register('estado')}
+                  label="Estado"
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {estados.map(estado => (
+                    <MenuItem key={estado.value} value={estado.value}>
+                      {estado.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <FormControl size="small" sx={{ minWidth: 140 }}>
-              <InputLabel>Industria</InputLabel>
-              <Select
-                {...register('industria')}
-                label="Industria"
-              >
-                <MenuItem value="">Todas</MenuItem>
-                {industrias.map(industria => (
-                  <MenuItem key={industria.value} value={industria.value}>
-                    {industria.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Stack>
+              <FormControl size="small" sx={{ minWidth: 140 }}>
+                <InputLabel>Industria</InputLabel>
+                <Select
+                  {...register('industria')}
+                  label="Industria"
+                >
+                  <MenuItem value="">Todas</MenuItem>
+                  {industrias.map(industria => (
+                    <MenuItem key={industria.value} value={industria.value}>
+                      {industria.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
 
-          <Stack direction="row" spacing={1}>
-            <Tooltip title="Limpiar filtros">
-              <IconButton onClick={handleClearFilters} size="small">
-                <FilterIcon />
-              </IconButton>
-            </Tooltip>
+            {/* Segunda fila de filtros */}
+            <Stack direction="row" spacing={2} alignItems="center">
+              <FormControl size="small" sx={{ minWidth: 120 }}>
+                <InputLabel>Sector</InputLabel>
+                <Select
+                  {...register('sector')}
+                  label="Sector"
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {sectores.map(sector => (
+                    <MenuItem key={sector.value} value={sector.value}>
+                      {sector.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <Tooltip title="Actualizar">
-              <IconButton onClick={handleGetCustomers} size="small">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
+              <FormControl size="small" sx={{ minWidth: 120 }}>
+                <InputLabel>Zona</InputLabel>
+                <Select
+                  {...register('zona')}
+                  label="Zona"
+                >
+                  <MenuItem value="">Todas</MenuItem>
+                  {zonas.map(zona => (
+                    <MenuItem key={zona.value} value={zona.value}>
+                      {zona.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <Tooltip title="Exportar">
-              <IconButton size="small">
-                <DownloadIcon />
-              </IconButton>
-            </Tooltip>
+              <FormControl size="small" sx={{ minWidth: 120 }}>
+                <InputLabel>País</InputLabel>
+                <Select
+                  {...register('pais')}
+                  label="País"
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {paises.map(pais => (
+                    <MenuItem key={pais.value} value={pais.value}>
+                      {pais.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAddClient}
-              size="small"
-            >
-              Nuevo Cliente
-            </Button>
+              <FormControlLabel
+                control={
+                  <Switch
+                    {...register('soloClientes')}
+                    size="small"
+                  />
+                }
+                label="Solo Clientes"
+              />
+
+              <FormControlLabel
+                control={
+                  <Switch
+                    {...register('soloProveedores')}
+                    size="small"
+                  />
+                }
+                label="Solo Proveedores"
+              />
+
+              <Box sx={{ flexGrow: 1 }} />
+
+              <Stack direction="row" spacing={1}>
+                <Tooltip title="Limpiar filtros">
+                  <IconButton onClick={handleClearFilters} size="small">
+                    <FilterIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Actualizar">
+                  <IconButton onClick={handleGetEmpresas} size="small">
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Exportar">
+                  <IconButton size="small">
+                    <DownloadIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={handleAddClient}
+                  size="small"
+                >
+                  Nueva Empresa
+                </Button>
+              </Stack>
+            </Stack>
           </Stack>
         </Toolbar>
       </Paper>
 
-      {/* Modal para agregar cliente */}
-      <Dialog
-        open={openModal}
-        onClose={handleCloseModal}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          sx: { minHeight: '80vh' }
-        }}
-      >
-        <DialogTitle>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography variant="h6" component="div">
-              Agregar Nuevo Cliente
-            </Typography>
-            <IconButton onClick={handleCloseModal} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-
-        <form onSubmit={handleSubmitCustomer(onSubmitCustomer)}>
-          <DialogContent dividers>
-            <Grid container spacing={3}>
-              {/* Información de identificación */}
-              <Grid size={12}>
-                <Typography variant="h6" gutterBottom color="primary">
-                  Información de Identificación
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth error={!!errors.idTdi}>
-                  <InputLabel>Tipo de Documento</InputLabel>
-                  <Controller
-                    name="idTdi"
-                    control={controlCustomer}
-                    rules={{ required: 'El tipo de documento es requerido' }}
-                    render={({ field }) => (
-                      <Select {...field} label="Tipo de Documento">
-                        <MenuItem value={0}>DNI</MenuItem>
-                        <MenuItem value={6}>RUC</MenuItem>
-                      </Select>
-                    )}
-                  />
-                  {errors.idTdi && (
-                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
-                      {errors.idTdi.message}
-                    </Typography>
-                  )}
-                </FormControl>
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  {...registerCustomer('nDoc', {
-                    required: 'El número de documento es requerido',
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: 'Solo se permiten números'
-                    }
-                  })}
-                  label="Número de Documento"
-                  fullWidth
-                  error={!!errors.nDoc}
-                  helperText={errors.nDoc?.message}
-                />
-              </Grid>
-
-              <Grid size={12}>
-                <TextField
-                  {...registerCustomer('razonSocial', { required: 'La razón social es requerida' })}
-                  label="Razón Social"
-                  fullWidth
-                  error={!!errors.razonSocial}
-                  helperText={errors.razonSocial?.message}
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  {...registerCustomer('nombreCliente')}
-                  label="Nombre Comercial"
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Tipo de Cliente</InputLabel>
-                  <Controller
-                    name="tipoCliente"
-                    control={controlCustomer}
-                    render={({ field }) => (
-                      <Select {...field} label="Tipo de Cliente">
-                        <MenuItem value="EMPRESA">Empresa</MenuItem>
-                        <MenuItem value="PERSONA">Persona Natural</MenuItem>
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              {/* Información comercial */}
-              <Grid size={12}>
-                <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
-                  Información Comercial
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Industria</InputLabel>
-                  <Controller
-                    name="industria"
-                    control={controlCustomer}
-                    render={({ field }) => (
-                      <Select {...field} label="Industria">
-                        {industrias.map(industria => (
-                          <MenuItem key={industria.value} value={industria.value}>
-                            {industria.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Sector</InputLabel>
-                  <Controller
-                    name="sector"
-                    control={controlCustomer}
-                    render={({ field }) => (
-                      <Select {...field} label="Sector">
-                        {sectores.map(sector => (
-                          <MenuItem key={sector.value} value={sector.value}>
-                            {sector.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Zona</InputLabel>
-                  <Controller
-                    name="zona"
-                    control={controlCustomer}
-                    render={({ field }) => (
-                      <Select {...field} label="Zona">
-                        {zonas.map(zona => (
-                          <MenuItem key={zona.value} value={zona.value}>
-                            {zona.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel>País</InputLabel>
-                  <Controller
-                    name="pais"
-                    control={controlCustomer}
-                    render={({ field }) => (
-                      <Select {...field} label="País">
-                        {paises.map(pais => (
-                          <MenuItem key={pais.value} value={pais.value}>
-                            {pais.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              {/* Información de contacto */}
-              <Grid size={12}>
-                <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
-                  Información de Contacto
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  {...registerCustomer('telefClt', {
-                    pattern: {
-                      value: /^[\+]?[0-9\s\-\(\)]+$/,
-                      message: 'Formato de teléfono inválido'
-                    }
-                  })}
-                  label="Teléfono"
-                  fullWidth
-                  error={!!errors.telefClt}
-                  helperText={errors.telefClt?.message}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PhoneIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  {...registerCustomer('correoClt', {
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: 'Formato de email inválido'
-                    }
-                  })}
-                  label="Correo Electrónico"
-                  fullWidth
-                  type="email"
-                  error={!!errors.correoClt}
-                  helperText={errors.correoClt?.message}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-
-              <Grid size={12}>
-                <FormControl fullWidth>
-                  <InputLabel>Estado</InputLabel>
-                  <Controller
-                    name="estado"
-                    control={controlCustomer}
-                    render={({ field }) => (
-                      <Select {...field} label="Estado">
-                        {estados.map(estado => (
-                          <MenuItem key={estado.value} value={estado.value}>
-                            {estado.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              {/* Datos adicionales */}
-              <Grid size={12}>
-                <Box sx={{ mt: 2 }}>
-                  <FormControlLabel
-                    control={
-                      <Controller
-                        name="incluirDatosAdicionales"
-                        control={controlCustomer}
-                        render={({ field }) => (
-                          <Switch {...field} checked={field.value} />
-                        )}
-                      />
-                    }
-                    label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <LocationIcon fontSize="small" />
-                        <Typography>Incluir datos adicionales</Typography>
-                      </Box>
-                    }
-                  />
-                </Box>
-              </Grid>
-
-              {incluirDatosAdicionales && (
-                <>
-                  <Grid size={12}>
-                    <Typography variant="h6" gutterBottom color="primary">
-                      Datos Adicionales
-                    </Typography>
-                    <Divider sx={{ mb: 2 }} />
-                  </Grid>
-
-                  <Grid size={12}>
-                    <TextField
-                      {...registerCustomer('direccion')}
-                      label="Dirección"
-                      fullWidth
-                      multiline
-                      rows={2}
-                    />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      {...registerCustomer('ciudad')}
-                      label="Ciudad"
-                      fullWidth
-                    />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      {...registerCustomer('codigoPostal')}
-                      label="Código Postal"
-                      fullWidth
-                    />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      {...registerCustomer('contactoPrincipal')}
-                      label="Contacto Principal"
-                      fullWidth
-                    />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      {...registerCustomer('cargoContacto')}
-                      label="Cargo del Contacto"
-                      fullWidth
-                    />
-                  </Grid>
-                </>
-              )}
-
-              {/* Información adicional */}
-              <Grid size={12}>
-                <Alert severity="info" sx={{ mt: 2 }}>
-                  <Typography variant="body2">
-                    <strong>Nota:</strong> Una vez creado el cliente, se generará automáticamente la fecha de creación
-                    y estará disponible para su gestión en el sistema.
-                  </Typography>
-                </Alert>
-              </Grid>
-            </Grid>
-          </DialogContent>
-
-          <DialogActions sx={{ p: 3 }}>
-            <Button
-              onClick={handleCloseModal}
-              variant="outlined"
-              disabled={submitting}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={submitting}
-              startIcon={submitting ? undefined : <SaveIcon />}
-            >
-              {submitting ? 'Guardando...' : 'Guardar Cliente'}
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
+      <CustomerCreate openModal={openModal} handleCloseModal={handleCloseModal} />
+      <CustomerEdit openModal={true} handleCloseModal={handleCloseModalEdit} empresa={empresaSelected} />
 
       {/* Tabla */}
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 1400 }} aria-label="tabla de clientes">
+        <Table sx={{ minWidth: 1400 }} aria-label="tabla de empresas">
           <TableHead>
             <TableRow sx={{ backgroundColor: 'primary.main' }}>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>ID</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tipo Doc.</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Nro. Documento</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Razón Social</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Nombre Cliente</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tipo Cliente</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Industria</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Sector</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Zona</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>País</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Roles</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Estado</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Acciones</TableCell>
             </TableRow>
@@ -968,7 +725,7 @@ const ListClients: React.FC = () => {
               ?
               [...Array(5)].map((_, i) => (
                 <TableRow key={i}>
-                  {[...Array(11)].map((_, j) => (
+                  {[...Array(12)].map((_, j) => (
                     <TableCell key={j}>
                       <Skeleton variant="text" width={j % 2 === 0 ? '80%' : '60%'} />
                     </TableCell>
@@ -976,95 +733,84 @@ const ListClients: React.FC = () => {
                 </TableRow>
               ))
               :
-              filteredClients
+              filteredEmpresas
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((client) => (
+                .map((empresa) => (
                   <TableRow
-                    key={client.idClt}
+                    key={empresa.empresaID}
                     sx={{
                       '&:nth-of-type(odd)': { backgroundColor: 'action.hover' },
                       '&:hover': { backgroundColor: 'action.selected' }
                     }}
                   >
+                    <TableCell sx={{ fontWeight: 'medium' }}>
+                      {empresa.empresaID}
+                    </TableCell>
                     <TableCell>
                       <Chip
-                        label={tipoDocumento[client.idTdi]}
+                        label={empresa.tipoDocumento}
                         size="small"
                         variant="outlined"
                         color="primary"
                       />
                     </TableCell>
                     <TableCell sx={{ fontWeight: 'medium', fontFamily: 'monospace' }}>
-                      {client.nDoc}
+                      {empresa.numDoc}
                     </TableCell>
-                    <TableCell sx={{ maxWidth: 200 }}>
-                      <Typography variant="body2" noWrap title={client.razonSocial}>
-                        {client.razonSocial}
+                    <TableCell sx={{ maxWidth: 250 }}>
+                      <Typography variant="body2" noWrap title={empresa.razonSocial}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          {getTipoClienteIcon(empresa.tipoCliente)}
+                          {empresa.razonSocial}
+                        </Box>
                       </Typography>
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 'medium' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {getTipoClienteIcon(client.tipoCliente || '')}
-                        {client.nombreCliente || client.razonSocial}
-                      </Box>
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={client.tipoCliente}
+                        label={empresa.tipoCliente}
                         size="small"
                         variant="outlined"
-                        color={client.tipoCliente === 'EMPRESA' ? 'primary' : 'default'}
+                        color={empresa.tipoCliente === 'PERSONA_NATURAL' ? 'default' : 'primary'}
                       />
                     </TableCell>
+                    <TableCell>{empresa.industria}</TableCell>
                     <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-
-                        {client.industria}
-                      </Box>
+                      <Chip label={empresa.sector} size="small" variant="filled" />
                     </TableCell>
-                    <TableCell>
-                      <Chip label={client.sector} size="small" variant="filled" />
-                    </TableCell>
-                    <TableCell>
-                      {client.zona}
-                    </TableCell>
+                    <TableCell>{empresa.zona}</TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                         <LocationIcon fontSize="small" color="action" />
-                        {client.pais}
+                        {empresa.pais}
                       </Box>
                     </TableCell>
                     <TableCell>
+                      <Stack direction="row" spacing={0.5}>
+                        {empresa.ib_Clt && (
+                          <Chip label="Cliente" size="small" color="success" variant="outlined" />
+                        )}
+                        {empresa.ib_Prv && (
+                          <Chip label="Proveedor" size="small" color="info" variant="outlined" />
+                        )}
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
                       <Chip
-                        label={client.estado}
-                        color={getStatusColor(client.estado) as any}
+                        label={empresa.estado ? 'Activo' : 'Inactivo'}
+                        color={getStatusColor(empresa.estado) as any}
                         size="small"
+                        icon={empresa.estado ? <CheckCircleIcon /> : <CancelIcon />}
                       />
                     </TableCell>
                     <TableCell>
                       <Stack direction="row" spacing={1}>
-                        <Tooltip title="Ver detalles">
-                          <IconButton
-                            size="small"
-                            onClick={() => handleViewClient(client.idClt)}
-                          >
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
                         <Tooltip title="Editar">
-                          <IconButton
-                            size="small"
-                          // onClick={() => handleEditClient(client.idClt)}
-                          >
+                          <IconButton size="small" onClick={() => handleEditClient(empresa)}>
                             <EditIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Eliminar">
-                          <IconButton
-                            size="small"
-                            // onClick={() => handleDeleteClient(client.idClt)}
-                            color="error"
-                          >
+                          <IconButton size="small" color="error">
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
@@ -1072,11 +818,11 @@ const ListClients: React.FC = () => {
                     </TableCell>
                   </TableRow>
                 ))}
-            {!loading && filteredClients.length === 0 && (
+            {!loading && filteredEmpresas.length === 0 && (
               <TableRow>
-                <TableCell colSpan={11} align="center" sx={{ py: 4 }}>
+                <TableCell colSpan={12} align="center" sx={{ py: 4 }}>
                   <Typography variant="body1" color="text.secondary">
-                    No se encontraron clientes que coincidan con los filtros
+                    No se encontraron empresas que coincidan con los filtros
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -1089,7 +835,7 @@ const ListClients: React.FC = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, 50]}
         component="div"
-        count={filteredClients.length}
+        count={filteredEmpresas.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

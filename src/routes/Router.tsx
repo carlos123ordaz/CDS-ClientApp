@@ -10,11 +10,12 @@ const Dashboard = lazy(() => import("../views/dashboard/page"));
 const OrderSaleCreate = lazy(() => import('../views/saleOrder/SaleRegister'));
 const OrderSaleList = lazy(() => import('../views/saleOrder/SaleList'));
 const OrderSaleDetails = lazy(() => import('../views/saleOrder/SeleDetails'));
+const OrderSaleEdit = lazy(() => import('../views/saleOrder/SaleEdit'));
 const OrderPurchaseCreate = lazy(() => import('../views/purchaseOrder/PurchaseRegister'));
 const OrderPurchaseList = lazy(() => import('../views/purchaseOrder/PurchaseList'));
 const OrderPurchaseDetails = lazy(() => import('../views/purchaseOrder/PurchaseDetails'));
 const OrderPurchaseEdit = lazy(() => import('../views/purchaseOrder/PurchaseEdit'));
-const VendorList = lazy(() => import('../views/seller/SellerList'));
+const VendorList = lazy(() => import('../views/user/UserList'));
 const ProductList = lazy(() => import('../views/product/ProductList'));
 const ServiceCreate = lazy(() => import('../views/service/ServiceCreate'));
 const ServiceList = lazy(() => import('../views/service/ServiceList'));
@@ -39,6 +40,7 @@ const Router = [
       { path: '/pedidos-crear', exact: true, element: <OrderSaleCreate /> },
       { path: '/pedidos-lista', exact: true, element: <OrderSaleList /> },
       { path: '/pedidos/:id', exact: true, element: <OrderSaleDetails /> },
+      { path: '/pedidos-editar/:id', exact: true, element: <OrderSaleEdit /> },
       { path: '/vendedores-lista', exact: true, element: <VendorList /> },
       { path: '/productos-lista', exact: true, element: <ProductList /> },
       { path: '/servicios-crear', exact: true, element: <ServiceCreate /> },
