@@ -62,7 +62,7 @@ const AdminLayout = () => {
     { id: 'dashboard', label: 'Dashboard', icon: DashboardIcon, path: '/' },
     { id: 'pedidos', label: 'Pedidos', icon: AssignmentIcon, path: '/pedidos-lista' },
     { id: 'compras', label: 'Compras', icon: ShoppingCartIcon, path: '/compras-lista' },
-    { id: 'vendedores', label: 'Usuarios', icon: StorefrontIcon, path: '/vendedores-lista' },
+    { id: 'usuarios', label: 'Usuarios', icon: PeopleIcon, path: '/usuarios-lista' },
     { id: 'productos', label: 'Productos', icon: InventoryIcon, path: '/productos-lista' },
     { id: 'servicios', label: 'Servicios', icon: BuildIcon, path: '/servicios-lista' },
     { id: 'clientes', label: 'Clientes', icon: GroupIcon, path: '/clientes-lista' },

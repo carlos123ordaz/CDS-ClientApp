@@ -3,8 +3,8 @@
 import React, { lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router';
 
-const FullLayout = lazy(() => import('../layouts/full/FullLayout'));
-const BlankLayout = lazy(() => import('../layouts/blank/BlankLayout'));
+const FullLayout = lazy(() => import('../layouts/FullLayout'));
+const BlankLayout = lazy(() => import('../layouts/BlankLayout'));
 
 const Dashboard = lazy(() => import("../views/dashboard/page"));
 const OrderSaleCreate = lazy(() => import('../views/saleOrder/SaleRegister'));
@@ -40,7 +40,7 @@ const Router = [
       { path: '/pedidos-lista', exact: true, element: <OrderSaleList /> },
       { path: '/pedidos/:id', exact: true, element: <OrderSaleDetails /> },
       { path: '/pedidos-editar/:id', exact: true, element: <OrderSaleEdit /> },
-      { path: '/vendedores-lista', exact: true, element: <VendorList /> },
+      { path: '/usuarios-lista', exact: true, element: <VendorList /> },
       { path: '/productos-lista', exact: true, element: <ProductList /> },
       { path: '/servicios-crear', exact: true, element: <ServiceCreate /> },
       { path: '/servicios-lista', exact: true, element: <ServiceList /> },
