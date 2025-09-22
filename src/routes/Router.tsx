@@ -19,7 +19,6 @@ const VendorList = lazy(() => import('../views/user/UserList'));
 const ProductList = lazy(() => import('../views/product/ProductList'));
 const ServiceCreate = lazy(() => import('../views/service/ServiceCreate'));
 const ServiceList = lazy(() => import('../views/service/ServiceList'));
-const CustomerCreate = lazy(() => import('../views/customer/CustomerCreate'));
 const CustomerList = lazy(() => import('../views/customer/CustomerList'));
 const ProjectCreate = lazy(() => import('../views/project/PorjectRegister'));
 const ProjectList = lazy(() => import('../views/project/ProjectList'));
@@ -45,7 +44,6 @@ const Router = [
       { path: '/productos-lista', exact: true, element: <ProductList /> },
       { path: '/servicios-crear', exact: true, element: <ServiceCreate /> },
       { path: '/servicios-lista', exact: true, element: <ServiceList /> },
-      { path: '/clientes-crear', exact: true, element: <CustomerCreate /> },
       { path: '/clientes-lista', exact: true, element: <CustomerList /> },
       { path: '/proyectos-crear', exact: true, element: <ProjectCreate /> },
       { path: '/proyectos-lista', exact: true, element: <ProjectList /> },

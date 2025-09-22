@@ -98,7 +98,7 @@ const AdminLayout = () => {
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {(desktopOpen || isMobile) && (
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
               Corsusa
             </Typography>
             <Typography variant="caption" color="text.secondary">
