@@ -117,8 +117,7 @@ const AdminLayout = () => {
       <List sx={{ flexGrow: 1, px: 1, py: 2 }}>
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path; // 👈 comparar con la ruta
-
+          const isActive = location.pathname === item.path;
           return (
             <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
