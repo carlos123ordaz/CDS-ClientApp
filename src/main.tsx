@@ -10,6 +10,7 @@ import 'dayjs/locale/es';
 import dayjs from 'dayjs';
 dayjs.locale('es');
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <DashboardContextProvider>
     <Suspense>
