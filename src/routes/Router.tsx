@@ -2,6 +2,8 @@
 // @ts-ignore
 import React, { lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router';
+import ForgotPasswordComponent from 'src/views/authentication/ForgotPassword';
+import ResetPasswordComponent from 'src/views/authentication/RestPassword';
 
 const FullLayout = lazy(() => import('../layouts/FullLayout'));
 const BlankLayout = lazy(() => import('../layouts/BlankLayout'));
@@ -59,7 +61,8 @@ const Router = [
       { path: '*', element: <Navigate to="/auth/404" /> },
       { path: '/auth/register', element: <Register /> },
       { path: '/auth/login', element: <Login /> },
-
+      { path: '/auth/reset-password', element: <ForgotPasswordComponent /> },
+      { path: '/auth/reset-password/:token', element: <ResetPasswordComponent /> },
     ],
   },
   { basename: '/' }

@@ -478,7 +478,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 />
                             </FormControl>
                         </Grid>
-
                         <Grid size={{ xs: 12, sm: 6 }}>
                             <FormControl fullWidth>
                                 <InputLabel>Unidad de Medida</InputLabel>
@@ -498,15 +497,12 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 />
                             </FormControl>
                         </Grid>
-
-                        {/* Información comercial/inventario */}
                         <Grid size={{ xs: 12 }}>
                             <Typography variant="h6" gutterBottom color="primary" sx={{ mt: 2 }}>
                                 Información Comercial e Inventario
                             </Typography>
                             <Divider sx={{ mb: 2 }} />
                         </Grid>
-
                         <Grid size={{ xs: 12, sm: 4 }}>
                             <TextField
                                 {...register('precio', {
@@ -520,7 +516,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 helperText={errors.precio?.message}
                             />
                         </Grid>
-
                         <Grid size={{ xs: 12, sm: 4 }}>
                             <TextField
                                 {...register('stock', {
@@ -534,7 +529,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 helperText={errors.stock?.message}
                             />
                         </Grid>
-
                         <Grid size={{ xs: 12, sm: 4 }}>
                             <TextField
                                 {...register('stockMinimo', {
@@ -548,8 +542,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 helperText={errors.stockMinimo?.message}
                             />
                         </Grid>
-
-                        {/* Traducciones */}
                         <Grid size={{ xs: 12 }}>
                             <Box sx={{ mt: 2 }}>
                                 <FormControlLabel
@@ -571,7 +563,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 />
                             </Box>
                         </Grid>
-
                         {incluirTraducciones && (
                             <>
                                 <Grid size={{ xs: 12 }}>
@@ -589,7 +580,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                         placeholder="Model name in English"
                                     />
                                 </Grid>
-
                                 <Grid size={{ xs: 12, sm: 6 }}>
                                     <TextField
                                         {...register('materialTraduc')}
@@ -598,7 +588,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                         placeholder="Material description"
                                     />
                                 </Grid>
-
                                 <Grid size={{ xs: 12 }}>
                                     <TextField
                                         {...register('descripTraduc')}
@@ -609,7 +598,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                         placeholder="Product description in English"
                                     />
                                 </Grid>
-
                                 <Grid size={{ xs: 12 }}>
                                     <TextField
                                         {...register('usoTraduc')}
@@ -622,8 +610,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                                 </Grid>
                             </>
                         )}
-
-                        {/* Información adicional */}
                         <Grid size={{ xs: 12 }}>
                             <Alert severity="info" sx={{ mt: 2 }}>
                                 <Typography variant="body2">
@@ -634,7 +620,6 @@ export const ProductCreate: React.FC<ProductCreateProps> = ({
                         </Grid>
                     </Grid>
                 </DialogContent>
-
                 <DialogActions sx={{ p: 3 }}>
                     <Button
                         onClick={handleClose}
