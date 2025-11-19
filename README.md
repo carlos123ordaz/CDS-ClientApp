@@ -14,7 +14,7 @@
 
 
 
-## 👋 Introduction
+## 👋 Introduction ...
 
 **MaterialPro React Admin Free** is a modern, responsive, and high-performance **React admin dashboard template** built with **React**, **Material UI (MUI)**, **TypeScript**, **Vite**, and **ApexCharts**. 
 
