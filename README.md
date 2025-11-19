@@ -8,7 +8,7 @@ Una aplicación web moderna para gestión integral de cadenas de suministro desa
 ![Vite](https://img.shields.io/badge/Vite-5.0-yellow?logo=vite)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## 🚀 Características Principales
+## 🚀 Características Principales --
 
 ### Módulos Empresariales
 - **👥 Gestión de Clientes**: Control completo de información de clientes y contactos
