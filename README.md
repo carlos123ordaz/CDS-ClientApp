@@ -22,7 +22,7 @@ Designed for speed, scalability, and an exceptional developer experience, Materi
 
 With a clean Material Design aesthetic, powerful UI components, and dynamic data visualizations, it provides everything you need to launch professional-grade dashboards with minimal setup—**completely free and open-source**.
 
-### 🔑 Key Features
+### 🔑 Key Features...
 
 - **Responsive Design**  
   Delivers a seamless experience across all devices with a mobile-first layout powered by **Material UI’s responsive grid system**.
