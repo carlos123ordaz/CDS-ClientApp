@@ -1,264 +1,364 @@
-<p align="center">
-   <a href="https://www.wrappixel.com/" target="_blank">
-      <img src="https://adminmart.github.io/template_api/images/brand-logo/WrapPixel-Logo.svg" alt="sneat-logo" width="100px" height="100px">
-   </a>
-</p>
-<h1 align="center">
-   <a href="https://www.wrappixel.com/templates/materialpro-react-admin-lite/?ref=376" target="_blank" align="center">
-       MaterialPro React Admin Free
-   </a>
-</h1>
-<p align="center">Download most useful and comprehensive 🚀 Free React admin template built for developers 🛠</p>
+# 📦 CDS-ClientApp - Sistema de Gestión de Cadena de Suministro
 
-[![MaterialPro React Admin Free Demo Screenshot](https://www.wrappixel.com/wp-content/uploads/edd/2020/04/materialpro-react-lite-y.jpg)](https://www.wrappixel.com/templates/materialpro-react-admin-lite/?ref=376)
+Una aplicación web moderna para gestión integral de cadenas de suministro desarrollada con React, TypeScript y Material-UI, basada en MaterialPro React Admin Template.
 
+![React](https://img.shields.io/badge/React-18.2.0-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
+![Material-UI](https://img.shields.io/badge/Material--UI-5.14-blue?logo=mui)
+![Vite](https://img.shields.io/badge/Vite-5.0-yellow?logo=vite)
+![License](https://img.shields.io/badge/License-MIT-green)
 
+## 🚀 Características Principales --
 
-## 👋 Introduction
+### Módulos Empresariales
+- **👥 Gestión de Clientes**: Control completo de información de clientes y contactos
+- **🛍️ Gestión de Pedidos**: Creación, seguimiento y procesamiento de órdenes de venta
+- **🛒 Gestión de Compras**: Control de órdenes de compra y relaciones con proveedores
+- **📦 Gestión de Productos**: Catálogo de productos con especificaciones técnicas
+- **🔧 Gestión de Servicios**: Administración de servicios profesionales
+- **📋 Gestión de Proyectos**: Planificación y seguimiento de proyectos empresariales
+- **🏪 Gestión de Almacén**: Control de inventario, ubicaciones y movimientos de stock
+- **📊 Sistema de Facturación**: Generación automática de facturas y control de pagos
 
-**MaterialPro React Admin Free** is a modern, responsive, and high-performance **React admin dashboard template** built with **React**, **Material UI (MUI)**, **TypeScript**, **Vite**, and **ApexCharts**. 
+### Características del Template Base
+- **🎨 MaterialPro Design**: Interfaz moderna basada en Material Design
+- **📱 Diseño Responsive**: Experiencia optimizada para todos los dispositivos
+- **⚡ Vite Development**: Desarrollo ultra-rápido con Hot Module Replacement
+- **📊 ApexCharts**: Visualizaciones interactivas de datos empresariales
+- **🔧 TypeScript**: Código tipado para mayor robustez y mantenibilidad
 
-Designed for speed, scalability, and an exceptional developer experience, MaterialPro is perfect for building **SaaS applications**, **admin panels**, **CRM systems**, and **internal dashboards**. 
+## 🛠️ Stack Tecnológico
 
-With a clean Material Design aesthetic, powerful UI components, and dynamic data visualizations, it provides everything you need to launch professional-grade dashboards with minimal setup—**completely free and open-source**.
+### Core Framework
+- **React 18.2+** - Biblioteca principal para UI
+- **TypeScript 5.0+** - Tipado estático para JavaScript
+- **Vite** - Build tool y servidor de desarrollo de alta velocidad
+- **Material-UI (MUI) 5.14+** - Sistema de componentes Material Design
 
-### 🔑 Key Features
+### Librerías y Herramientas
+- **ApexCharts** - Gráficos y visualizaciones de datos
+- **React Router 6+** - Navegación y enrutamiento SPA
+- **React Query/TanStack Query** - Gestión de estado del servidor
+- **Formik + Yup** - Manejo avanzado de formularios y validaciones
+- **Date-fns** - Manipulación y formateo de fechas
 
-- **Responsive Design**  
-  Delivers a seamless experience across all devices with a mobile-first layout powered by **Material UI’s responsive grid system**.
+### Desarrollo y Calidad
+- **ESLint** - Análisis estático de código
+- **Prettier** - Formateo automático de código
+- **Husky** - Git hooks para CI/CD local
 
-- **Material UI Styling**  
-  Built entirely with **Material UI (MUI)** components for a polished, consistent look and feel that follows **Google’s Material Design** guidelines.
+## 📁 Estructura del Proyecto
 
-- **Vite-Powered Development**  
-  Experience lightning-fast dev builds and hot module replacement with **Vite**, optimizing performance and developer efficiency.
-
-- **ApexCharts Integration**  
-  Visualize complex data effortlessly with **ApexCharts**, offering interactive, customizable charts ideal for dashboards and analytics.
-
-- **TypeScript Support**  
-  A fully typed codebase ensures improved code quality, better IDE support, and fewer runtime errors.
-
-- **Developer Friendly**  
-  Clean, modular folder structure and reusable components make customization, scalability, and maintenance a breeze—perfect for real-world apps.
----
-
-## 🛠️ Notable Libraries and Tools
-
-| **Library / Tool**     | **Description**                                                                 |
-|------------------------|---------------------------------------------------------------------------------|
-| **React**              | A declarative JavaScript library for building modern, component-based user interfaces. |
-| **Material UI (MUI)**  | A comprehensive React UI framework that follows Google's Material Design system, offering pre-built, customizable components. |
-| **ApexCharts**         | A powerful charting library for creating interactive and visually appealing data visualizations. |
-| **TypeScript**         | A statically typed superset of JavaScript that improves code quality, refactoring, and IDE support. |
-| **Vite**               | A lightning-fast frontend build tool that provides instant dev server startup and optimized production builds. |
-
----
-
-## 💾 Installation Guide
-
-Welcome to the **MaterialPro React Admin Free**! This guide will walk you through the installation and setup process, so you can get started with building your custom admin dashboard in no time.
-
-### 📝 Steps to Install
-
-#### 1. **Clone the Repository**
-
-The easiest way to get started is by cloning the repository or download the zip file. You can do this with the following command:
-
-```bash
-git clone https://github.com/wrappixel/materialpro-react-lite.git
+```
+CDS-ClientApp/
+├── public/                  # Archivos públicos y assets
+├── src/
+│   ├── components/          # Componentes reutilizables
+│   │   ├── dashboard/       # Componentes del dashboard
+│   │   ├── forms/           # Componentes de formularios
+│   │   ├── charts/          # Componentes de gráficos
+│   │   └── shared/          # Componentes compartidos
+│   ├── layouts/             # Layouts principales
+│   │   ├── full/            # Layout principal con sidebar
+│   │   └── blank/           # Layout limpio para login/registro
+│   ├── views/               # Páginas/Vistas principales
+│   │   ├── customers/       # Módulo de clientes
+│   │   ├── orders/          # Módulo de pedidos
+│   │   ├── purchases/       # Módulo de compras
+│   │   ├── products/        # Módulo de productos
+│   │   ├── services/        # Módulo de servicios
+│   │   ├── projects/        # Módulo de proyectos
+│   │   ├── warehouse/       # Módulo de almacén
+│   │   ├── billing/         # Módulo de facturación
+│   │   └── dashboard/       # Dashboard principal
+│   ├── theme/               # Configuración de tema MaterialPro
+│   ├── utils/               # Utilidades y helpers
+│   ├── services/            # Servicios API y llamadas HTTP
+│   ├── hooks/               # Custom React hooks
+│   ├── types/               # Definiciones TypeScript
+│   └── store/               # Gestión de estado global
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
 ```
 
-#### 2. **Install Dependencies**
+## ⚙️ Instalación y Configuración
 
-Install the relative Dependencies of the template. You can do this with the following command:
+### Prerrequisitos
+- **Node.js** 18.0 o superior
+- **npm** 9.0+ o **yarn** 1.22+
+- **Git** para control de versiones
+
+### Pasos de Instalación
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/carlos123ordaz/CDS-ClientApp.git
+   cd CDS-ClientApp
+   git checkout carlos
+   ```
+
+2. **Instalar dependencias**
+   ```bash
+   npm install
+   # o con yarn
+   yarn install
+   ```
+
+3. **Configurar variables de entorno**
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Configurar las variables necesarias:
+   ```env
+   VITE_API_BASE_URL=http://localhost:3001/api
+   VITE_APP_NAME=CDS Supply Chain Manager
+   VITE_APP_VERSION=1.0.0
+   ```
+
+4. **Iniciar servidor de desarrollo**
+   ```bash
+   npm run dev
+   # o con yarn
+   yarn dev
+   ```
+
+La aplicación estará disponible en `http://localhost:5173`
+
+## 📝 Scripts Disponibles
 
 ```bash
-npm install
+# Desarrollo
+npm run dev          # Servidor de desarrollo con HMR
+npm run dev:host     # Servidor accesible desde red local
+
+# Build y Producción
+npm run build        # Build optimizado para producción
+npm run preview      # Preview de la build de producción
+npm run serve        # Servir build de producción
+
+# Calidad de Código
+npm run lint         # Ejecutar ESLint
+npm run lint:fix     # Corregir errores automáticamente
+npm run format       # Formatear código con Prettier
+npm run type-check   # Verificar tipos de TypeScript
+
+# Utilidades
+npm run clean        # Limpiar node_modules y builds
+npm run analyze      # Analizar bundle size
 ```
 
-#### 3. **Start the Development Server**
+## 🏗️ Módulos de la Aplicación
 
-Once the dependencies are installed, you can start a local development server to preview the template: 
+### 📊 Dashboard Principal
+- **Métricas en tiempo real** de ventas, compras e inventario
+- **Gráficos interactivos** con ApexCharts para análisis de tendencias
+- **Alertas y notificaciones** del sistema
+- **Resumen de actividad** reciente por módulo
+
+### 👥 Gestión de Clientes
+- **Registro completo** de información de clientes
+- **Historial de transacciones** y pedidos
+- **Segmentación** por tipo, región o volumen de compra
+- **Información de contacto** y datos de facturación
+
+### 🛍️ Gestión de Pedidos
+- **Creación y edición** de órdenes de venta
+- **Workflow de aprobación** con estados configurables
+- **Seguimiento en tiempo real** del estado de pedidos
+- **Integración automática** con inventario y facturación
+
+### 🛒 Gestión de Compras
+- **Órdenes de compra** a proveedores
+- **Sistema de cotizaciones** y comparativas
+- **Control de recepción** de mercancías
+- **Gestión de pagos** y términos comerciales
+
+### 📦 Gestión de Productos
+- **Catálogo detallado** con especificaciones técnicas
+- **Control de precios** por cliente o volumen
+- **Gestión de categorías** y clasificaciones
+- **Imágenes y documentación** técnica
+
+### 🔧 Gestión de Servicios
+- **Catálogo de servicios** profesionales
+- **Asignación de recursos** humanos y técnicos
+- **Control de tiempo** y tareas
+- **Facturación de servicios** por horas o proyecto
+
+### 📋 Gestión de Proyectos
+- **Planificación** con diagramas de Gantt
+- **Asignación de tareas** y recursos
+- **Seguimiento de progreso** y entregables
+- **Control de presupuesto** y rentabilidad
+
+### 🏪 Gestión de Almacén
+- **Control de inventario** en tiempo real
+- **Ubicaciones y zonas** de almacenamiento
+- **Movimientos de stock** con trazabilidad completa
+- **Alertas automáticas** de stock mínimo y máximo
+
+### 📊 Sistema de Facturación
+- **Generación automática** de facturas
+- **Plantillas personalizables** por tipo de cliente
+- **Control de pagos** y cuentas por cobrar
+- **Reportes financieros** y análisis de flujo de caja
+
+## 🎨 Personalización del Tema
+
+CDS-ClientApp utiliza el sistema de temas de MaterialPro basado en MUI:
+
+```typescript
+// src/theme/Theme.ts
+import { createTheme } from '@mui/material/styles';
+
+export const baselightTheme = createTheme({
+  direction: 'ltr',
+  palette: {
+    primary: {
+      main: '#5D87FF',
+      light: '#ECF2FF',
+      dark: '#4570EA',
+    },
+    secondary: {
+      main: '#49BEFF',
+      light: '#E8F7FF',
+      dark: '#23afdb',
+    },
+    success: {
+      main: '#13DEB9',
+      light: '#E6FFFA',
+      dark: '#02b3a9',
+      contrastText: '#ffffff',
+    },
+    // ... más configuraciones
+  },
+  typography: {
+    fontFamily: "'Plus Jakarta Sans', sans-serif;",
+    h1: {
+      fontWeight: 600,
+      fontSize: '2.25rem',
+      lineHeight: '2.75rem',
+    },
+    // ... más configuraciones tipográficas
+  },
+});
+```
+
+## 📈 Características de ApexCharts
+
+La aplicación incluye múltiples tipos de gráficos:
+
+- **Gráficos de líneas** para tendencias de ventas
+- **Gráficos de barras** para comparativas de productos
+- **Gráficos de área** para análisis de inventario
+- **Gráficos de dona** para distribución por categorías
+- **Gráficos de radar** para análisis de performance
+- **Mapas de calor** para visualización de datos geográficos
+
+## 🔒 Seguridad y Autenticación
+
+- **Sistema de login** con JWT tokens
+- **Roles y permisos** granulares por módulo
+- **Rutas protegidas** con guards de autenticación
+- **Gestión de sesiones** seguras
+- **Validación de formularios** en cliente y servidor
+
+## 🚀 Despliegue en Producción
+
+### Build Optimizado
+```bash
+npm run build
+```
+
+### Variables de Entorno de Producción
+```env
+VITE_API_BASE_URL=https://api.yourdomain.com
+VITE_APP_ENV=production
+VITE_ENABLE_ANALYTICS=true
+```
+
+### Opciones de Despliegue
+- **Vercel**: Deploy automático desde GitHub
+- **Netlify**: Hosting estático con funciones serverless
+- **AWS S3 + CloudFront**: Distribución global
+- **Docker**: Contenedorización para cualquier plataforma
+
+## 🧪 Testing y Calidad
 
 ```bash
-npm run dev
+# Testing (cuando se implemente)
+npm run test              # Ejecutar tests unitarios
+npm run test:coverage     # Reporte de cobertura
+npm run test:e2e         # Tests end-to-end
+
+# Análisis de Código
+npm run analyze          # Análisis del bundle
+npm run audit            # Auditoría de seguridad
 ```
+
+## 🤝 Contribución al Proyecto
+
+### Workflow de Desarrollo
+1. **Fork** el repositorio
+2. **Crear rama** de feature (`git checkout -b feature/nueva-funcionalidad`)
+3. **Desarrollar** siguiendo las convenciones establecidas
+4. **Commit** con mensajes descriptivos
+5. **Push** y crear **Pull Request**
+
+### Convenciones de Código
+- **TypeScript** obligatorio para nuevas funcionalidades
+- **Material-UI** para todos los componentes de interfaz
+- **Funcional Components** con hooks de React
+- **ESLint** y **Prettier** configurados automáticamente
+- **Conventional Commits** para mensajes de commit
+
+## 📋 Roadmap de Desarrollo
+
+### Versión 1.1 (Q1 2026)
+- [ ] **Módulo de Reportes** avanzados con exportación PDF/Excel
+- [ ] **API REST** completa para todos los módulos
+- [ ] **Notificaciones en tiempo real** con WebSockets
+- [ ] **Módulo de configuración** del sistema
+
+### Versión 1.2 (Q2 2026)
+- [ ] **App móvil** complementaria con React Native
+- [ ] **Integración con sistemas ERP** externos
+- [ ] **Inteligencia artificial** para predicción de demanda
+- [ ] **Módulo de calidad** y trazabilidad de productos
+
+### Versión 2.0 (Q3 2026)
+- [ ] **Multi-tenancy** para múltiples empresas
+- [ ] **API GraphQL** para consultas complejas
+- [ ] **Módulo de e-commerce** B2B
+- [ ] **Análisis predictivo** avanzado con ML
+
+## 📞 Soporte y Contacto
+
+- **Desarrollador**: carlos123ordaz
+- **Repositorio**: [GitHub - CDS-ClientApp](https://github.com/carlos123ordaz/CDS-ClientApp)
+- **Issues**: [Reportar problemas](https://github.com/carlos123ordaz/CDS-ClientApp/issues)
+- **Documentación**: Wiki del proyecto (próximamente)
+
+## 📄 Licencia
+
+Este proyecto está bajo la **Licencia MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+## 🙏 Agradecimientos
+
+- **MaterialPro React Admin** - Template base de alta calidad
+- **Material-UI Team** - Excelente sistema de componentes
+- **React Community** - Por las mejores prácticas y herramientas
+- **Vite Team** - Por la experiencia de desarrollo ultrarrápida
 
 ---
 
-## 📝 Documentation
+<div align="center">
+  
+**⭐ Si te gusta el proyecto, ¡dale una estrella en GitHub!**
 
-Welcome to the **MaterialPro React Admin Free** documentation! Whether you're just getting started or looking to explore advanced features, this guide will help you set up and customize your project with ease.
+Desarrollado con ❤️ por carlos123ordaz usando React + TypeScript + Material-UI
 
-👉 **[Click here to read the full documentation](https://wrappixel.github.io/free-documentation-wp/react/materialpro/index.html?ref=376)**
-
----
-
-## 💎 Pro Version
-
-The Pro Version of the **MaterialPro React Admin Template** comes packed with essential features—ideal for personal projects, prototypes, or small-scale applications. When you're ready to level up, the Pro Version unlocks a powerful suite of extras, including multiple theme options, advanced UI widgets, real-time notifications, priority support, and a host of other premium tools designed to supercharge your development workflow.
-
-<div style="display: flex; gap: 10px; align-items: center;">
-  <a href="https://materialpro-react-main.netlify.app/?ref=376" target="_blank">
-    <img src="https://img.shields.io/badge/Try_the_Demo-Click_Here-blue" alt="Try the Demo">
-  </a>
-  <a href="https://www.wrappixel.com/templates/materialpro-react-admin/?ref=376" target="_blank">
-    <img src="https://img.shields.io/badge/Download_Now-Click_Here-green" alt="Download Now">
-  </a>
 </div>
-
-[![MaterialPro React Admin Demo Screenshot](https://www.wrappixel.com/wp-content/uploads/edd/2025/01/MaterialPro-React.js.jpg)](https://www.wrappixel.com/templates/materialpro-react-admin/?ref=376)
-
----
-
-## ⚖️ Free vs Pro Version Comparison
-
-The **Free Version** of the **MaterialPro React Admin Template** provides a solid set of features, perfect for personal projects or small applications. However, for businesses or developers looking to unlock more advanced functionality, the **Pro Version** offers exciting features like **multiple themes**, **advanced widgets**, **real-time notifications**, **priority support**, and much more. 
-
-
-#### Check out the comparison below to see the key differences between the two versions:
-
-| **Feature**                      | **Free Version**                       | **Pro Version**                                      |
-|-----------------------------------|----------------------------------------|-----------------------------------------------------|
-| **Demo**                          | [![Try the Demo](https://img.shields.io/badge/Try_the_Demo-Click_Here-blue)](https://materialpro-react-free.netlify.app/?ref=376)                               | [![Try the Demo](https://img.shields.io/badge/Try_the_Demo-Click_Here-blue)](https://materialpro-react-main.netlify.app/?ref=376)                                              |
-| **Download**                      | [![Download Now](https://img.shields.io/badge/Download_Now-Click_Here-green)](https://www.wrappixel.com/templates/materialpro-react-admin-lite/?ref=376)                                | [![Download Now](https://img.shields.io/badge/Download_Now-Click_Here-green)](https://www.wrappixel.com/templates/materialpro-react-admin/?ref=376)                                          |
-| **Responsive Design**             | ✅ Yes                                 | ✅ Yes                                              |
-| **Pre-designed Pages**            | ✅ Basic Pages                         | ✅ Advanced Pages (more layouts & options)           |
-| **Widgets**                       | ✅ Basic Widgets                       | ✅ Advanced Widgets (e.g., weather, charts, maps)    |
-| **Themes**                        | ✅ Default Theme                | ✅ Multiple Themes, Custom Color Skins, and Dark Modes |
-| **Support**                       | ✅ Community Support                   | ✅ Priority Support with Direct Contact             |
-| **Additional Components**         | ❌ Limited                             | ✅ Additional Components (Forms, Buttons, More UI Elements) |
-| **Advanced Data Visualization**   | ❌ Basic Charts                        | ✅ Advanced Data Visualizations (graphs, complex charts) |
-| **Multi-Language Support**        | ❌ Not available                       | ✅ Built-in support for multiple languages          |
-| **User Permissions & Roles**      | ❌ No                                  | ✅ User roles and permissions management            |
-| **Real-time Notifications**       | ❌ Not available                       | ✅ Real-time notifications for alerts & updates      |
-| **Advanced Analytics & Reporting**| ❌ Basic reports                       | ✅ Advanced analytics with custom reports and filters|
-
-
----
-
-## 🗂️ Other versions
-
-<table>
-   <thead>
-      <tr>
-         <th> 
-            <span style="font-size: 16px;">All Access Pass</span>
-         </th>
-         <th> 
-            <img src="https://skillicons.dev/icons?i=bootstrap" height="20" alt="Bootstrap 5 templates" style="margin-right: 8px;">
-            <span style="font-size: 16px;">Bootstrap</span>
-         </th>
-         <th> 
-            <img src="https://skillicons.dev/icons?i=next" height="20" alt="next templates" style="margin-right: 8px;">
-            <span style="font-size: 16px;">Next</span>
-         </th>
-      </tr>
-   </thead>      
-   <tbody>
-      <tr>
-         <td>
-            <a href="https://www.wrappixel.com/all-access-pass/?ref=376" width="150px">
-               <img src="https://www.wrappixel.com/wp-content/uploads/2025/04/all-access-pass-category-banner-1.png" alt="admin-template" style="max-width:140px;">
-            </a>
-         </td>
-         <td>
-            <a href="https://www.wrappixel.com/templates/materialpro/?ref=376" width="150px">
-               <img src="https://www.wrappixel.com/wp-content/uploads/edd/2024/05/materialpro-bootstrap-admin-wpn.jpg" alt="materialpro-bootstrap-admin-template" style="max-width:140px;">
-            </a>
-         </td>
-         <td>
-            <a href="https://www.wrappixel.com/templates/materialpro-nextjs-admin-dashboard-app-directory/?ref=376" width="150px">
-               <img src="https://www.wrappixel.com/wp-content/uploads/edd/2025/02/MaterialPro-Nextjs_without.jpg" alt="materialpro-next-admin-template" style="max-width:140px;">
-            </a>
-         </td> 
-      </tr>
-   </tbody>      
-   <thead>
-      <tr>
-         <th>
-            <img src="https://skillicons.dev/icons?i=angular" height="20" alt="Angular templates" style="margin-right: 8px;">
-            <span>Angular</span>
-         </th>
-         <th>
-            <img src="https://skillicons.dev/icons?i=vue" height="20" alt="Vue templates" style="margin-right: 8px;">
-            <span>Vue</span>
-         </th>
-         <th>
-            <img src="https://skillicons.dev/icons?i=nuxt" height="20" alt="Nuxt templates" style="margin-right: 8px;">
-            <span>Nuxt</span>
-         </th>
-      </tr>
-   </thead>   
-   <tbody>
-      <tr>
-         <td>
-            <a href="https://www.wrappixel.com/templates/materialpro-angular-dashboard/?ref=376" width="150px">
-               <img src="https://www.wrappixel.com/wp-content/uploads/edd/2024/05/materialpro-angular-admin-wpn.jpg" style="max-width:140px;">
-            </a>
-         </td>
-         <td>
-            <a href="https://www.wrappixel.com/templates/materialpro-vuetify-admin/?ref=376" width="150px">
-               <img src="https://www.wrappixel.com/wp-content/uploads/edd/2024/05/materialpro-vuetify-admin-wpn.jpg" alt="materialpro-vue-admin-template" style="max-width:150px;">
-            </a>
-         </td>  
-         <td>
-            <a href="https://www.wrappixel.com/templates/materialpro-nuxtjs/?ref=376" width="150px">
-               <img src="https://www.wrappixel.com/wp-content/uploads/edd/2024/05/materialpro-nuxtjs-admin-wpn.jpg" alt="materialpro-nuxt-admin-template" style="max-width:150px;">
-            </a>
-         </td>
-      </tr>
-   </tbody>
-</table>
-
----
-
-
-##  🤝  Contributing
-
-We welcome contributions from the community to help improve the **MaterialPro React Admin Free**. Whether it’s fixing bugs, adding new features, improving documentation, or sharing ideas — your input is appreciated!
-
-### 🛠️ How to Contribute
-
-Follow these simple steps to start contributing:
-
-1. **Fork the Repository**  
-   Click the **Fork** button on the top-right corner of this repo to create your own copy.
-
-2. **Clone Your Fork**  
-   Use the command below to clone your forked repository:
-   ```bash
-   git clone https://github.com/wrappixel/materialpro-react-lite.git
-
-3. **Create a New Branch**  
-   Create a new branch to work on your feature or fix. This keeps your changes separate from the main branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-
-4. **Commit and Push Changes**  
-   After making your changes, commit them with a meaningful message and push your branch to your fork:
-   ```bash
-   git commit -am "Add: Description of changes made"
-   git push origin feature/your-feature-name
-
-
----
-
-## 🧭 Useful Links
-- <p><a href="https://www.wrappixel.com/templates/category/admin-dashboard-templates/?ref=376">Admin Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/bootstrap-templates/?ref=376">Bootstrap Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/angular-templates/?ref=376">Angular Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/react-templates/?ref=376">React Template</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/framer-templates/?ref=376">Framer Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/mui-templates/?ref=376">Material UI Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/vuetify-templates/?ref=376">Vuetify Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/nextjs-templates/?ref=376">NextJs Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/nuxt-templates/?ref=376">Nuxt Templates</a> from Wrappixel</p>
-- <p><a href="https://www.wrappixel.com/templates/category/tailwind-dashboard/?ref=376">Tailwind Templates</a> from Wrappixel</p>
-
----
-
-## 🌐 We are social
-
-[![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/wrappixel)  [![twitter](https://img.shields.io/badge/twitter-x?style=for-the-badge&logo=x&logoColor=white&color=%230f1419)](https://twitter.com/wrappixel)  [![facebook](https://img.shields.io/badge/facebook-logo?style=for-the-badge&logo=facebook&logoColor=white&color=%230866ff)](https://www.facebook.com/wrappixel)  [![instagram](https://img.shields.io/badge/instagram-logo?style=for-the-badge&logo=instagram&logoColor=white&color=%23F35369)](https://www.instagram.com/wrappixel)  [![youtube](https://img.shields.io/badge/youtube-logo?style=for-the-badge&logo=youtube&logoColor=white&color=%23cc0000)](https://www.youtube.com/@wrappixel)  [![](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/wrappixel)

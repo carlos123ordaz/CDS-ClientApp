@@ -10,3 +10,5 @@ export interface Customer {
   ibCltFinal: true,
   estado: true
 }
+
+// - Customer
